@@ -175,7 +175,7 @@
 
 								</div>
 							</div>
-							
+
 							<div class="item">
 								<div class="col-sm-6">
 									<h1><span>{{$slide[2]->HangSanXuat}}</span></h1>
@@ -188,7 +188,7 @@
 
 								</div>
 							</div>
-							
+
 						</div>
 						
 						<a href="#slider-carousel" class="left control-carousel hidden-xs" data-slide="prev">
@@ -288,20 +288,10 @@
 							<h2>Hãng</h2>
 							<div class="brands-name">
 								<ul class="nav nav-pills nav-stacked">
-									<li><a href="#"> <span class="pull-right">(50)</span>Apple</a></li>
-									<li><a href="shop.html"><span class="pull-right">(50)</span>Apple</a></li>
-									<li><a href="product-details.html"><span class="pull-right">(50)</span>SamSung</a></li>
-									<li><a href="checkout.html"><span class="pull-right">(50)</span>ASUS</a></li>
-									<li><a href="cart.html"><span class="pull-right">(50)</span>OPPO</a></li>
-									<li><a href="login.html"><span class="pull-right">(50)</span>Sony</a></li>
-									<li><a href="login.html"><span class="pull-right">(50)</span>Xiao Mi</a></li>
-									<li><a href="login.html"><span class="pull-right">(50)</span>Vivo</a></li>
-									<li><a href="login.html"><span class="pull-right">(50)</span>HTC</a></li>
-									<li><a href="login.html"><span class="pull-right">(50)</span>Huawei</a></li>
-									<li><a href="login.html"><span class="pull-right">(50)</span>Lenovo</a></li>
-									<li><a href="login.html"><span class="pull-right">(50)</span>Pantech</a></li>
-									<li><a href="login.html"><span class="pull-right">(50)</span>Coolpad</a></li>
-									<li><a href="login.html"><span class="pull-right">(50)</span>Itel</a></li>
+									@foreach($left as $l)
+										<li><a href="#"> <span class="pull-right">({{$l -> Count}})</span>{{$l -> HangSanXuat}}</a></li>
+									@endforeach
+
 								</ul>
 							</div>
 						</div><!--/brands_products-->

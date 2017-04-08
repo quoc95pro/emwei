@@ -12,12 +12,13 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\View\View;
 
-class pageController
+class pageController extends \Illuminate\Routing\Controller
 {
       public function index(){
           $newProduct = DB::select('SELECT * FROM `tbl_anh`,`tbl_sanpham` WHERE tbl_anh.MaSanPham=tbl_sanpham.IDSanPham ORDER BY tbl_anh.MaSanPham DESC LIMIT 5');
           $slide = DB::select('SELECT * FROM `tbl_anh`,`tbl_sanpham` WHERE tbl_anh.MaSanPham=tbl_sanpham.IDSanPham LIMIT 3');
-          return view('index', ['newProducts' => $newProduct],['slide' => $slide]);
-
+          $left=DB::select('SELECT HangSanXuat,COUNT(*) AS Count FROM `tbl_sanpham` GROUP BY HangSanXuat');
+          return view('index', ['newProducts' => $newProduct],['slide' => $slide])
+              ->with(['left' => $left]);
       }
 }
