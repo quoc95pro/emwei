@@ -12,3 +12,19 @@
 */
 
 Route::get('/', 'pageController@index' );
+Route::get('readAll',function (){
+    $post = \App\tbl_anh::all();
+    foreach ($post as $p){
+        return $p->link;
+    }
+} );
+
+Route::get('/',[
+    'as'=>'trang-chu',
+    'uses'=>'PageController@index'
+]);
+
+Route::get('dang-nhap',[
+    'as'=>'dang-nhap',
+    'uses'=>'PageController@login'
+]);

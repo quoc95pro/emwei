@@ -1,30 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>Login | E-Shopper</title>
-    <link href="../../public/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../public/css/font-awesome.min.css" rel="stylesheet">
-    <link href="../../public/css/prettyPhoto.css" rel="stylesheet">
-    <link href="../../public/css/price-range.css" rel="stylesheet">
-    <link href="../../public/css/animate.css" rel="stylesheet">
-	<link href="../../public/css/main.css" rel="stylesheet">
-	<link href="../../public/css/responsive.css" rel="stylesheet">
-    <!--[if lt IE 9]>
-    <script src="../../public/js/html5shiv.js"></script>
-    <script src="public/js/respond.min.js"></script>
-    <![endif]-->
-    <link rel="shortcut icon" href="public/images/ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="public/images/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="public/images/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="public/images/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="public/images/ico/apple-touch-icon-57-precomposed.png">
-</head><!--/head-->
-
-<body>
+@include(he)
 	<header id="header"><!--header-->
 		<div class="header_top"><!--header_top-->
 			<div class="container">
@@ -57,7 +31,7 @@
 				<div class="row">
 					<div class="col-sm-4">
 						<div class="logo pull-left">
-							<a href="index.html"><img src="../../public/images/home/logo.png" alt="" /></a>
+							<a href="index.html"><img src="{{ URL::asset('images/home/logo.gif') }}" alt="" /></a>
 						</div>
 						<div class="btn-group pull-right">
 							<div class="btn-group">
@@ -194,7 +168,7 @@
 							<div class="video-gallery text-center">
 								<a href="#">
 									<div class="iframe-img">
-										<img src="../../public/images/home/iframe1.png" alt="" />
+										<img src="{{ URL::asset('images/home/iframe1.png') }}" alt="" />
 									</div>
 									<div class="overlay-icon">
 										<i class="fa fa-play-circle-o"></i>
@@ -209,7 +183,7 @@
 							<div class="video-gallery text-center">
 								<a href="#">
 									<div class="iframe-img">
-										<img src="../../public/images/home/iframe2.png" alt="" />
+										<img src="{{ URL::asset('images/home/iframe2.png') }}" alt="" />
 									</div>
 									<div class="overlay-icon">
 										<i class="fa fa-play-circle-o"></i>
@@ -224,7 +198,7 @@
 							<div class="video-gallery text-center">
 								<a href="#">
 									<div class="iframe-img">
-										<img src="../../public/images/home/iframe3.png" alt="" />
+										<img src="{{ URL::asset('images/home/iframe3.png') }}" alt="" />
 									</div>
 									<div class="overlay-icon">
 										<i class="fa fa-play-circle-o"></i>
@@ -239,7 +213,7 @@
 							<div class="video-gallery text-center">
 								<a href="#">
 									<div class="iframe-img">
-										<img src="../../public/images/home/iframe4.png" alt="" />
+										<img src="{{ URL::asset('images/home/iframe4.png') }}" alt="" />
 									</div>
 									<div class="overlay-icon">
 										<i class="fa fa-play-circle-o"></i>
@@ -252,7 +226,7 @@
 					</div>
 					<div class="col-sm-3">
 						<div class="address">
-							<img src="../../public/images/home/map.png" alt="" />
+							<img src="{{ URL::asset('images/home/map.png') }}" alt="" />
 							<p>505 S Atlantic Ave Virginia Beach, VA(Virginia)</p>
 						</div>
 					</div>
