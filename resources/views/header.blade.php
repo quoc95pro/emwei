@@ -1,31 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>Login | E-Shopper</title>
-    <link href="{{ URL::asset('css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ URL::asset('css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ URL::asset('css/prettyPhoto.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ URL::asset('css/price-range.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ URL::asset('css/animate.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ URL::asset('css/main.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ URL::asset('css/responsive.css') }}" rel="stylesheet" type="text/css">
-    <!--[if lt IE 9]>
-    <script src="{{ URL::asset('js/html5shiv.js') }}"></script>
-    <script src="{{ URL::asset('js/respond.min.js') }}"></script>
-    <![endif]-->
-    <link rel="shortcut icon" href="{{ URL::asset('images/ico/favicon.ico') }}">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ URL::asset('images/ico/apple-touch-icon-144-precomposed.png') }}">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ URL::asset('images/ico/apple-touch-icon-114-precomposed.png') }}">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ URL::asset('images/ico/apple-touch-icon-72-precomposed.png') }}">
-    <link rel="apple-touch-icon-precomposed" href="{{ URL::asset('images/ico/apple-touch-icon-57-precomposed.png') }}">
-</head><!--/head-->
-
-<body>
-
 <header id="header"><!--header-->
     <div class="header_top"><!--header_top-->
         <div class="container">
@@ -33,19 +5,20 @@
                 <div class="col-sm-6">
                     <div class="contactinfo">
                         <ul class="nav nav-pills">
-                            <li><a href=""><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-                            <li><a href=""><i class="fa fa-envelope"></i> info@domain.com</a></li>
+                            <li><a href="#"><i class="fa fa-phone"></i> +84 89 98 89 989</a></li>
+                            <li><a href="#"><i class="fa fa-envelope"></i> emwei@gmail.com</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="social-icons pull-right">
                         <ul class="nav navbar-nav">
-                            <li><a href=""><i class="fa fa-facebook"></i></a></li>
-                            <li><a href=""><i class="fa fa-twitter"></i></a></li>
-                            <li><a href=""><i class="fa fa-linkedin"></i></a></li>
-                            <li><a href=""><i class="fa fa-dribbble"></i></a></li>
-                            <li><a href=""><i class="fa fa-google-plus"></i></a></li>
+                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+                            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+
                         </ul>
                     </div>
                 </div>
@@ -58,40 +31,18 @@
             <div class="row">
                 <div class="col-sm-4">
                     <div class="logo pull-left">
-                        <a href="index.html"><img src="{{ URL::asset('images/home/logo.gif') }}" alt="" /></a>
+                        <a href="{{route('trang-chu')}}"><img src="{{ URL::asset('images/home/logo.gif') }}" alt="" /></a>
                     </div>
-                    <div class="btn-group pull-right">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-                                USA
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a href="">Canada</a></li>
-                                <li><a href="">UK</a></li>
-                            </ul>
-                        </div>
 
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-                                DOLLAR
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a href="">Canadian Dollar</a></li>
-                                <li><a href="">Pound</a></li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
                 <div class="col-sm-8">
                     <div class="shop-menu pull-right">
                         <ul class="nav navbar-nav">
-                            <li><a href=""><i class="fa fa-user"></i> Account</a></li>
-                            <li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
-                            <li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
-                            <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-                            <li><a href="login.html" class="active"><i class="fa fa-lock"></i> Login</a></li>
+                            <li><a href="#"><i class="fa fa-user"></i> Tài khoản</a></li>
+                            <li><a href="{{route('contact-us')}}"><i class="fa fa-star"></i> Liên hệ</a></li>
+                            <li><a href="{{route('checkout')}}"><i class="fa fa-crosshairs"></i> Thanh toán</a></li>
+                            <li><a href="{{route('cart')}}"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
+                            <li><a href="{{route('dang-nhap')}}"><i class="fa fa-lock"></i> Đăng nhập</a></li>
                         </ul>
                     </div>
                 </div>
@@ -113,24 +64,41 @@
                     </div>
                     <div class="mainmenu pull-left">
                         <ul class="nav navbar-nav collapse navbar-collapse">
-                            <li><a href="index.html">Home</a></li>
-                            <li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
+                            <li><a href="{{route('trang-chu')}}" class="active">Trang Chủ</a></li>
+                            <li class="dropdown"><a href="{{route('list-product/phone')}}">Điện Thoại<i class="fa fa-angle-down"></i></a>
                                 <ul role="menu" class="sub-menu">
-                                    <li><a href="shop.html">Products</a></li>
-                                    <li><a href="product-details.html">Product Details</a></li>
-                                    <li><a href="checkout.html">Checkout</a></li>
-                                    <li><a href="cart.html">Cart</a></li>
-                                    <li><a href="login.html" class="active">Login</a></li>
+                                    <li><a href="shop.html">Apple</a></li>
+                                    <li><a href="product-details.html">SamSung</a></li>
+                                    <li><a href="checkout.html">ASUS</a></li>
+                                    <li><a href="cart.html">OPPO</a></li>
+                                    <li><a href="login.html">Sony</a></li>
+                                    <li><a href="login.html">Xiao Mi</a></li>
+                                    <li><a href="login.html">Vivo</a></li>
+                                    <li><a href="login.html">HTC</a></li>
+                                    <li><a href="login.html">Huawei</a></li>
+                                    <li><a href="login.html">Lenovo</a></li>
+                                    <li><a href="login.html">Pantech</a></li>
+                                    <li><a href="login.html">Coolpad</a></li>
+                                    <li><a href="login.html">Itel</a></li>
                                 </ul>
                             </li>
-                            <li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
+                            <li class="dropdown"><a href="#">Máy Tính Bảng<i class="fa fa-angle-down"></i></a>
                                 <ul role="menu" class="sub-menu">
-                                    <li><a href="blog.html">Blog List</a></li>
-                                    <li><a href="blog-single.html">Blog Single</a></li>
+                                    <li><a href="blog.html">Apple-Ipad</a></li>
+                                    <li><a href="blog-single.html">SamSung</a></li>
+                                    <li><a href="blog-single.html">Sony</a></li>
+                                    <li><a href="blog-single.html">ASUS</a></li>
                                 </ul>
                             </li>
-                            <li><a href="404.html">404</a></li>
-                            <li><a href="contact-us.html">Contact</a></li>
+                            <li class="dropdown"><a href="#">Phụ Kiện<i class="fa fa-angle-down"></i></a>
+                                <ul role="menu" class="sub-menu">
+                                    <li><a href="blog.html">Apple-Ipad</a></li>
+                                    <li><a href="blog-single.html">SamSung</a></li>
+                                    <li><a href="blog-single.html">Sony</a></li>
+                                    <li><a href="blog-single.html">ASUS</a></li>
+                                </ul>
+                            </li>
+
                         </ul>
                     </div>
                 </div>

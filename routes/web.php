@@ -28,3 +28,53 @@ Route::get('dang-nhap',[
     'as'=>'dang-nhap',
     'uses'=>'PageController@login'
 ]);
+
+Route::get('contact-us',[
+    'as'=>'contact-us',
+    'uses'=>'PageController@contactUs'
+]);
+
+Route::get('checkout',[
+    'as'=>'checkout',
+    'uses'=>'PageController@checkout'
+]);
+
+Route::get('cart',[
+    'as'=>'cart',
+    'uses'=>'PageController@cart'
+]);
+
+Route::get('blog',[
+    'as'=>'blog',
+    'uses'=>'PageController@blog'
+]);
+
+Route::get('blog-single',[
+    'as'=>'blog-single',
+    'uses'=>'PageController@blogSingle'
+]);
+
+Route::get('404',[
+    'as'=>'404',
+    'uses'=>'PageController@error404'
+]);
+
+Route::get('detail',[
+    'as'=>'detail',
+    'uses'=>'PageController@detail'
+]);
+
+Route::get('shop',[
+    'as'=>'shop',
+    'uses'=>'PageController@shop'
+]);
+
+Route::get('list-product/phone',[
+    'as'=>'list-product/phone',
+    'uses'=>'PageController@listProductPhone'
+]);
+
+Route::get('detail-product/{id}',[
+    'as'=>'detail-product',
+    'uses'=>'PageController@getDetail'
+]);
