@@ -78,3 +78,43 @@ Route::get('detail-product/{id}',[
     'as'=>'detail-product',
     'uses'=>'PageController@getDetail'
 ]);
+
+Route::get('admin',[
+    'as'=>'admin-index',
+    'uses'=>'PageController@admin'
+]);
+
+Route::get('widgets',[
+    'as'=>'widgets',
+    'uses'=>'PageController@widgets'
+]);
+
+Route::get('charts',[
+    'as'=>'charts',
+    'uses'=>'PageController@charts'
+]);
+
+Route::get('tables',[
+    'as'=>'tables',
+    'uses'=>'PageController@tables'
+]);
+
+Route::get('forms',[
+    'as'=>'forms',
+    'uses'=>'PageController@forms'
+]);
+
+Route::get('panels',[
+    'as'=>'panels',
+    'uses'=>'PageController@panels'
+]);
+
+Route::get('icons',[
+    'as'=>'icons',
+    'uses'=>'PageController@icons'
+]);
+
+Route::get('login-admin',[
+    'as'=>'login-admin',
+    'uses'=>'PageController@loginAdmin'
+]);
