@@ -8,6 +8,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/datepicker3.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
+    <link href="{{ URL::asset('css/bootstrap-table.css') }}" rel="stylesheet">
 
     <!--Icons-->
     <script src="js/lumino.glyphs.js"></script>
@@ -31,6 +32,7 @@
 <script src="js/easypiechart.js"></script>
 <script src="js/easypiechart-data.js"></script>
 <script src="js/bootstrap-datepicker.js"></script>
+<script src="js/bootstrap-table.js"></script>
 <script>
     $('#calendar').datepicker({
     });

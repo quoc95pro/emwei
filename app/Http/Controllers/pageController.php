@@ -106,4 +106,9 @@ class pageController extends \Illuminate\Routing\Controller
         return \view('admin.login');
 
     }
+
+    public function adminAllProduct(){
+        return \view('admin.Product');
+
+    }
 }

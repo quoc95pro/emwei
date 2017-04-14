@@ -118,3 +118,8 @@ Route::get('login-admin',[
     'as'=>'login-admin',
     'uses'=>'PageController@loginAdmin'
 ]);
+
+Route::get('all-product',[
+    'as'=>'adminAllProduct',
+    'uses'=>'PageController@adminAllProduct'
+]);
