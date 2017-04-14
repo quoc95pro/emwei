@@ -83,7 +83,9 @@ class pageController extends \Illuminate\Routing\Controller
     }
 
     public function tables(){
-        return \view('admin.tables');
+        $listProduct = DB::select('SELECT * FROM `tbl_anh`,`tbl_sanpham` WHERE tbl_anh.MaSanPham=tbl_sanpham.IDSanPham');
+        return \view('admin.tables')
+            ->with(['listProduct'=>$listProduct]);
 
     }
 

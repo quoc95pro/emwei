@@ -30,132 +30,17 @@
 								</tr>
 								</thead>
 								<tbody>
-									<tr data-index="0">
-										<td class="bs-checkbox">
-											<input data-index="0" name="toolbar1" type="checkbox">
+									@foreach($listProduct as $product)
+										<tr>
+											<td class="bs-checkbox">
+												<input name="toolbar1" type="checkbox">
 
-										</td>
-										<td>10</td>
-										<td>10</td>
-										<td>10</td>
-									</tr>
-									<tr data-index="1">
-										<td class="bs-checkbox">
-											<input data-index="1" name="toolbar1" type="checkbox">
-
-										</td>
-										<td>20</td>
-										<td>20</td>
-										<td>20</td>
-									</tr>
-									<tr data-index="1">
-										<td class="bs-checkbox">
-											<input data-index="2" name="toolbar1" type="checkbox">
-
-										</td>
-										<td>30</td>
-										<td>30</td>
-										<td>30</td>
-									</tr>
-									<tr data-index="1">
-										<td class="bs-checkbox">
-											<input data-index="2" name="toolbar1" type="checkbox">
-
-										</td>
-										<td>30</td>
-										<td>30</td>
-										<td>30</td>
-									</tr>
-									<tr data-index="1">
-										<td class="bs-checkbox">
-											<input data-index="2" name="toolbar1" type="checkbox">
-
-										</td>
-										<td>30</td>
-										<td>30</td>
-										<td>30</td>
-									</tr>
-									<tr data-index="1">
-										<td class="bs-checkbox">
-											<input data-index="2" name="toolbar1" type="checkbox">
-
-										</td>
-										<td>30</td>
-										<td>30</td>
-										<td>30</td>
-									</tr>
-									<tr data-index="1">
-										<td class="bs-checkbox">
-											<input data-index="2" name="toolbar1" type="checkbox">
-
-										</td>
-										<td>30</td>
-										<td>30</td>
-										<td>30</td>
-									</tr>
-									<tr data-index="1">
-										<td class="bs-checkbox">
-											<input data-index="2" name="toolbar1" type="checkbox">
-
-										</td>
-										<td>30</td>
-										<td>30</td>
-										<td>30</td>
-									</tr>
-									<tr data-index="1">
-										<td class="bs-checkbox">
-											<input data-index="2" name="toolbar1" type="checkbox">
-
-										</td>
-										<td>30</td>
-										<td>30</td>
-										<td>30</td>
-									</tr>
-									<tr data-index="1">
-										<td class="bs-checkbox">
-											<input data-index="2" name="toolbar1" type="checkbox">
-
-										</td>
-										<td>30</td>
-										<td>30</td>
-										<td>30</td>
-									</tr>
-									<tr data-index="1">
-										<td class="bs-checkbox">
-											<input data-index="2" name="toolbar1" type="checkbox">
-
-										</td>
-										<td>30</td>
-										<td>30</td>
-										<td>30</td>
-									</tr>
-									<tr data-index="1">
-										<td class="bs-checkbox">
-											<input data-index="2" name="toolbar1" type="checkbox">
-
-										</td>
-										<td>30</td>
-										<td>30</td>
-										<td>30</td>
-									</tr>
-									<tr data-index="1">
-										<td class="bs-checkbox">
-											<input data-index="2" name="toolbar1" type="checkbox">
-
-										</td>
-										<td>30</td>
-										<td>30</td>
-										<td>30</td>
-									</tr>
-									<tr data-index="1">
-										<td class="bs-checkbox">
-											<input data-index="2" name="toolbar1" type="checkbox">
-
-										</td>
-										<td>30</td>
-										<td>30</td>
-										<td>30</td>
-									</tr>
+											</td>
+											<td>{{$product->IDSanPham}}</td>
+											<td>{{$product->TenSanPham}}</td>
+											<td>{{$product->Gia}}</td>
+										</tr>
+										@endforeach
 								</tbody>
 							</table>
 						</div>
