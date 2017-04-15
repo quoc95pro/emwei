@@ -123,3 +123,8 @@ Route::get('all-product',[
     'as'=>'adminAllProduct',
     'uses'=>'PageController@adminAllProduct'
 ]);
+
+Route::get('add-product',[
+    'as'=>'adminAddProduct',
+    'uses'=>'PageController@adminAddProduct'
+]);

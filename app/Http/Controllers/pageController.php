@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 
 use Illuminate\View\View;
+use phpDocumentor\Reflection\Types\Integer;
 
 class pageController extends \Illuminate\Routing\Controller
 {
@@ -110,7 +111,53 @@ class pageController extends \Illuminate\Routing\Controller
     }
 
     public function adminAllProduct(){
-        return \view('admin.Product');
+        $listProduct = DB::select('SELECT * FROM `tbl_anh`,`tbl_sanpham` WHERE tbl_anh.MaSanPham=tbl_sanpham.IDSanPham');
+        return \view('admin.Product')
+            ->with(['listProduct'=>$listProduct]);
 
     }
+
+    public function adminAddProduct(){
+        $productTypes = DB::select('SELECT LoaiSanPham FROM `tbl_sanpham` GROUP BY LoaiSanPham');
+        return \view('admin.addproduct')
+            ->with(['productTypes'=>$productTypes])
+            ->with(['nextID'=>$this->NextID()]);
+
+    }
+
+        public function GetLastID()
+        {
+        $sql = DB::select('SELECT IDSanPham FROM tbl_sanpham ORDER by IDSanPham DESC LIMIT 1');
+           foreach ($sql as $a)
+           {
+               return $a->IDSanPham;
+           }
+
+
+        }
+
+     public function NextID()
+{
+            $prefixID="SP";
+            if($this->GetLastID()=="")
+            {
+                return $prefixID+"001";
+            }
+            $nextID = substr($this->GetLastID(),2) +1;
+            $lengthNumerID = strlen($this->GetLastID())- strlen($prefixID);
+            $zeroNumber = "";
+            for ($i = 1; $i <= $lengthNumerID; $i++)
+            {
+                if ($nextID < pow(10, $i))
+                {
+                    for ($j = 1; $j <= $lengthNumerID - $i; $j++)
+                    {
+                        $zeroNumber += "0";
+                    }
+                    return $prefixID + $zeroNumber + ""+$nextID;
+                }
+            }
+            return $prefixID + $nextID;
+
+        }
 }

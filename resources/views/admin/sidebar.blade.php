@@ -12,13 +12,13 @@
             </a>
             <ul class="children collapse" id="sub-item-1">
                 <li>
-                    <a class="" href="#">
+                    <a class="" href="{{route('adminAllProduct')}}">
                         <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Danh sách sản phẩm
 
                     </a>
                 </li>
                 <li>
-                    <a class="" href="#">
+                    <a class="" href="{{route('adminAddProduct')}}">
                         <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Thêm sản phẩm mới
                     </a>
                 </li>
