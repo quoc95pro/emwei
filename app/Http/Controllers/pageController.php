@@ -119,8 +119,10 @@ class pageController extends \Illuminate\Routing\Controller
 
     public function adminAddProduct(){
         $productTypes = DB::select('SELECT LoaiSanPham FROM `tbl_sanpham` GROUP BY LoaiSanPham');
+        $companies = DB::select('SELECT HangSanXuat FROM `tbl_sanpham` GROUP BY HangSanXuat');
         return \view('admin.addproduct')
             ->with(['productTypes'=>$productTypes])
+            ->with(['companies'=>$companies])
             ->with(['nextID'=>$this->NextID()]);
 
     }
@@ -152,12 +154,12 @@ class pageController extends \Illuminate\Routing\Controller
                 {
                     for ($j = 1; $j <= $lengthNumerID - $i; $j++)
                     {
-                        $zeroNumber += "0";
+                        $zeroNumber=$zeroNumber."0";
                     }
-                    return $prefixID + $zeroNumber + ""+$nextID;
+                    return $prefixID.$zeroNumber.$nextID;
                 }
             }
-            return $prefixID + $nextID;
+            return $prefixID.$nextID;
 
         }
 }

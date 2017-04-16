@@ -34,25 +34,60 @@
                                             <option>{{$productType->LoaiSanPham}}</option>
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="form-group">
                                     <label>Mã Sản Phẩm</label>
                                     <input class="form-control" placeholder="{{$nextID}}" disabled >
                                 </div>
+                            <div class="form-group">
+                                <label>Tên Sản Phẩm</label>
+                                <input class="form-control" >
+                            </div>
+                            <div class="form-group">
+                                <label>Hãng Sản Xuất</label>
+                                <select class="form-control" id="companySelect">
+                                    @foreach($companies as $company)
+                                        <option>{{$company->HangSanXuat}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Giá</label>
+                                <input class="form-control" >
+                            </div>
+                            <div class="form-group">
+                                <label>Mô Tả Sản Phẩm</label>
+                                <input class="form-control" >
+                            </div>
+                            <div class="form-group">
+                                <label>Số Lượng</label>
+                                <input class="form-control" >
+                            </div>
+                            <div class="form-group">
+                                <label>Tình Trạng</label>
+                                <select class="form-control">
+                                    <option>Còn Hàng</option>
+                                    <option>Hết Hàng</option>
+                                    <option>Liên Hệ</option>
+                                </select>
+                            </div>
                     </div>
                             <div class="col-md-6">
+
                                 <div class="form-group">
-
-
-                                        <label>
-                                            <input type="checkbox"  onchange="myFunction()" id="productTypeCheckBox">  Loại Sản Phẩm Mới
-                                        </label>
-
+                                    <label><input type="checkbox"  onchange="newProductFunction()" id="productTypeCheckBox">  Loại Sản Phẩm Mới</label>
                                     <input class="form-control"  disabled id="productTypeInput">
-
                                 </div>
+
+                                <div class="form-group" style="margin-top: 158px">
+                                    <label><input type="checkbox"  onchange="newCompanyFunction()" id="companyCheckBox">  Hãng Sản Xuất Mới</label>
+                                    <input class="form-control" disabled id="companyInput">
+                                </div>
+
                             </div>
                         </form>
                         <script>
-                            function myFunction() {
+                            function newProductFunction() {
                                if(document.getElementById("productTypeCheckBox").checked){
                                    document.getElementById("productTypeInput").disabled = false;
                                    document.getElementById("productTypeSelect").disabled = true;
@@ -63,7 +98,16 @@
 
                             }
 
+                            function newCompanyFunction() {
+                                if(document.getElementById("companyCheckBox").checked){
+                                    document.getElementById("companyInput").disabled = false;
+                                    document.getElementById("companySelect").disabled = true;
+                                }else {
+                                    document.getElementById("companyInput").disabled = true;
+                                    document.getElementById("companySelect").disabled = false;
+                                }
 
+                            }
 
                         </script>
                 </div>
