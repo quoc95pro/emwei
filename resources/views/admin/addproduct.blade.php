@@ -56,10 +56,6 @@
                                 <input class="form-control" >
                             </div>
                             <div class="form-group">
-                                <label>Mô Tả Sản Phẩm</label>
-                                <input class="form-control" >
-                            </div>
-                            <div class="form-group">
                                 <label>Số Lượng</label>
                                 <input class="form-control" >
                             </div>
@@ -70,6 +66,18 @@
                                     <option>Hết Hàng</option>
                                     <option>Liên Hệ</option>
                                 </select>
+                            </div>
+
+                            <div class="form-group" style="margin-top: 100px;border-bottom: 1px solid #eee;border-top:1px solid #eee ">
+                                <label  style="margin-top: 30px">Mô Tả Sản Phẩm</label>
+                                <div style="overflow: auto ;height: 200px">
+                                    @foreach($description as $des)
+                                        <div class="form-group">
+                                            <label>{{$des->TenMoTa}}</label>
+                                            <input class="form-control" >
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                     </div>
                             <div class="col-md-6">
@@ -83,7 +91,18 @@
                                     <label><input type="checkbox"  onchange="newCompanyFunction()" id="companyCheckBox">  Hãng Sản Xuất Mới</label>
                                     <input class="form-control" disabled id="companyInput">
                                 </div>
-
+                                
+                                <div class="form-group" style="margin-top: 100px;border-bottom: 1px solid #eee;border-top:1px solid #eee ">
+                                    <label  style="margin-top: 30px">Mô Tả Sản Phẩm</label>
+                                    <div style="overflow: auto ;height: 200px">
+                                        @foreach($description as $des)
+                                            <div class="form-group">
+                                                <label>{{$des->TenMoTa}}</label>
+                                                <input class="form-control" >
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
                             </div>
                         </form>
                         <script>

@@ -106,7 +106,8 @@ class pageController extends \Illuminate\Routing\Controller
     }
 
     public function loginAdmin(){
-        return \view('admin.login');
+        return \view('admin.login
+        ');
 
     }
 
@@ -120,9 +121,12 @@ class pageController extends \Illuminate\Routing\Controller
     public function adminAddProduct(){
         $productTypes = DB::select('SELECT LoaiSanPham FROM `tbl_sanpham` GROUP BY LoaiSanPham');
         $companies = DB::select('SELECT HangSanXuat FROM `tbl_sanpham` GROUP BY HangSanXuat');
+        $description = DB::select('SELECT * FROM `tbl_motasanpham`');
+
         return \view('admin.addproduct')
             ->with(['productTypes'=>$productTypes])
             ->with(['companies'=>$companies])
+            ->with(['description'=>$description])
             ->with(['nextID'=>$this->NextID()]);
 
     }
