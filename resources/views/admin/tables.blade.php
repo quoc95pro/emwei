@@ -60,6 +60,16 @@
 									<th data-field="price">Item Price</th>
 								</tr>
 								</thead>
+								<tbody>
+								@foreach($listProduct as $product)
+									<tr>
+
+										<td>{{$product->IDSanPham}}</td>
+										<td>{{$product->TenSanPham}}</td>
+										<td>{{$product->Gia}}</td>
+									</tr>
+								@endforeach
+								</tbody>
 							</table>
 						</div>
 					</div>
@@ -76,6 +86,16 @@
 									<th data-field="price" >Item Price</th>
 								</tr>
 								</thead>
+								<tbody>
+								@foreach($listProduct as $product)
+									<tr>
+
+										<td>{{$product->IDSanPham}}</td>
+										<td>{{$product->TenSanPham}}</td>
+										<td>{{$product->Gia}}</td>
+									</tr>
+								@endforeach
+								</tbody>
 							</table>
 							<script>
                                 $(function () {

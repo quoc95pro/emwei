@@ -19,6 +19,8 @@ Route::get('readAll',function (){
     }
 } );
 
+Route::get('/test', 'pageController@test' );
+
 Route::get('/',[
     'as'=>'trang-chu',
     'uses'=>'PageController@index'
@@ -127,4 +129,9 @@ Route::get('all-product',[
 Route::get('add-product',[
     'as'=>'adminAddProduct',
     'uses'=>'PageController@adminAddProduct'
+]);
+
+Route::get('add-function',[
+    'as'=>'add-function',
+    'uses'=>'PageController@add-function'
 ]);

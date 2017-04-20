@@ -77,6 +77,10 @@ class pageController extends \Illuminate\Routing\Controller
         return \view('admin.widgets');
 
     }
+    public function test(){
+        return \view('test');
+
+    }
 
     public function charts(){
         return \view('admin.charts');
@@ -112,7 +116,7 @@ class pageController extends \Illuminate\Routing\Controller
     }
 
     public function adminAllProduct(){
-        $listProduct = DB::select('SELECT * FROM `tbl_anh`,`tbl_sanpham` WHERE tbl_anh.MaSanPham=tbl_sanpham.IDSanPham');
+        $listProduct = DB::select('SELECT * FROM tbl_sanpham');
         return \view('admin.Product')
             ->with(['listProduct'=>$listProduct]);
 

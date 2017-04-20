@@ -9,7 +9,7 @@
         <div class="row">
             <ol class="breadcrumb">
                 <li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
-                <li class="active">Icons</li>
+                <li class="active">Thêm Sản Phẩm</li>
             </ol>
         </div><!--/.row-->
 
@@ -23,7 +23,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Thông Tin Sản Phẩm</div>
                     <div class="panel-body">
-                        <form role="form">
+                        <form role="form" action="{{route('add-function')}}">
                         <div class="col-md-6">
 
 
@@ -68,15 +68,29 @@
                                 </select>
                             </div>
 
-                            <div class="form-group" style="margin-top: 100px;border-bottom: 1px solid #eee;border-top:1px solid #eee ">
+                            <div class="form-group" style="margin-top: 70px;border-bottom: 1px solid #eee;border-top:1px solid #eee ">
                                 <label  style="margin-top: 30px">Mô Tả Sản Phẩm</label>
                                 <div style="overflow: auto ;height: 200px">
                                     @foreach($description as $des)
-                                        <div class="form-group">
+
                                             <label>{{$des->TenMoTa}}</label>
                                             <input class="form-control" >
-                                        </div>
+
                                     @endforeach
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Thêm Ảnh</label>
+                                <div class="container kv-main">
+
+                                        <input id="kv-explorer" type="file" name="image[]" multiple>
+                                        <br>
+
+                                        <button type="submit" name="Submit" class="btn btn-primary">Submit</button>
+                                        <button type="reset" class="btn btn-default">Reset</button>
+
+                                    <hr>
+
                                 </div>
                             </div>
                     </div>
@@ -89,23 +103,48 @@
 
                                 <div class="form-group" style="margin-top: 158px">
                                     <label><input type="checkbox"  onchange="newCompanyFunction()" id="companyCheckBox">  Hãng Sản Xuất Mới</label>
-                                    <input class="form-control" disabled id="companyInput">
+                                    <input class="form-control"  disabled id="companyInput">
                                 </div>
-                                
-                                <div class="form-group" style="margin-top: 100px;border-bottom: 1px solid #eee;border-top:1px solid #eee ">
-                                    <label  style="margin-top: 30px">Mô Tả Sản Phẩm</label>
-                                    <div style="overflow: auto ;height: 200px">
-                                        @foreach($description as $des)
-                                            <div class="form-group">
-                                                <label>{{$des->TenMoTa}}</label>
-                                                <input class="form-control" >
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
+
+
+
+                                <div class="form-group" style="margin-top: 293px;border-bottom: 1px solid #eee;border-top:1px solid #eee ">
+                                    <a class="btn btn-primary btn-md"  style="margin-top: 30px" onclick="addNewDescription()">Thêm Mô Tả</a>
+                                    <table   data-toggle="table" data-pagination="true">
+                                        <thead>
+                                        <tr>
+                                            <th data-field="state" data-checkbox="true" ></th>
+                                            <th data-field="id" data-sortable="true">Tên Mô Tả</th>
+                                            <th data-field="name"  data-sortable="true">Giá Trị</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="addNewDiv" style="overflow: auto ;height: 200px">
+                                        </tbody>
+                                    </table>
+
+
+
+                                 </div>
                             </div>
+
+
                         </form>
                         <script>
+
+                            $("#kv-explorer").fileinput({
+                                'theme': 'explorer',
+                                'uploadUrl': '#',
+                                overwriteInitial: false,
+                                initialPreviewAsData: true,
+                                initialPreview: [
+
+                                ],
+                                initialPreviewConfig: [
+
+                                ]
+                            });
+
+
                             function newProductFunction() {
                                if(document.getElementById("productTypeCheckBox").checked){
                                    document.getElementById("productTypeInput").disabled = false;
@@ -127,7 +166,39 @@
                                 }
 
                             }
+                                $row =0;
+                            function addNewDescription() {
+                                var tr = document.createElement("TR");
+                                var td1 = document.createElement("TD");
+                                td1.className='bs-checkbox';
+                                var checkBox = document.createElement("INPUT");
+                                checkBox.setAttribute("type","checkbox");
+                                checkBox.setAttribute("name","toolbar1");
+                                td1.appendChild(checkBox);
 
+                                var td2 = document.createElement("TD");
+                                var input1 = document.createElement("INPUT");
+                                input1.className='form-control';
+                                input1.setAttribute("placeholder","Tên Mô Tả");
+                                td2.appendChild(input1);
+
+                                var td3 = document.createElement("TD");
+                                var input2 = document.createElement("INPUT");
+                                input2.className='form-control';
+                                input2.setAttribute("placeholder","Giá Trị");
+                                td3.appendChild(input2);
+                                tr.appendChild(td1);
+                                tr.appendChild(td2);
+                                tr.appendChild(td3);
+
+                                document.getElementById("addNewDiv").appendChild(tr)
+                                var cur_columns = document.getElementsByClassName('no-records-found');
+                                for (var i = 0; i < cur_columns.length; i++) {
+                                    cur_columns[i].parentNode.removeChild(cur_columns[i]);
+                                }
+
+
+                            }
                         </script>
                 </div>
             </div><!-- /.col-->
