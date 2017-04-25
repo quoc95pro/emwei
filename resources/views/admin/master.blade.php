@@ -7,6 +7,7 @@
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/datepicker3.css" rel="stylesheet">
+    <link href="css/bootstrap-table.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
     <link href="{{ URL::asset('css/bootstrap-table.css') }}" rel="stylesheet">
     <link href="css/fileinput.css" media="all" rel="stylesheet" type="text/css"/>
@@ -76,6 +77,35 @@
     $(window).on('resize', function () {
         if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
     })
+
+    $(function () {
+        $('#hover, #striped, #condensed').click(function () {
+            var classes = 'table';
+
+            if ($('#hover').prop('checked')) {
+                classes += ' table-hover';
+            }
+            if ($('#condensed').prop('checked')) {
+                classes += ' table-condensed';
+            }
+            $('#table-style').bootstrapTable('destroy')
+                .bootstrapTable({
+                    classes: classes,
+                    striped: $('#striped').prop('checked')
+                });
+        });
+    });
+
+    function rowStyle(row, index) {
+        var classes = ['active', 'success', 'info', 'warning', 'danger'];
+
+        if (index % 2 === 0 && index / 2 < classes.length) {
+            return {
+                classes: classes[index / 2]
+            };
+        }
+        return {};
+    }
 </script>
 </body>
 

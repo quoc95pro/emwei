@@ -175,12 +175,12 @@
 				<div class="col-sm-9 padding-right">
 					<div class="features_items"><!--features_items-->
 						<h2 class="title text-center">SẢN PHẨM MỚI</h2>
+
 						@foreach($newProducts as $newProduct)
 							<div class="col-sm-4">
 								<div class="product-image-wrapper">
 									<div class="single-products">
 										<div class="productinfo text-center">
-
 											<img src="{{$newProduct->link}}" alt="" />
 											<h2>{{$newProduct->Gia}} VND</h2>
 											<p>{{$newProduct->TenSanPham}}</p>
@@ -203,6 +203,7 @@
 									</div>
 								</div>
 							</div>
+
 						@endforeach
 
 						

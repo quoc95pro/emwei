@@ -23,13 +23,14 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Thông Tin Sản Phẩm</div>
                     <div class="panel-body">
-                        <form role="form" action="{{route('add-function')}}">
+                        <form enctype="multipart/form-data"  action="{{route('add')}}" method="post">
+                            {{csrf_field()}}
                         <div class="col-md-6">
 
 
                                 <div class="form-group">
                                     <label>Loại Sản Phẩm</label>
-                                    <select class="form-control" id="productTypeSelect">
+                                    <select class="form-control" name="productType" id="productTypeSelect">
                                         @foreach($productTypes as $productType)
                                             <option>{{$productType->LoaiSanPham}}</option>
                                         @endforeach
@@ -37,15 +38,15 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Mã Sản Phẩm</label>
-                                    <input class="form-control" placeholder="{{$nextID}}" disabled >
+                                    <input class="form-control"  value="{{$nextID}}" name="productID" readonly >
                                 </div>
                             <div class="form-group">
                                 <label>Tên Sản Phẩm</label>
-                                <input class="form-control" >
+                                <input class="form-control" name="productName">
                             </div>
                             <div class="form-group">
                                 <label>Hãng Sản Xuất</label>
-                                <select class="form-control" id="companySelect">
+                                <select class="form-control" id="companySelect" name="productCompany">
                                     @foreach($companies as $company)
                                         <option>{{$company->HangSanXuat}}</option>
                                     @endforeach
@@ -53,15 +54,15 @@
                             </div>
                             <div class="form-group">
                                 <label>Giá</label>
-                                <input class="form-control" >
+                                <input class="form-control" name="productPrice">
                             </div>
                             <div class="form-group">
                                 <label>Số Lượng</label>
-                                <input class="form-control" >
+                                <input class="form-control" name="productQTY">
                             </div>
                             <div class="form-group">
                                 <label>Tình Trạng</label>
-                                <select class="form-control">
+                                <select class="form-control" name="productStatus">
                                     <option>Còn Hàng</option>
                                     <option>Hết Hàng</option>
                                     <option>Liên Hệ</option>
@@ -74,7 +75,7 @@
                                     @foreach($description as $des)
 
                                             <label>{{$des->TenMoTa}}</label>
-                                            <input class="form-control" >
+                                            <input class="form-control" name="{{$des->TenMoTa}}">
 
                                     @endforeach
                                 </div>
@@ -83,13 +84,8 @@
                                 <label>Thêm Ảnh</label>
                                 <div class="container kv-main">
 
-                                        <input id="kv-explorer" type="file" name="image[]" multiple>
+                                        <input id="kv-explorer" type="file" name="image[]" multiple accept="image/*">
                                         <br>
-
-                                        <button type="submit" name="Submit" class="btn btn-primary">Submit</button>
-                                        <button type="reset" class="btn btn-default">Reset</button>
-
-                                    <hr>
 
                                 </div>
                             </div>
@@ -125,6 +121,10 @@
 
 
                                  </div>
+                                <button type="submit" name="Submit" class="btn btn-primary">Submit</button>
+                                <button type="reset" class="btn btn-default">Reset</button>
+
+
                             </div>
 
 
@@ -203,7 +203,17 @@
                 </div>
             </div><!-- /.col-->
         </div><!-- /.row -->
+            @if(count($errors)>0)
+                <div class="alert alert-danger">
+                    @foreach($errors->all() as $err)
+                        {{$err}}
+                    @endforeach
+                </div>
+            @endif
+            @if(Session::has('thanhcong'))
+                <div class="alert alert-success">{{Session::get('thanhcong')}}</div>
 
+            @endif
         </div>
     </div>	<!--/.main-->
 @endsection

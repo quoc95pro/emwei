@@ -23,28 +23,30 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Advanced Table</div>
                     <div class="panel-body">
-                        <table data-toggle="table" data-url="tables/data1.json"  data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc">
+                        <table data-toggle="table" data-url="http://localhost:82/emwei/public/json"  data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc" class="table table-hover">
                             <thead>
                             <tr>
                                 <th data-field="state" data-checkbox="true" >Item ID</th>
-                                <th data-field="id" data-sortable="true">Item ID</th>
-                                <th data-field="name"  data-sortable="true">Item Name</th>
-                                <th data-field="price" data-sortable="true">Item Price</th>
+                                <th data-field="IDSanPham" data-sortable="true">Item ID</th>
+                                <th data-field="TenSanPham"  data-sortable="true">Item Name</th>
+                                <th data-field="Gia" data-sortable="true">Item Price</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            @foreach($listProduct as $product)
-                                <tr>
-                                    <td class="bs-checkbox">
-                                        <input name="toolbar1" type="checkbox">
+                            {{--<tbody>--}}
 
-                                    </td>
-                                    <td>{{$product->IDSanPham}}</td>
-                                    <td>{{$product->TenSanPham}}</td>
-                                    <td>{{$product->Gia}}</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
+                            {{--@foreach($listProduct as $product)--}}
+                                {{--<tr >--}}
+                                    {{--<td class="bs-checkbox">--}}
+                                        {{--<input name="toolbar1"  type="checkbox" >--}}
+
+                                    {{--</td>--}}
+                                    {{--<td>{{$product->IDSanPham}}</td>--}}
+                                    {{--<td>{{$product->TenSanPham}}</td>--}}
+                                    {{--<td>{{$product->Gia}}</td>--}}
+                                {{--</tr>--}}
+
+                            {{--@endforeach--}}
+                            {{--</tbody>--}}
                         </table>
                     </div>
                 </div>

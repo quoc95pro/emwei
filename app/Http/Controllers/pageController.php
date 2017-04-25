@@ -7,18 +7,20 @@
  */
 
 namespace App\Http\Controllers;
+use App\Description;
+use App\Product;
+use App\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-
-use Illuminate\View\View;
-use phpDocumentor\Reflection\Types\Integer;
-
-class pageController extends \Illuminate\Routing\Controller
+class pageController extends Controller
 {
       public function index(){
-          $newProduct = DB::select('SELECT * FROM `tbl_anh`,`tbl_sanpham` WHERE tbl_anh.MaSanPham=tbl_sanpham.IDSanPham ORDER BY tbl_sanpham.IDSanPham DESC LIMIT 5');
-          $slide = DB::select('SELECT * FROM `tbl_anh`,`tbl_sanpham` WHERE tbl_anh.MaSanPham=tbl_sanpham.IDSanPham LIMIT 3');
+          $newProduct = DB::select('SELECT * FROM `tbl_anh`,`tbl_sanpham` WHERE tbl_anh.MaSanPham=tbl_sanpham.IDSanPham ORDER BY tbl_sanpham.IDSanPham DESC LIMIT 6');
+           // $newProduct=Product::orderBy('IDSanPham','DESC')->take(5)->get();
+
+          $slide = DB::select('SELECT * FROM `tbl_anh`,`tbl_sanpham` WHERE tbl_anh.MaSanPham=tbl_sanpham.IDSanPham ORDER BY tbl_sanpham.IDSanPham DESC LIMIT 3');
+         // $slide=Product::take(3) ->get();
           $left=DB::select('SELECT HangSanXuat,COUNT(*) AS Count FROM `tbl_sanpham` GROUP BY HangSanXuat');
           $tabTitle=DB::select('SELECT LoaiPhuKien from `tbl_phukien` GROUP BY LoaiPhukien');
           $tabContent=DB::select('SELECT * FROM `tbl_anhphukien`,`tbl_phukien` WHERE tbl_anhphukien.MaSanPham=tbl_phukien.IDPhuKien ORDER BY tbl_phukien.IDPhuKien DESC LIMIT 5');
@@ -170,4 +172,46 @@ class pageController extends \Illuminate\Routing\Controller
             return $prefixID.$nextID;
 
         }
+     public function add(Request $req)
+     {
+         $this->validate($req,
+             [
+                 'name'=>'required'
+
+             ],[
+                 'name.required'=>'error'
+             ]
+         );
+
+         $product = new Product();
+         $product->IDSanPham = $req->productID;
+         $product->TenSanPham = $req->productName;
+         $product->HangSanXuat = $req->productCompany;
+         $product->LoaiSanPham = $req->productType;
+         $product->Gia = $req->productPrice;
+         $product->SoLuong = $req->productQTY;
+         $product->TinhTrang = $req->productStatus;
+         $mota = Description::all();
+         $stringMoTa='';
+         foreach ($mota as $item){
+             $tenMoTa=$item->TenMoTa;
+             $stringMoTa=$stringMoTa.$tenMoTa.':'.$req->$tenMoTa.';';
+         }
+         $product->MoTa=$stringMoTa;
+         $product->save();
+
+
+//         foreach ($req->image as $img)
+//             $filename+= $img->store('photos');
+         foreach ($req->image as $file) {
+             $path = public_path() . '/images/';
+             $file->move($path, $req->productID.'.'.$file->getClientOriginalExtension());
+             $photo = new Photo();
+             $photo->MaSanPham = $req->productID;
+             $photo->link = 'images/'.$req->productID.'.'.$file->getClientOriginalExtension();
+             $photo->save();
+         }
+
+         return redirect()->back()->with('thanhcong','Thêm thành công');
+     }
 }

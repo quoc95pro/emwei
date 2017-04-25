@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use Illuminate\Http\Request;
 
 Route::get('/', 'pageController@index' );
 Route::get('readAll',function (){
@@ -131,7 +132,12 @@ Route::get('add-product',[
     'uses'=>'PageController@adminAddProduct'
 ]);
 
-Route::get('add-function',[
-    'as'=>'add-function',
-    'uses'=>'PageController@add-function'
-]);
+Route::post('add',[
+    'as'=>'add',
+    'uses'=>'PageController@add'
+    ]);
+
+Route::get('/json',function (){
+    $product = \App\Product::get(['IDSanPham','TenSanPham','Gia']);
+    return $product->toJson();
+});
