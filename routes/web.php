@@ -138,6 +138,21 @@ Route::post('add',[
     ]);
 
 Route::get('/json',function (){
-    $product = \App\Product::get(['IDSanPham','TenSanPham','Gia']);
+    $product = \App\Product::get(['IDSanPham','TenSanPham','Gia','TinhTrang']);
     return $product->toJson();
 });
+
+Route::get('edit-product/{id}',[
+    'as'=>'edit-product',
+    'uses'=>'PageController@getEditProduct'
+]);
+
+Route::post('edit',[
+    'as'=>'edit',
+    'uses'=>'PageController@postEditProduct'
+]);
+
+Route::get('delete-product/{id}',[
+    'as'=>'delete-product',
+    'uses'=>'PageController@getDeleteProduct'
+]);

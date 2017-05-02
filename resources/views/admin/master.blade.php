@@ -5,24 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Lumino - Dashboard</title>
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/datepicker3.css" rel="stylesheet">
-    <link href="css/bootstrap-table.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+    <link href="{{ URL::asset('css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{ URL::asset('css/datepicker3.css')}}" rel="stylesheet">
+    <link href="{{ URL::asset('css/bootstrap-table.css')}}" rel="stylesheet">
+    <link href="{{ URL::asset('css/styles.css')}}" rel="stylesheet">
     <link href="{{ URL::asset('css/bootstrap-table.css') }}" rel="stylesheet">
-    <link href="css/fileinput.css" media="all" rel="stylesheet" type="text/css"/>
-    <link href="themes/explorer/theme.css" media="all" rel="stylesheet" type="text/css"/>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="js/fileinput.js" type="text/javascript"></script>
-    <script src="themes/explorer/theme.js" type="text/javascript"></script>
+    <link href="{{ URL::asset('css/fileinput.css')}}" media="all" rel="stylesheet" type="text/css"/>
+    <link href="{{ URL::asset('themes/explorer/theme.css')}}" media="all" rel="stylesheet" type="text/css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="{{ URL::asset('js/fileinput.js')}}" type="text/javascript"></script>
+    <script src="{{ URL::asset('themes/explorer/theme.js')}}" type="text/javascript"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
     <!--Icons-->
-    <script src="js/lumino.glyphs.js"></script>
+    <script src="{{ URL::asset('js/lumino.glyphs.js')}}"></script>
 
     <!--[if lt IE 9]>
-    <script src="js/html5shiv.js"></script>
-    <script src="js/respond.min.js"></script>
+    <script src="{{ URL::asset('js/html5shiv.js')}}"></script>
+    <script src="{{ URL::asset('js/respond.min.js')}}"></script>
     <![endif]-->
+    <script src="{{ URL::asset('js/jquery-1.11.1.min.js')}}"></script>
+    <script src="{{ URL::asset('js/bootstrap.min.js')}}"></script>
+    <script src="{{ URL::asset('js/chart.min.js')}}"></script>
+    <script src="{{ URL::asset('js/chart-data.js')}}"></script>
+    <script src="{{ URL::asset('js/easypiechart.js')}}"></script>
+    <script src="{{ URL::asset('js/easypiechart-data.js')}}"></script>
+    <script src="{{ URL::asset('js/bootstrap-datepicker.js')}}"></script>
+    <script src="{{ URL::asset('js/bootstrap-table.js')}}"></script>
     <style>
         .width40{
             width: 49%;
@@ -44,6 +52,34 @@
         .kv-main{
             width: 100%;
         }
+
+        .table-hover tr{
+            height: 70px;
+        }
+
+        .table-hover>tbody>tr>td>a{
+            display: none;
+            text-decoration: none;
+            float: left;
+            margin: 3px;
+            border-right: solid 1px #c1c1c1;
+            padding-right: 4px;
+        }
+        .table-hover>tbody>tr>td>a:hover{
+            color: red;
+        }
+        .table-hover>tbody>tr:hover>td>a{
+            display: block;
+            text-decoration: none;
+        }
+        .form-group>label{
+            color: #30a5ff;
+        }
+        .table-hover>tbody>tr>td>.view-button{
+            border-right: none;
+            padding-right: 4px;
+        }
+
     </style>
 </head>
 
@@ -52,14 +88,7 @@
 @include('admin.sidebar')
 @yield('content')
 
-<script src="js/jquery-1.11.1.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/chart.min.js"></script>
-<script src="js/chart-data.js"></script>
-<script src="js/easypiechart.js"></script>
-<script src="js/easypiechart-data.js"></script>
-<script src="js/bootstrap-datepicker.js"></script>
-<script src="js/bootstrap-table.js"></script>
+
 <script>
     $('#calendar').datepicker({
     });
@@ -107,6 +136,8 @@
         return {};
     }
 </script>
+
+
 </body>
 
 </html>

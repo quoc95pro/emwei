@@ -23,30 +23,38 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Advanced Table</div>
                     <div class="panel-body">
-                        <table data-toggle="table" data-url="http://localhost:82/emwei/public/json"  data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc" class="table table-hover">
+                        <table data-toggle="table"   data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc" class="table table-hover">
                             <thead>
                             <tr>
-                                <th data-field="state" data-checkbox="true" >Item ID</th>
-                                <th data-field="IDSanPham" data-sortable="true">Item ID</th>
-                                <th data-field="TenSanPham"  data-sortable="true">Item Name</th>
-                                <th data-field="Gia" data-sortable="true">Item Price</th>
+                                <th data-field="state" data-checkbox="true" ></th>
+                                <th data-field="IDSanPham" data-sortable="true">Mã Sản Phẩm</th>
+                                <th data-field="TenSanPham"  data-sortable="true">Tên Sản Phẩm</th>
+                                <th data-field="Gia" data-sortable="true">Giá</th>
+                                <th data-field="TinhTrang" data-sortable="true">Tình Trạng</th>
                             </tr>
                             </thead>
-                            {{--<tbody>--}}
+                            <tbody>
 
-                            {{--@foreach($listProduct as $product)--}}
-                                {{--<tr >--}}
-                                    {{--<td class="bs-checkbox">--}}
-                                        {{--<input name="toolbar1"  type="checkbox" >--}}
+                            @foreach($listProduct as $product)
+                                <tr>
+                                    <td class="bs-checkbox">
+                                        <input name="toolbar1" value="{{$product->IDSanPham}}"  type="checkbox" >
 
-                                    {{--</td>--}}
-                                    {{--<td>{{$product->IDSanPham}}</td>--}}
-                                    {{--<td>{{$product->TenSanPham}}</td>--}}
-                                    {{--<td>{{$product->Gia}}</td>--}}
-                                {{--</tr>--}}
+                                    </td>
+                                    <td>{{$product->IDSanPham}}<br/>
+                                        <a class="edit-button" href="{{route('edit-product',$product->IDSanPham)}}" >Sửa</a>
+                                        <a class="delete-button" href="{{route('delete-product',$product->IDSanPham)}}" >Xóa</a>
+                                        <a class="view-button" href="{{route('edit-product',$product->IDSanPham)}}" >Chi tiết</a>
+                                    </td>
+                                    <td>{{$product->TenSanPham}}</td>
+                                    <td>{{$product->Gia}}</td>
+                                    <td>{{$product->TinhTrang}}</td>
+                                </tr>
 
-                            {{--@endforeach--}}
-                            {{--</tbody>--}}
+                            @endforeach
+
+
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -302,4 +310,6 @@
             </div><!--/.col-->
         </div><!--/.row-->
     </div>	<!--/.main-->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-table.js"></script>
 @endsection

@@ -1,5 +1,6 @@
 @extends('admin.master')
 @section('content')
+
     <script>
         document.getElementById("Product").className += " active";
         document.getElementById("Dashboard").className -= "active";
@@ -15,7 +16,7 @@
 
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Thêm Sản Phẩm</h1>
+                <h1 class="page-header">Sửa Sản Phẩm</h1>
             </div>
         </div><!--/.row-->
         <div class="row">
@@ -23,73 +24,103 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Thông Tin Sản Phẩm</div>
                     <div class="panel-body">
-                        <form enctype="multipart/form-data"  action="{{route('add')}}" method="post">
+                        <form enctype="multipart/form-data"  action="{{route('edit')}}" method="post">
                             {{csrf_field()}}
-                        <div class="col-md-6">
-
-
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Loại Sản Phẩm</label>
                                     <select class="form-control" name="productType" id="productTypeSelect">
                                         @foreach($productTypes as $productType)
-                                            <option>{{$productType->LoaiSanPham}}</option>
+
+                                            @if($productType->LoaiSanPham==$product[0]->LoaiSanPham)
+                                                <option selected>{{$productType->LoaiSanPham}}</option>
+                                            @else
+                                                <option>{{$productType->LoaiSanPham}}</option>
+                                                @endif
+
+
+
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Mã Sản Phẩm</label>
-                                    <input class="form-control"  value="{{$nextID}}" name="productID" readonly >
+                                    <input class="form-control"  value="{{$product[0]->IDSanPham}}" name="productID" readonly >
                                 </div>
-                            <div class="form-group">
-                                <label>Tên Sản Phẩm</label>
-                                <input class="form-control" name="productName">
-                            </div>
-                            <div class="form-group">
-                                <label>Hãng Sản Xuất</label>
-                                <select class="form-control" id="companySelect" name="productCompany">
-                                    @foreach($companies as $company)
-                                        <option>{{$company->HangSanXuat}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Giá</label>
-                                <input class="form-control" name="productPrice">
-                            </div>
-                            <div class="form-group">
-                                <label>Số Lượng</label>
-                                <input class="form-control" name="productQTY">
-                            </div>
-                            <div class="form-group">
-                                <label>Tình Trạng</label>
-                                <select class="form-control" name="productStatus">
-                                    <option>Còn Hàng</option>
-                                    <option>Hết Hàng</option>
-                                    <option>Liên Hệ</option>
-                                </select>
-                            </div>
+                                <div class="form-group">
+                                    <label>Tên Sản Phẩm</label>
+                                    <input class="form-control" value="{{$product[0]->TenSanPham}}" name="productName">
+                                </div>
+                                <div class="form-group">
+                                    <label>Hãng Sản Xuất</label>
+                                    <select class="form-control" id="companySelect" name="productCompany">
+                                        @foreach($companies as $company)
+                                            @if($company->HangSanXuat==$product[0]->HangSanXuat)
+                                                <option selected>{{$company->HangSanXuat}}</option>
+                                            @else
+                                            <option>{{$company->HangSanXuat}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Giá</label>
+                                    <input class="form-control" value="{{$product[0]->Gia}}" name="productPrice">
+                                </div>
+                                <div class="form-group">
+                                    <label>Số Lượng</label>
+                                    <input class="form-control" value="{{$product[0]->SoLuong}}" name="productQTY">
+                                </div>
+                                <div class="form-group">
+                                    <label>Tình Trạng</label>
+                                    <select class="form-control" name="productStatus">
 
-                            <div class="form-group" style="margin-top: 70px;border-bottom: 1px solid #eee;border-top:1px solid #eee ">
-                                <label  style="margin-top: 30px">Mô Tả Sản Phẩm</label>
-                                <div style="overflow: auto ;height: 200px">
-                                    @foreach($description as $des)
+                                        <option @if($product[0]->TinhTrang=="Còn Hàng") selected @endif>Còn Hàng</option>
+                                        <option @if($product[0]->TinhTrang=="Hết Hàng") selected @endif>Hết Hàng</option>
+                                        <option @if($product[0]->TinhTrang=="Liên Hệ") selected @endif>Liên Hệ</option>
+                                    </select>
+                                </div>
 
+                                <div class="form-group" style="margin-top: 70px;border-bottom: 1px solid #eee;border-top:1px solid #eee ">
+                                    <label  style="margin-top: 30px">Mô Tả Sản Phẩm</label>
+                                    <div style="overflow: auto ;height: 200px">
+                                        <?php
+                                        $x = preg_split("/;/", $product[0]->MoTa);
+                                        $a= array();
+                                        foreach ($x as $b){
+                                            $c = preg_split("/:/",$b);
+                                            $arr1 = array($c[0] => $c[1]);
+                                            $a+=$arr1;
+                                        }
+
+//                                        foreach($a as $key=>$test){
+//                                            echo "Key: $key. Gia Tri: $test<br>";
+//                                        }
+                                        ?>
+
+                                        @foreach($description as $des)
+                                            @foreach($a as $key=>$test)
+                                                @if($key==$des->MoTa)
                                             <label>{{$des->MoTa}}</label>
-                                            <input class="form-control" name="{{$des->TenMoTa}}">
-
-                                    @endforeach
+                                            <input class="form-control" value="{{$test}}" name="{{$des->TenMoTa}}">
+                                                    @else
+                                                        <label>{{$des->MoTa}}</label>
+                                                        <input class="form-control"  name="{{$des->TenMoTa}}">
+                                                 @endif
+                                            @endforeach
+                                        @endforeach
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Thêm Ảnh</label>
-                                <div class="container kv-main">
+                                <div class="form-group">
+                                    <label>Thêm Ảnh</label>
+                                    <div class="container kv-main">
 
                                         <input id="kv-explorer" type="file" name="image[]" multiple accept="image/*">
                                         <br>
 
+                                    </div>
                                 </div>
                             </div>
-                    </div>
                             <div class="col-md-6">
 
                                 <div class="form-group">
@@ -120,7 +151,7 @@
 
 
 
-                                 </div>
+                                </div>
                                 <button type="submit" name="Submit" class="btn btn-primary">Submit</button>
                                 <button type="reset" class="btn btn-default">Reset</button>
 
@@ -146,13 +177,13 @@
 
 
                             function newProductFunction() {
-                               if(document.getElementById("productTypeCheckBox").checked){
-                                   document.getElementById("productTypeInput").disabled = false;
-                                   document.getElementById("productTypeSelect").disabled = true;
-                               }else {
-                                   document.getElementById("productTypeInput").disabled = true;
-                                   document.getElementById("productTypeSelect").disabled = false;
-                               }
+                                if(document.getElementById("productTypeCheckBox").checked){
+                                    document.getElementById("productTypeInput").disabled = false;
+                                    document.getElementById("productTypeSelect").disabled = true;
+                                }else {
+                                    document.getElementById("productTypeInput").disabled = true;
+                                    document.getElementById("productTypeSelect").disabled = false;
+                                }
 
                             }
 
@@ -166,7 +197,7 @@
                                 }
 
                             }
-                                $row =0;
+                            $row =0;
                             function addNewDescription() {
                                 var tr = document.createElement("TR");
                                 var td1 = document.createElement("TD");
@@ -200,9 +231,9 @@
 
                             }
                         </script>
-                </div>
-            </div><!-- /.col-->
-        </div><!-- /.row -->
+                    </div>
+                </div><!-- /.col-->
+            </div><!-- /.row -->
             @if(count($errors)>0)
                 <div class="alert alert-danger">
                     @foreach($errors->all() as $err)

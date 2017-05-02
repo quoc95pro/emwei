@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 class pageController extends Controller
 {
       public function index(){
-          $newProduct = DB::select('SELECT * FROM `tbl_anh`,`tbl_sanpham` WHERE tbl_anh.MaSanPham=tbl_sanpham.IDSanPham ORDER BY tbl_sanpham.IDSanPham DESC LIMIT 6');
+          $newProduct = DB::select('SELECT * FROM `tbl_anh`,`tbl_sanpham` WHERE tbl_anh.MaSanPham=tbl_sanpham.IDSanPham and tbl_sanpham.TinhTrang!="Đã xóa" ORDER BY tbl_sanpham.IDSanPham DESC LIMIT 6');
            // $newProduct=Product::orderBy('IDSanPham','DESC')->take(5)->get();
 
           $slide = DB::select('SELECT * FROM `tbl_anh`,`tbl_sanpham` WHERE tbl_anh.MaSanPham=tbl_sanpham.IDSanPham ORDER BY tbl_sanpham.IDSanPham DESC LIMIT 3');
@@ -176,7 +176,7 @@ class pageController extends Controller
      {
          $this->validate($req,
              [
-                 'name'=>'required'
+                 'productName'=>'required'
 
              ],[
                  'name.required'=>'error'
@@ -194,10 +194,10 @@ class pageController extends Controller
          $mota = Description::all();
          $stringMoTa='';
          foreach ($mota as $item){
-             $tenMoTa=$item->TenMoTa;
+             $tenMoTa=$item->MoTa;
              $stringMoTa=$stringMoTa.$tenMoTa.':'.$req->$tenMoTa.';';
          }
-         $product->MoTa=$stringMoTa;
+         $product->MoTa=rtrim($stringMoTa,";");
          $product->save();
 
 
@@ -214,4 +214,61 @@ class pageController extends Controller
 
          return redirect()->back()->with('thanhcong','Thêm thành công');
      }
+
+    public function getEditProduct(Request $req){
+        $product = DB::select("SELECT * FROM `tbl_sanpham` WHERE IDSanPham='$req->id'");
+       $productTypes = DB::select('SELECT LoaiSanPham FROM `tbl_sanpham` GROUP BY LoaiSanPham');
+        $companies = DB::select('SELECT HangSanXuat FROM `tbl_sanpham` GROUP BY HangSanXuat');
+        $description = DB::select('SELECT * FROM `tbl_motasanpham`');
+
+       return \view('admin.edit')
+           ->with(['product'=>$product])
+            ->with(['productTypes'=>$productTypes])
+            ->with(['companies'=>$companies])
+            ->with(['description'=>$description])
+           ->with(['nextID'=>$this->NextID()]);
+
+        return $req->id;
+
+    }
+
+    public function postEditProduct(Request $req)
+    {
+        $this->validate($req,
+            [
+                'productName'=>'required'
+
+            ],[
+                'name.required'=>'error'
+            ]
+        );
+
+        $product = Product::find($req->productID);
+        $product->TenSanPham = $req->productName;
+        $product->HangSanXuat = $req->productCompany;
+        $product->LoaiSanPham = $req->productType;
+        $product->Gia = $req->productPrice;
+        $product->SoLuong = $req->productQTY;
+        $product->TinhTrang = $req->productStatus;
+        $mota = Description::all();
+        $stringMoTa='';
+        foreach ($mota as $item){
+            $tenMoTa=$item->MoTa;
+            $stringMoTa=$stringMoTa.$tenMoTa.':'.$req->$tenMoTa.';';
+        }
+
+        $product->MoTa=rtrim($stringMoTa,";");
+        $product->save();
+
+
+        return redirect()->back()->with('thanhcong','Sửa thành công');
+    }
+
+    public function getDeleteProduct(Request $req){
+        $product = Product::find($req->id);
+        $product->TinhTrang = "Đã xóa";
+        $product->save();
+        return $this->adminAllProduct();
+
+    }
 }
