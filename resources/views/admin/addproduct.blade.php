@@ -29,21 +29,13 @@
 
 
                                 <div class="form-group">
-                                    <label>Loại Sản Phẩm</label>
+                                    <label style="width: 100%">Loại Sản Phẩm <a href="{{route('getAddProductType')}}" class="btn btn-primary btn-md" style="float: right">Loại Sản Phẩm Mới</a></label>
                                     <select class="form-control" name="productType" id="productTypeSelect">
-                                        @foreach($productTypes as $productType)
-                                            <option>{{$productType->LoaiSanPham}}</option>
+                                        @foreach($listType as $productType)
+                                            <option>{{$productType->TenLoaiSanPham}}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label>Mã Sản Phẩm</label>
-                                    <input class="form-control"  value="{{$nextID}}" name="productID" readonly >
-                                </div>
-                            <div class="form-group">
-                                <label>Tên Sản Phẩm</label>
-                                <input class="form-control" name="productName">
-                            </div>
                             <div class="form-group">
                                 <label>Hãng Sản Xuất</label>
                                 <select class="form-control" id="companySelect" name="productCompany">
@@ -51,6 +43,10 @@
                                         <option>{{$company->HangSanXuat}}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Tên Sản Phẩm</label>
+                                <input class="form-control" name="productName">
                             </div>
                             <div class="form-group">
                                 <label>Giá</label>
@@ -69,17 +65,7 @@
                                 </select>
                             </div>
 
-                            <div class="form-group" style="margin-top: 70px;border-bottom: 1px solid #eee;border-top:1px solid #eee ">
-                                <label  style="margin-top: 30px">Mô Tả Sản Phẩm</label>
-                                <div style="overflow: auto ;height: 200px">
-                                    @foreach($description as $des)
 
-                                            <label>{{$des->MoTa}}</label>
-                                            <input class="form-control" name="{{$des->TenMoTa}}">
-
-                                    @endforeach
-                                </div>
-                            </div>
                             <div class="form-group">
                                 <label>Thêm Ảnh</label>
                                 <div class="container kv-main">
@@ -90,39 +76,32 @@
                                 </div>
                             </div>
                     </div>
+
                             <div class="col-md-6">
-
                                 <div class="form-group">
-                                    <label><input type="checkbox"  onchange="newProductFunction()" id="productTypeCheckBox">  Loại Sản Phẩm Mới</label>
-                                    <input class="form-control"  disabled id="productTypeInput">
+                                    <label>Mã Sản Phẩm</label>
+                                    <input  class="form-control"  value="{{$nextID}}" name="productID" style="margin-top:13px " readonly >
                                 </div>
-
-                                <div class="form-group" style="margin-top: 158px">
-                                    <label><input type="checkbox"  onchange="newCompanyFunction()" id="companyCheckBox">  Hãng Sản Xuất Mới</label>
+                                <div class="form-group" >
+                                    <label><input type="checkbox"  onchange="newCompanyFunction()" name="companyCheckBox" id="companyCheckBox">  Hãng Sản Xuất Mới</label>
                                     <input class="form-control"  disabled id="companyInput">
                                 </div>
 
+                                <div class="form-group" style="margin-top: 70px;border-bottom: 1px solid #eee;border-top:1px solid #eee ">
+                                    <label  style="margin-top: 30px">Mô Tả Sản Phẩm</label>
+                                    <div style="overflow: auto ;height: 450px">
+                                        @foreach($description as $des)
+
+                                            <label>{{$des->MoTa}}</label>
+                                            <input class="form-control" name="{{$des->TenMoTa}}">
+
+                                        @endforeach
+                                    </div>
+                                </div>
 
 
-                                <div class="form-group" style="margin-top: 293px;border-bottom: 1px solid #eee;border-top:1px solid #eee ">
-                                    <a class="btn btn-primary btn-md"  style="margin-top: 30px" onclick="addNewDescription()">Thêm Mô Tả</a>
-                                    <table   data-toggle="table" data-pagination="true">
-                                        <thead>
-                                        <tr>
-                                            <th data-field="state" data-checkbox="true" ></th>
-                                            <th data-field="id" data-sortable="true">Tên Mô Tả</th>
-                                            <th data-field="name"  data-sortable="true">Giá Trị</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="addNewDiv" style="overflow: auto ;height: 200px">
-                                        </tbody>
-                                    </table>
-
-
-
-                                 </div>
-                                <button type="submit" name="Submit" class="btn btn-primary">Submit</button>
-                                <button type="reset" class="btn btn-default">Reset</button>
+                                <button type="submit" name="Submit" style="width: 150px" class="btn btn-primary">Submit</button>
+                                <button type="reset" class="btn btn-default" style="width: 150px">Reset</button>
 
 
                             </div>
@@ -145,21 +124,14 @@
                             });
 
 
-                            function newProductFunction() {
-                               if(document.getElementById("productTypeCheckBox").checked){
-                                   document.getElementById("productTypeInput").disabled = false;
-                                   document.getElementById("productTypeSelect").disabled = true;
-                               }else {
-                                   document.getElementById("productTypeInput").disabled = true;
-                                   document.getElementById("productTypeSelect").disabled = false;
-                               }
-
-                            }
 
                             function newCompanyFunction() {
                                 if(document.getElementById("companyCheckBox").checked){
                                     document.getElementById("companyInput").disabled = false;
                                     document.getElementById("companySelect").disabled = true;
+                                    var txt = document.getElementById("companyInput");
+                                    txt.disabled = false;
+                                    txt.setAttribute('name','companyInput');
                                 }else {
                                     document.getElementById("companyInput").disabled = true;
                                     document.getElementById("companySelect").disabled = false;
@@ -167,38 +139,7 @@
 
                             }
                                 $row =0;
-                            function addNewDescription() {
-                                var tr = document.createElement("TR");
-                                var td1 = document.createElement("TD");
-                                td1.className='bs-checkbox';
-                                var checkBox = document.createElement("INPUT");
-                                checkBox.setAttribute("type","checkbox");
-                                checkBox.setAttribute("name","toolbar1");
-                                td1.appendChild(checkBox);
 
-                                var td2 = document.createElement("TD");
-                                var input1 = document.createElement("INPUT");
-                                input1.className='form-control';
-                                input1.setAttribute("placeholder","Tên Mô Tả");
-                                td2.appendChild(input1);
-
-                                var td3 = document.createElement("TD");
-                                var input2 = document.createElement("INPUT");
-                                input2.className='form-control';
-                                input2.setAttribute("placeholder","Giá Trị");
-                                td3.appendChild(input2);
-                                tr.appendChild(td1);
-                                tr.appendChild(td2);
-                                tr.appendChild(td3);
-
-                                document.getElementById("addNewDiv").appendChild(tr)
-                                var cur_columns = document.getElementsByClassName('no-records-found');
-                                for (var i = 0; i < cur_columns.length; i++) {
-                                    cur_columns[i].parentNode.removeChild(cur_columns[i]);
-                                }
-
-
-                            }
                         </script>
                 </div>
             </div><!-- /.col-->

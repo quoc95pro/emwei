@@ -84,7 +84,7 @@
                                 <div class="form-group" style="margin-top: 70px;border-bottom: 1px solid #eee;border-top:1px solid #eee ">
                                     <label  style="margin-top: 30px">Mô Tả Sản Phẩm</label>
                                     <div style="overflow: auto ;height: 200px">
-                                        <?php
+                                       @php
                                         $x = preg_split("/;/", $product[0]->MoTa);
                                         $a= array();
                                         foreach ($x as $b){
@@ -96,18 +96,25 @@
 //                                        foreach($a as $key=>$test){
 //                                            echo "Key: $key. Gia Tri: $test<br>";
 //                                        }
-                                        ?>
+                                        @endphp
 
                                         @foreach($description as $des)
+                                            @php
+                                                $boo=false;
+                                                @endphp
                                             @foreach($a as $key=>$test)
                                                 @if($key==$des->MoTa)
                                             <label>{{$des->MoTa}}</label>
                                             <input class="form-control" value="{{$test}}" name="{{$des->TenMoTa}}">
-                                                    @else
-                                                        <label>{{$des->MoTa}}</label>
-                                                        <input class="form-control"  name="{{$des->TenMoTa}}">
+                                               @php
+                                                        $boo=true;
+                                                    @endphp
                                                  @endif
                                             @endforeach
+                                            @if($boo==false)
+                                             <label>{{$des->MoTa}}</label>
+                                             <input class="form-control"  name="{{$des->TenMoTa}}">
+                                                @endif
                                         @endforeach
                                     </div>
                                 </div>

@@ -54,7 +54,7 @@
 									</div>
 								</div>
 							</div>
-							
+
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h4 class="panel-title">
@@ -112,7 +112,7 @@
 								</div>
 							</div>
 						</div><!--/category-products-->
-					
+
 						<div class="brands_products"><!--brands_products-->
 							<h2>Brands</h2>
 							<div class="brands-name">
@@ -127,7 +127,7 @@
 								</ul>
 							</div>
 						</div><!--/brands_products-->
-						
+
 						<div class="price-range"><!--price-range-->
 							<h2>Price Range</h2>
 							<div class="well">
@@ -135,11 +135,11 @@
 								 <b>$ 0</b> <b class="pull-right">$ 600</b>
 							</div>
 						</div><!--/price-range-->
-						
+
 						<div class="shipping text-center"><!--shipping-->
 							<img src="{{ URL::asset('images/home/shipping.jpg') }}" alt="" />
 						</div><!--/shipping-->
-						
+
 					</div>
 				</div>
 				@foreach($product as $p)
@@ -147,7 +147,7 @@
 					<div class="product-details"><!--product-details-->
 						<div class="col-sm-5">
 							<div class="view-product">
-									<img src="{{$p->link}}" alt="" />
+									<img src="../{{$p->AnhDaiDien}}" alt="" />
 								<h3>ZOOM</h3>
 							</div>
 							<div id="similar-product" class="carousel slide" data-ride="carousel">
@@ -189,7 +189,7 @@
 								<p>Mã Sản Phẩm: {{$p->IDSanPham}}</p>
 								<img src="{{ URL::asset('images/product-details/rating.png') }}" alt="" />
 								<span>
-									<span>{{$p->Gia}} VND</span>
+									<span>{{number_format($p->Gia, 0, ',', '.')}} VND</span>
 									<label>Quantity:</label>
 									<input type="text" value="3" />
 									<button type="button" class="btn btn-fefault cart">
@@ -207,167 +207,51 @@
 					<div class="category-tab shop-details-tab"><!--category-tab-->
 						<div class="col-sm-12">
 							<ul class="nav nav-tabs">
-								<li><a href="#details" data-toggle="tab">Details</a></li>
-								<li><a href="#companyprofile" data-toggle="tab">Company Profile</a></li>
-								<li><a href="#tag" data-toggle="tab">Tag</a></li>
-								<li class="active"><a href="#reviews" data-toggle="tab">Reviews (5)</a></li>
+								<li  class="active"><a href="#details" data-toggle="tab">Mô Tả Sản Phẩm</a></li>
+								<li><a href="#reviews" data-toggle="tab">Đánh Giá</a></li>
 							</ul>
 						</div>
 						<div class="tab-content">
-							<div class="tab-pane fade" id="details" >
-								<div class="col-sm-3">
-									<div class="product-image-wrapper">
-										<div class="single-products">
-											<div class="productinfo text-center">
-												<img src="{{ URL::asset('images/home/gallery1.jpg') }}" alt="" />
-												<h2>$56</h2>
-												<p>Easy Polo Black Edition</p>
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-											</div>
+							<div class="tab-pane fade active in" id="details" >
+
+									<div class="panel panel-default">
+										<div class="panel-heading">Mô Tả</div>
+										<div class="panel-body">
+											<table data-toggle="table" >
+												<thead>
+												<tr>
+													<th data-field="id" data-align="left">Mô Tả</th>
+													<th data-field="name">Giá Trị</th>
+												</tr>
+												</thead>
+												<tbody>
+                                                <?php
+                                                $x = preg_split("/;/", $p->MoTa);
+                                                $a= array();
+                                                foreach ($x as $b){
+                                                    $c = preg_split("/:/",$b);
+                                                    $arr1 = array($c[0] => $c[1]);
+                                                    $a+=$arr1;
+                                                }
+                                                ?>
+													@foreach($a as $key=>$test)
+														<tr>
+															<td>{{$key}}</td>
+															<td>{{$test}}</td>
+														</tr>
+													@endforeach
+
+												</tbody>
+											</table>
 										</div>
 									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="product-image-wrapper">
-										<div class="single-products">
-											<div class="productinfo text-center">
-												<img src="{{ URL::asset('images/home/gallery2.jpg') }}" alt="" />
-												<h2>$56</h2>
-												<p>Easy Polo Black Edition</p>
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="product-image-wrapper">
-										<div class="single-products">
-											<div class="productinfo text-center">
-												<img src="{{ URL::asset('images/home/gallery3.jpg') }}" alt="" />
-												<h2>$56</h2>
-												<p>Easy Polo Black Edition</p>
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="product-image-wrapper">
-										<div class="single-products">
-											<div class="productinfo text-center">
-												<img src="{{ URL::asset('images/home/gallery4.jpg') }}" alt="" />
-												<h2>$56</h2>
-												<p>Easy Polo Black Edition</p>
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-											</div>
-										</div>
-									</div>
-								</div>
+
 							</div>
 							
-							<div class="tab-pane fade" id="companyprofile" >
-								<div class="col-sm-3">
-									<div class="product-image-wrapper">
-										<div class="single-products">
-											<div class="productinfo text-center">
-												<img src="{{ URL::asset('images/home/gallery1.jpg') }}" alt="" />
-												<h2>$56</h2>
-												<p>Easy Polo Black Edition</p>
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="product-image-wrapper">
-										<div class="single-products">
-											<div class="productinfo text-center">
-												<img src="{{ URL::asset('images/home/gallery2.jpg') }}" alt="" />
-												<h2>$56</h2>
-												<p>Easy Polo Black Edition</p>
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="product-image-wrapper">
-										<div class="single-products">
-											<div class="productinfo text-center">
-												<img src="{{ URL::asset('images/home/gallery3.jpg') }}" alt="" />
-												<h2>$56</h2>
-												<p>Easy Polo Black Edition</p>
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="product-image-wrapper">
-										<div class="single-products">
-											<div class="productinfo text-center">
-												<img src="{{ URL::asset('images/home/gallery4.jpg') }}" alt="" />
-												<h2>$56</h2>
-												<p>Easy Polo Black Edition</p>
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+
+
 							
-							<div class="tab-pane fade" id="tag" >
-								<div class="col-sm-3">
-									<div class="product-image-wrapper">
-										<div class="single-products">
-											<div class="productinfo text-center">
-												<img src="{{ URL::asset('images/home/gallery1.jpg') }}" alt="" />
-												<h2>$56</h2>
-												<p>Easy Polo Black Edition</p>
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="product-image-wrapper">
-										<div class="single-products">
-											<div class="productinfo text-center">
-												<img src="{{ URL::asset('images/home/gallery2.jpg') }}" alt="" />
-												<h2>$56</h2>
-												<p>Easy Polo Black Edition</p>
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="product-image-wrapper">
-										<div class="single-products">
-											<div class="productinfo text-center">
-												<img src="{{ URL::asset('images/home/gallery3.jpg') }}" alt="" />
-												<h2>$56</h2>
-												<p>Easy Polo Black Edition</p>
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="product-image-wrapper">
-										<div class="single-products">
-											<div class="productinfo text-center">
-												<img src="{{ URL::asset('images/home/gallery4.jpg') }}" alt="" />
-												<h2>$56</h2>
-												<p>Easy Polo Black Edition</p>
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<div class="tab-pane fade active in" id="reviews" >
+							<div class="tab-pane fade" id="reviews" >
 								<div class="col-sm-12">
 									<ul>
 										<li><a href=""><i class="fa fa-user"></i>EUGEN</a></li>
@@ -395,85 +279,52 @@
 					</div><!--/category-tab-->
 					
 					<div class="recommended_items"><!--recommended_items-->
-						<h2 class="title text-center">recommended items</h2>
-						
+						<h2 class="title text-center">Sản Phẩm Cùng Loại</h2>
+
+
 						<div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
 							<div class="carousel-inner">
-								<div class="item active">	
-									<div class="col-sm-4">
-										<div class="product-image-wrapper">
-											<div class="single-products">
-												<div class="productinfo text-center">
-													<img src="{{ URL::asset('images/home/recommend1.jpg') }}" alt="" />
-													<h2>$56</h2>
-													<p>Easy Polo Black Edition</p>
-													<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
+
+								<div class="item active">
+									@for($i=0;$i<3;$i++)
+										<div class="col-sm-4">
+											<div class="product-image-wrapper">
+												<div class="single-products">
+													@if(isset($relateProduct[$i]))
+													<div class="productinfo text-center">
+														<img src="../{{$relateProduct[$i]->AnhDaiDien}}" alt="" />
+														<h2>{{number_format($relateProduct[$i]->Gia, 0, ',', '.')}} VND</h2>
+														<p>{{$relateProduct[$i]->TenSanPham}}</p>
+														<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
+													</div>
+													@endif
 												</div>
 											</div>
 										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="product-image-wrapper">
-											<div class="single-products">
-												<div class="productinfo text-center">
-													<img src="{{ URL::asset('images/home/recommend2.jpg') }}" alt="" />
-													<h2>$56</h2>
-													<p>Easy Polo Black Edition</p>
-													<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="product-image-wrapper">
-											<div class="single-products">
-												<div class="productinfo text-center">
-													<img src="{{ URL::asset('images/home/recommend3.jpg') }}" alt="" />
-													<h2>$56</h2>
-													<p>Easy Polo Black Edition</p>
-													<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-												</div>
-											</div>
-										</div>
-									</div>
+									@endfor
 								</div>
-								<div class="item">	
-									<div class="col-sm-4">
-										<div class="product-image-wrapper">
-											<div class="single-products">
-												<div class="productinfo text-center">
-													<img src="{{ URL::asset('images/home/recommend1.jpg') }}" alt="" />
-													<h2>$56</h2>
-													<p>Easy Polo Black Edition</p>
-													<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
+
+
+								<div class="item">
+									@for($i=3;$i<6;$i++)
+										<div class="col-sm-4">
+											<div class="product-image-wrapper">
+												<div class="single-products">
+													@if(isset($relateProduct[$i]))
+													<div class="productinfo text-center">
+														<img src="../{{$relateProduct[$i]->AnhDaiDien}}" alt="" />
+														<h2>{{number_format($relateProduct[$i]->Gia, 0, ',', '.')}} VND</h2>
+														<p>{{$relateProduct[$i]->TenSanPham}}</p>
+														<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
+													</div>
+														@endif
 												</div>
 											</div>
 										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="product-image-wrapper">
-											<div class="single-products">
-												<div class="productinfo text-center">
-													<img src="{{ URL::asset('images/home/recommend2.jpg') }}" alt="" />
-													<h2>$56</h2>
-													<p>Easy Polo Black Edition</p>
-													<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="product-image-wrapper">
-											<div class="single-products">
-												<div class="productinfo text-center">
-													<img src="{{ URL::asset('images/home/recommend3.jpg') }}" alt="" />
-													<h2>$56</h2>
-													<p>Easy Polo Black Edition</p>
-													<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-												</div>
-											</div>
-										</div>
-									</div>
+									@endfor
+
+
+
 								</div>
 							</div>
 							 <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">

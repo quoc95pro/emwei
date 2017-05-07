@@ -11,6 +11,7 @@
 |
 */
 use Illuminate\Http\Request;
+use App\Customer;
 
 Route::get('/', 'pageController@index' );
 Route::get('readAll',function (){
@@ -20,7 +21,12 @@ Route::get('readAll',function (){
     }
 } );
 
-Route::get('/test', 'pageController@test' );
+Route::get('/test', function (){
+    $user = Customer::where('Email','=','quoc95@gmail.com');
+    foreach ($user as $p){
+        return $p->Email;
+    }
+});
 
 Route::get('/',[
     'as'=>'trang-chu',
@@ -30,6 +36,21 @@ Route::get('/',[
 Route::get('dang-nhap',[
     'as'=>'dang-nhap',
     'uses'=>'PageController@login'
+]);
+
+Route::post('post-login',[
+    'as'=>'post-login',
+    'uses'=>'PageController@postLogin'
+]);
+
+Route::get('dang-ky',[
+    'as'=>'dang-ky',
+    'uses'=>'PageController@signUp'
+]);
+
+Route::post('post-signup',[
+    'as'=>'post-signup',
+    'uses'=>'PageController@postSignUp'
 ]);
 
 Route::get('contact-us',[
@@ -72,9 +93,9 @@ Route::get('shop',[
     'uses'=>'PageController@shop'
 ]);
 
-Route::get('list-product/phone',[
-    'as'=>'list-product/phone',
-    'uses'=>'PageController@listProductPhone'
+Route::get('list-product/{type}',[
+    'as'=>'list-product/type',
+    'uses'=>'PageController@listProduct'
 ]);
 
 Route::get('detail-product/{id}',[
@@ -155,4 +176,20 @@ Route::post('edit',[
 Route::get('delete-product/{id}',[
     'as'=>'delete-product',
     'uses'=>'PageController@getDeleteProduct'
+]);
+
+Route::get('getAddProductType',[
+    'as'=>'getAddProductType',
+    'uses'=>'PageController@getAddProductType'
+]);
+
+Route::post('add-productType',[
+    'as'=>'add-ProductType',
+    'uses'=>'PageController@postAddProductType'
+]);
+
+
+Route::get('logout',[
+    'as'=>'logout',
+    'uses'=>'PageController@logout'
 ]);

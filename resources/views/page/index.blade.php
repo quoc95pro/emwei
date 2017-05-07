@@ -16,11 +16,11 @@
 								<div class="col-sm-6">
 									<h1><span>{{$slide[0]->HangSanXuat}}</span></h1>
 									<h2>{{$slide[0]->TenSanPham}}</h2>
-									<p>{{$slide[0]->Gia}} VND</p>
+									<p> {{number_format($slide[0]->Gia, 0, ',', '.')}} VND</p>
 									<button type="button" class="btn btn-default get">Get it now</button>
 								</div>
 								<div class="col-sm-6">
-									<img src="{{$slide[0]->link}}" class="girl img-responsive" alt="" />
+									<img src="{{$slide[0]->AnhDaiDien}}" class="girl img-responsive" alt="" />
 
 								</div>
 							</div>
@@ -28,11 +28,11 @@
 								<div class="col-sm-6">
 									<h1><span>{{$slide[1]->HangSanXuat}}</span></h1>
 									<h2>{{$slide[1]->TenSanPham}}</h2>
-									<p>{{$slide[1]->Gia}} VND</p>
+									<p>{{number_format($slide[1]->Gia, 0, ',', '.')}} VND</p>
 									<button type="button" class="btn btn-default get">Get it now</button>
 								</div>
 								<div class="col-sm-6">
-									<img src="{{ $slide[1]->link }}" class="girl img-responsive" alt="" />
+									<img src="{{ $slide[1]->AnhDaiDien }}" class="girl img-responsive" alt="" />
 
 								</div>
 							</div>
@@ -41,11 +41,11 @@
 								<div class="col-sm-6">
 									<h1><span>{{$slide[2]->HangSanXuat}}</span></h1>
 									<h2>{{$slide[2]->TenSanPham}}</h2>
-									<p>{{$slide[2]->Gia}} VND</p>
+									<p>{{number_format($slide[2]->Gia, 0, ',', '.')}} VND</p>
 									<button type="button" class="btn btn-default get">Get it now</button>
 								</div>
 								<div class="col-sm-6">
-									<img src="{{ $slide[2]->link }}" class="girl img-responsive" alt="" />
+									<img src="{{ $slide[2]->AnhDaiDien }}" class="girl img-responsive" alt="" />
 
 								</div>
 							</div>
@@ -181,8 +181,8 @@
 								<div class="product-image-wrapper">
 									<div class="single-products">
 										<div class="productinfo text-center">
-											<img src="{{$newProduct->link}}" alt="" />
-											<h2>{{$newProduct->Gia}} VND</h2>
+											<img src="{{$newProduct->AnhDaiDien}}" alt="" />
+											<h2>{{number_format($newProduct->Gia, 0, ',', '.')}} VND</h2>
 											<p>{{$newProduct->TenSanPham}}</p>
 
 										</div>
@@ -190,7 +190,7 @@
 											<div class="overlay-content">
 												<h2>{{$newProduct->Gia}}</h2>
 												<p>{{$newProduct->TenSanPham}}</p>
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
 											</div>
 										</div>
 										<img src="{{ URL::asset('images/home/new.png') }}" class="new" alt="" />

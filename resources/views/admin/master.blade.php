@@ -9,7 +9,6 @@
     <link href="{{ URL::asset('css/datepicker3.css')}}" rel="stylesheet">
     <link href="{{ URL::asset('css/bootstrap-table.css')}}" rel="stylesheet">
     <link href="{{ URL::asset('css/styles.css')}}" rel="stylesheet">
-    <link href="{{ URL::asset('css/bootstrap-table.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('css/fileinput.css')}}" media="all" rel="stylesheet" type="text/css"/>
     <link href="{{ URL::asset('themes/explorer/theme.css')}}" media="all" rel="stylesheet" type="text/css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -23,8 +22,7 @@
     <script src="{{ URL::asset('js/html5shiv.js')}}"></script>
     <script src="{{ URL::asset('js/respond.min.js')}}"></script>
     <![endif]-->
-    <script src="{{ URL::asset('js/jquery-1.11.1.min.js')}}"></script>
-    <script src="{{ URL::asset('js/bootstrap.min.js')}}"></script>
+
     <script src="{{ URL::asset('js/chart.min.js')}}"></script>
     <script src="{{ URL::asset('js/chart-data.js')}}"></script>
     <script src="{{ URL::asset('js/easypiechart.js')}}"></script>
@@ -88,7 +86,8 @@
 @include('admin.sidebar')
 @yield('content')
 
-
+<script src="{{ URL::asset('js/jquery-1.11.1.min.js')}}"></script>
+<script src="{{ URL::asset('js/bootstrap.min.js')}}"></script>
 <script>
     $('#calendar').datepicker({
     });

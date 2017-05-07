@@ -10,6 +10,6 @@ class Photo extends Model
     public $timestamps = false;
     public function relatedGallery()
     {
-        $this->belongsTo('App\Product', 'MaSanPham');
+        $this->belongsTo('App\Product');
     }
 }

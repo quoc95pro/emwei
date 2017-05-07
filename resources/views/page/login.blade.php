@@ -5,34 +5,37 @@
 			<div class="row">
 				<div class="col-sm-4 col-sm-offset-1">
 					<div class="login-form"><!--login form-->
-						<h2>Login to your account</h2>
-						<form action="#">
-							<input type="text" placeholder="Name" />
-							<input type="email" placeholder="Email Address" />
+						<h2>Đăng Nhập</h2>
+						<form action="{{'post-login'}}" method="post">
+							{{csrf_field()}}
+							@if(isset($_COOKIE['mail']))
+							<input type="text" placeholder="Email" value="{{$_COOKIE['mail']}}" name="mail"/>
+							<input type="password" placeholder="Mật Khẩu" value="{{$_COOKIE['pass']}}" name="pass"/>
 							<span>
-								<input type="checkbox" class="checkbox"> 
-								Keep me signed in
+								<input type="checkbox" name="save" checked class="checkbox">
+								Lưu Mật Khẩu ?
 							</span>
-							<button type="submit" class="btn btn-default">Login</button>
+							@else
+								<input type="text" placeholder="Email"  name="mail"/>
+								<input type="password" placeholder="Mật Khẩu"  name="pass"/>
+								<span>
+								<input type="checkbox" name="save"  class="checkbox">
+								Lưu Mật Khẩu ?
+							</span>
+							@endif
+							<button type="submit" class="btn btn-default">Đăng Nhập</button>
 						</form>
+
+						@if(Session::has('flag'))
+							<div class="alert alert-{{Session::get('flag')}}">{{Session::get('message')}}</div>
+						@endif
 					</div><!--/login form-->
+
 				</div>
-				<div class="col-sm-1">
-					<h2 class="or">OR</h2>
-				</div>
-				<div class="col-sm-4">
-					<div class="signup-form"><!--sign up form-->
-						<h2>New User Signup!</h2>
-						<form action="#">
-							<input type="text" placeholder="Name"/>
-							<input type="email" placeholder="Email Address"/>
-							<input type="password" placeholder="Password"/>
-							<button type="submit" class="btn btn-default">Signup</button>
-						</form>
-					</div><!--/sign up form-->
-				</div>
+
+
 			</div>
 		</div>
 	</section><!--/form-->
 @endsection
-	
+

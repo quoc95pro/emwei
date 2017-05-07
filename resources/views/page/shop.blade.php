@@ -152,12 +152,16 @@
 				<div class="col-sm-9 padding-right">
 					<div class="features_items"><!--features_items-->
 						<h2 class="title text-center">Features Items</h2>
+						<?php
+							$linkRow =0;
+						?>
 						@foreach($listProduct as $product)
 							<div class="col-sm-4">
 								<div class="product-image-wrapper">
 									<div class="single-products">
 										<div class="productinfo text-center">
-											<img src="{{ $product->link }}" alt="" />
+
+											<img src="../{{$product->AnhDaiDien}}" alt="" />
 											<h2>{{ $product->Gia }} VND</h2>
 											<p>{{ $product->TenSanPham }}</p>
 											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
@@ -178,13 +182,15 @@
 									</div>
 								</div>
 							</div>
+								<?php
+							$linkRow++;
+							?>
 							@endforeach
+						<div style="clear: both">
 						<ul class="pagination">
-							<li class="active"><a href="">1</a></li>
-							<li><a href="">2</a></li>
-							<li><a href="">3</a></li>
-							<li><a href="">&raquo;</a></li>
+							{{ $listProduct->links() }}
 						</ul>
+						</div>
 					</div><!--features_items-->
 				</div>
 			</div>

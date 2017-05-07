@@ -42,7 +42,14 @@
                             <li><a href="{{route('contact-us')}}"><i class="fa fa-star"></i> Liên hệ</a></li>
                             <li><a href="{{route('checkout')}}"><i class="fa fa-crosshairs"></i> Thanh toán</a></li>
                             <li><a href="{{route('cart')}}"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
-                            <li><a href="{{route('dang-nhap')}}"><i class="fa fa-lock"></i> Đăng nhập</a></li>
+                            @if(Session::has('userName'))
+                                <li><a href="">Chào bạn {{Session::get('userName')}}</a></li>
+                                <li><a href="{{route('logout')}}">Đăng xuất</a></li>
+                            @else
+                                <li><a href="{{route('dang-nhap')}}"><i class="fa fa-lock"></i> Đăng nhập</a></li>
+                                <li><a href="{{route('dang-ky')}}"><i class="fa fa-lock"></i> Đăng Ký</a></li>
+                            @endif
+
                         </ul>
                     </div>
                 </div>
@@ -65,7 +72,7 @@
                     <div class="mainmenu pull-left">
                         <ul class="nav navbar-nav collapse navbar-collapse">
                             <li><a href="{{route('trang-chu')}}" class="active">Trang Chủ</a></li>
-                            <li class="dropdown"><a href="{{route('list-product/phone')}}">Điện Thoại<i class="fa fa-angle-down"></i></a>
+                            <li class="dropdown"><a href="{{route('list-product/type','Điện thoại')}}">Điện Thoại<i class="fa fa-angle-down"></i></a>
                                 <ul role="menu" class="sub-menu">
                                     <li><a href="shop.html">Apple</a></li>
                                     <li><a href="product-details.html">SamSung</a></li>
@@ -82,7 +89,7 @@
                                     <li><a href="login.html">Itel</a></li>
                                 </ul>
                             </li>
-                            <li class="dropdown"><a href="#">Máy Tính Bảng<i class="fa fa-angle-down"></i></a>
+                            <li class="dropdown"><a href="{{route('list-product/type','Máy tính bảng')}}">Máy Tính Bảng<i class="fa fa-angle-down"></i></a>
                                 <ul role="menu" class="sub-menu">
                                     <li><a href="blog.html">Apple-Ipad</a></li>
                                     <li><a href="blog-single.html">SamSung</a></li>
