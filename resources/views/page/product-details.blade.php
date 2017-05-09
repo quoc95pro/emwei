@@ -192,10 +192,10 @@
 									<span>{{number_format($p->Gia, 0, ',', '.')}} VND</span>
 									<label>Quantity:</label>
 									<input type="text" value="3" />
-									<button type="button" class="btn btn-fefault cart">
+									<a href="{{route('add-cart',$p->IDSanPham)}}" type="button" class="btn btn-fefault cart">
 										<i class="fa fa-shopping-cart"></i>
 										Add to cart
-									</button>
+									</a>
 								</span>
 								<p><b>Tình trạng:</b> {{$p->TinhTrang}}</p>
 								<p><b>Hãng:</b>{{$p->HangSanXuat}}</p>

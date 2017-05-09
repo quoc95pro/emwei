@@ -170,7 +170,7 @@
 											<div class="overlay-content">
 												<h2>{{ $product->Gia }} VND</h2>
 												<p>{{ $product->TenSanPham }}</p>
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+												<a href="{{route('add-cart',$product->IDSanPham)}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm Vào Giỏ Hàng</a>
 											</div>
 										</div>
 									</div>

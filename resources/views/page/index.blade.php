@@ -190,7 +190,7 @@
 											<div class="overlay-content">
 												<h2>{{$newProduct->Gia}}</h2>
 												<p>{{$newProduct->TenSanPham}}</p>
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
+												<a href="{{route('add-cart',$newProduct->IDSanPham)}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
 											</div>
 										</div>
 										<img src="{{ URL::asset('images/home/new.png') }}" class="new" alt="" />

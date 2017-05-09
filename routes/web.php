@@ -21,12 +21,10 @@ Route::get('readAll',function (){
     }
 } );
 
-Route::get('/test', function (){
-    $user = Customer::where('Email','=','quoc95@gmail.com');
-    foreach ($user as $p){
-        return $p->Email;
-    }
-});
+Route::post('/test',[
+    'as'=>'test',
+    'uses'=>'PageController@test'
+]);
 
 Route::get('/',[
     'as'=>'trang-chu',
@@ -66,6 +64,16 @@ Route::get('checkout',[
 Route::get('cart',[
     'as'=>'cart',
     'uses'=>'PageController@cart'
+]);
+
+Route::post('/cart-update-qty',[
+    'as'=>'cart-update-qty',
+    'uses'=>'PageController@cart_update_qty'
+]);
+
+Route::post('/cart-delete',[
+    'as'=>'cart-delete',
+    'uses'=>'PageController@cart_delete'
 ]);
 
 Route::get('blog',[
@@ -192,4 +200,9 @@ Route::post('add-productType',[
 Route::get('logout',[
     'as'=>'logout',
     'uses'=>'PageController@logout'
+]);
+
+Route::get('add-cart/{id}',[
+    'as'=>'add-cart',
+    'uses'=>'PageController@addCart'
 ]);

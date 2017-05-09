@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
@@ -13,8 +14,8 @@
     <link href="{{ URL::asset('css/animate.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ URL::asset('css/main.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ URL::asset('css/responsive.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ URL::asset('}css/styles.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('css/bootstrap-table.css') }}" rel="stylesheet">
+    <script src="{{ URL::asset('js/app.js') }}"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
     <!--[if lt IE 9]>
     <script src="{{ URL::asset('js/bootstrap-table.js')}}"></script>
@@ -28,6 +29,7 @@
     <link rel="apple-touch-icon-precomposed" href="{{ URL::asset('images/ico/apple-touch-icon-57-precomposed.png') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
+    {{--cart--}}
 </head><!--/head-->
 
 <body>
@@ -44,12 +46,11 @@
 <script src="{{ URL::asset('js/jquery.scrollUp.min.js') }}"></script>
 <script src="{{ URL::asset('js/price-range.js') }}"></script>
 <script src="{{ URL::asset('js/jquery.prettyPhoto.js') }}"></script>
-<script src="{{ URL::asset('js/main.js') }}"></script>
 </body>
 </html>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script>
+<script type="text/javascript">
     $(function () {
         $( "#datepicker" ).datepicker({
             changeMonth: true,
@@ -59,6 +60,93 @@
             defaultDate: '01-01-1950'
 
         });
-        $("#commentForm").validate();
+
     });
+    $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    })
+
+
+    function cart_add_ajax(_rowId,_qty,_productPrice){
+        var rowId = document.getElementById(_rowId).value;
+        var qty = document.getElementById(_qty).value;
+        qty = parseInt(qty);
+        qty++;
+
+        $.ajax({
+            url : "{{route('cart-update-qty')}}",
+            type : "post",
+            dateType:"text",
+            data : {
+                number : qty,
+                id : rowId
+            },
+            success : function (result){
+                document.getElementById(_productPrice).innerHTML = result;
+            }
+        });
+        document.getElementById(_qty).value = qty;
+    }
+
+    function cart_minus_ajax(_rowId,_qty,_productPrice){
+        var rowId = document.getElementById(_rowId).value;
+        var qty = document.getElementById(_qty).value;
+        qty = parseInt(qty);
+        if(qty>1)
+        qty--;
+
+        $.ajax({
+            url : "{{route('cart-update-qty')}}",
+            type : "post",
+            dateType:"text",
+            data : {
+                number : qty,
+                id : rowId
+            },
+            success : function (result){
+                document.getElementById(_productPrice).innerHTML = result;
+            }
+        });
+        document.getElementById(_qty).value = qty;
+    }
+
+    function cart_set_qty(_rowId,_qty,_productPrice){
+        var rowId = document.getElementById(_rowId).value;
+        var qty = document.getElementById(_qty).value;
+        qty = parseInt(qty);
+
+
+        $.ajax({
+            url : "{{route('cart-update-qty')}}",
+            type : "post",
+            dateType:"text",
+            data : {
+                number : qty,
+                id : rowId
+            },
+            success : function (result){
+                document.getElementById(_productPrice).innerHTML = result;
+            }
+        });
+        document.getElementById(_qty).value = qty;
+    }
+
+    function cart_delete(_rowId){
+        var rowId = document.getElementById(_rowId).value;
+        $.ajax({
+            url : "{{route('cart-delete')}}",
+            type : "post",
+            dateType:"text",
+            data : {
+                id : rowId
+            },
+            success : function (result){
+                document.getElementsByClassName(_rowId)[0].innerHTML = result;
+            }
+        });
+    }
 </script>

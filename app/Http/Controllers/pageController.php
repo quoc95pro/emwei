@@ -11,13 +11,13 @@ use App\Customer;
 use  App\Product;
 use App\Photo;
 use App\Description;
-use App\User;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\ProductType;
-use Illuminate\Support\Facades\Auth;
+use function redirect;
+use function route;
 use function session;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class pageController extends Controller
 {
@@ -75,13 +75,15 @@ class pageController extends Controller
             return redirect()->back()->with(['flag'=>'danger','message'=>'Sai Email Hoặc Mật Khẩu']);
         }
 
-        return $this->index();
+        return redirect()->route('trang-chu');
     }
 
 
     public function logout(Request $req){
+             Cart::destroy();
             $req->session()->remove('userName');
-        return $this->index();
+
+        return redirect()->route('trang-chu');
     }
 
     public function signUp(){
@@ -130,7 +132,9 @@ class pageController extends Controller
     }
 
     public function cart(){
-        return \view('page.cart');
+        return view('page.cart')
+            ->with(['a'=>Cart::count()])
+            ->with(['listProduct'=>Cart::content()]);
     }
 
     public function blog(){
@@ -161,6 +165,31 @@ class pageController extends Controller
         return \view('page.shop');
     }
 
+    public function addCart(Request $req){
+        $product = Product::where('IDSanPham','=',$req->id)->first();
+        Cart::add($product->IDSanPham, $product->TenSanPham, 1, $product->Gia, ['img' => $product->AnhDaiDien]);
+
+        return redirect()->route('cart');
+
+    }
+
+    public function cart_update_qty(Request $req){
+        if($req->ajax()){
+            $rowId = $req->id;
+            $qty = $req->number;
+            Cart::update($rowId, ['qty' => $qty]);
+            $price=Cart::get($rowId)->price;
+            echo number_format($price*$qty, 0, ',', '.');
+        }
+    }
+
+    public function cart_delete(Request $req){
+        if($req->ajax()){
+            $rowId = $req->id;
+            Cart::remove($rowId);
+        }
+    }
+
     public function listProduct(Request $req){
 
         $listProduct = Product::where('LoaiSanPham','=',$req->type)
@@ -180,8 +209,7 @@ class pageController extends Controller
 
     }
     public function test(){
-        return \view('test');
-
+       return "test";
     }
 
     public function charts(){
@@ -447,4 +475,6 @@ class pageController extends Controller
 
         return $str; // Trả về chuỗi đã chuyển
     }
+
+
 }

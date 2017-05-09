@@ -21,82 +21,40 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td class="cart_product">
-								<a href=""><img src="{{ URL::asset('images/cart/one.png') }}" alt=""></a>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">Colorblock Scuba</a></h4>
-								<p>Web ID: 1089772</p>
-							</td>
-							<td class="cart_price">
-								<p>$59</p>
-							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
-							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-							</td>
-						</tr>
-
-						<tr>
-							<td class="cart_product">
-								<a href=""><img src="{{ URL::asset('images/cart/two.png') }}" alt=""></a>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">Colorblock Scuba</a></h4>
-								<p>Web ID: 1089772</p>
-							</td>
-							<td class="cart_price">
-								<p>$59</p>
-							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
-							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-							</td>
-						</tr>
-						<tr>
-							<td class="cart_product">
-								<a href=""><img src="{{ URL::asset('images/cart/three.png') }}" alt=""></a>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">Colorblock Scuba</a></h4>
-								<p>Web ID: 1089772</p>
-							</td>
-							<td class="cart_price">
-								<p>$59</p>
-							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
-							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-							</td>
-						</tr>
+                    @php
+                    $i = 0;
+                    @endphp
+						@foreach($listProduct as $product)
+							<tr class="rowId{{$i}}">
+								<td class="cart_product">
+									<a href=""><img src="{{$product->options->img}}" alt="" width="50px"></a>
+								</td>
+								<td class="cart_description">
+									<h4><a href="{{route('detail-product',$product->id)}}">{{$product->name}}</a></h4>
+									<p>Mã SP: {{$product->id}}</p>
+								</td>
+								<td class="cart_price">
+									<p>{{number_format($product->price, 0, ',', '.')}} VND</p>
+								</td>
+								<td class="cart_quantity">
+									<div class="cart_quantity_button">
+										<a class="cart_quantity_up" onclick="cart_add_ajax('rowId{{$i}}','qtyValue{{$i}}','totalProductPrice{{$i}}')"> + </a>
+										<input class="cart_quantity_input" type="number" min="1" style="width:38px" id="qtyValue{{$i}}"  onchange="cart_set_qty('rowId{{$i}}','qtyValue{{$i}}','totalProductPrice{{$i}}')" name="quantity" value="{{$product->qty}}" autocomplete="off" size="2">
+                                        <input value="{{$product->rowId}}" id="rowId{{$i}}" style="display: none">
+										<a class="cart_quantity_down" onclick="cart_minus_ajax('rowId{{$i}}','qtyValue{{$i}}','totalProductPrice{{$i}}')"> - </a>
+									</div>
+								</td>
+								<td class="cart_total">
+									<p class="cart_total_price" id="totalProductPrice{{$i}}">{{number_format($product->price*$product->qty, 0, ',', '.')}}</p>
+								</td>
+								<td class="cart_delete">
+									<a class="cart_quantity_delete" onclick="cart_delete('rowId{{$i}}')"><i class="fa fa-times"></i></a>
+								</td>
+							</tr>
+                            @php
+                                $i ++;
+                            @endphp
+						@endforeach
 					</tbody>
 				</table>
 			</div>
@@ -106,8 +64,7 @@
 	<section id="do_action">
 		<div class="container">
 			<div class="heading">
-				<h3>What would you like to do next?</h3>
-				<p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>
+
 			</div>
 			<div class="row">
 				<div class="col-sm-6">
