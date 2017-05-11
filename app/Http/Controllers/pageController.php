@@ -48,8 +48,8 @@ class pageController extends Controller
         if($admin){
             session(['admin' => $admin]);
             if($req->remember) {
-                setcookie('adminID', $req->mail, time() + (86400 * 10), "/"); // 86400 = 1 day
-                setcookie('adminPass', $req->pass, time() + (86400 * 10), "/"); // 86400 = 1 day
+                setcookie('adminID', $req->idAdmin, time() + (86400 * 10), "/"); // 86400 = 1 day
+                setcookie('adminPass', $req->passWord, time() + (86400 * 10), "/"); // 86400 = 1 day
             }else{
                 setcookie('adminID', null, -1, '/');
                 setcookie('adminPass', null, -1, '/');
@@ -61,6 +61,14 @@ class pageController extends Controller
 
         return redirect()->route('admin-index');
     }
+
+    public function logOutAdmin(Request $req){
+        $req->session()->remove('admin');
+
+        return redirect()->route('login-admin');
+    }
+
+
 
 
     public function login(){

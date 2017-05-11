@@ -1,3 +1,8 @@
+@if(!(Session::has('admin')))
+    <script type="text/javascript">
+        window.location = "{{route('login-admin')}}";//here double curly bracket
+    </script>
+@endif
 <!DOCTYPE html>
 <html>
 <head>
@@ -86,7 +91,6 @@
 @include('admin.sidebar')
 @yield('content')
 
-<script src="{{ URL::asset('js/jquery-1.11.1.min.js')}}"></script>
 <script src="{{ URL::asset('js/bootstrap.min.js')}}"></script>
 <script>
     $('#calendar').datepicker({

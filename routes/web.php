@@ -155,9 +155,14 @@ Route::get('login-admin',[
     'as'=>'login-admin',
     'uses'=>'PageController@loginAdmin'
 ]);
-Route::get('postLoginAdmin',[
+Route::post('postLoginAdmin',[
     'as'=>'postLoginAdmin',
     'uses'=>'PageController@postLoginAdmin'
+]);
+
+Route::get('logOutAdmin',[
+    'as'=>'logOutAdmin',
+    'uses'=>'PageController@logOutAdmin'
 ]);
 
 Route::get('all-product',[

@@ -1,3 +1,8 @@
+@if((Session::has('admin')))
+	<script type="text/javascript">
+        window.location = "{{route('admin-index')}}";//here double curly bracket
+	</script>
+@endif
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,28 +22,45 @@
 </head>
 
 <body>
-	
 	<div class="row">
 		<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
 			<div class="login-panel panel panel-default">
 				<div class="panel-heading">Đăng Nhập</div>
 				<div class="panel-body">
 					<form role="form" action="{{route('postLoginAdmin')}}" method="post">
+						{{csrf_field()}}
 						<fieldset>
+							@if(isset($_COOKIE['adminID']))
 							<div class="form-group">
-								<input class="form-control" placeholder="ID Admin" name="idAdmin" type="text" autofocus="" required>
+								<input class="form-control" placeholder="ID Admin" value="{{$_COOKIE['adminID']}}" name="idAdmin" type="text" autofocus="" required>
 							</div>
 							<div class="form-group">
-								<input class="form-control" placeholder="Mật Khẩu" name="passWord" type="password" value="" required>
+								<input class="form-control" placeholder="Mật Khẩu" name="passWord" type="password" value="{{$_COOKIE['adminPass']}}" required>
 							</div>
 							<div class="checkbox">
 								<label>
-									<input name="remember" type="checkbox" value="Remember Me">Lưu Mật Khẩu ?
+									<input name="remember" type="checkbox" checked value="Remember Me">Lưu Mật Khẩu ?
 								</label>
 							</div>
+							@else
+								<div class="form-group">
+									<input class="form-control" placeholder="ID Admin" name="idAdmin" type="text" autofocus="" required>
+								</div>
+								<div class="form-group">
+									<input class="form-control" placeholder="Mật Khẩu" name="passWord" type="password" value="" required>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input name="remember" type="checkbox" value="Remember Me">Lưu Mật Khẩu ?
+									</label>
+								</div>
+							@endif
 							<input type="submit" class="btn btn-primary"/>
 						</fieldset>
 					</form>
+					@if(Session::has('flagAdmin'))
+						<div class="alert alert-{{Session::get('flagAdmin')}}">{{Session::get('messageAdmin')}}</div>
+					@endif
 				</div>
 			</div>
 		</div><!-- /.col-->
