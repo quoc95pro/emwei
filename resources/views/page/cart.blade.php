@@ -12,11 +12,11 @@
 				<table class="table table-condensed">
 					<thead>
 						<tr class="cart_menu">
-							<td class="image">Item</td>
+							<td class="image">Sản Phẩm</td>
 							<td class="description"></td>
-							<td class="price">Price</td>
-							<td class="quantity">Quantity</td>
-							<td class="total">Total</td>
+							<td class="price">Giá</td>
+							<td class="quantity">Số Lượng</td>
+							<td class="total">Tổng</td>
 							<td></td>
 						</tr>
 					</thead>
@@ -39,10 +39,11 @@
 								</td>
 								<td class="cart_quantity">
 									<div class="cart_quantity_button">
-										<a class="cart_quantity_up" onclick="cart_add_ajax('rowId{{$i}}','qtyValue{{$i}}','totalProductPrice{{$i}}')"> + </a>
-										<input class="cart_quantity_input" type="number" min="1" style="width:38px" id="qtyValue{{$i}}"  onchange="cart_set_qty('rowId{{$i}}','qtyValue{{$i}}','totalProductPrice{{$i}}')" name="quantity" value="{{$product->qty}}" autocomplete="off" size="2">
+										<a class="cart_quantity_up" onclick="cart_add_ajax('rowId{{$i}}','qtyValue{{$i}}','totalProductPrice{{$i}}','idPrice{{$i}}')"> + </a>
+										<input class="cart_quantity_input" type="number" min="1" style="width:38px" id="qtyValue{{$i}}"  onchange="cart_set_qty('rowId{{$i}}','qtyValue{{$i}}','totalProductPrice{{$i}}','idPrice{{$i}}')" name="quantity" value="{{$product->qty}}" autocomplete="off" size="2">
                                         <input value="{{$product->rowId}}" id="rowId{{$i}}" style="display: none">
-										<a class="cart_quantity_down" onclick="cart_minus_ajax('rowId{{$i}}','qtyValue{{$i}}','totalProductPrice{{$i}}')"> - </a>
+										<a class="cart_quantity_down" onclick="cart_minus_ajax('rowId{{$i}}','qtyValue{{$i}}','totalProductPrice{{$i}}','idPrice{{$i}}')"> - </a>
+										<input value="{{$product->price}}"class="cart-product-price" id="idPrice{{$i}}" style="display: none">
 									</div>
 								</td>
 								<td class="cart_total">
@@ -73,10 +74,10 @@
 					<div class="total_area">
 						<ul>
 							<li>Tổng Giá : <span id="showTotal">{{number_format($total, 0, ',', '.')}}</span></li>
-							<input value="{{$total}}" id="total" style="display: none">
 						</ul>
-							<a class="btn btn-default update" href="">Update</a>
-							<a class="btn btn-default check_out" href="">Check Out</a>
+						@if($i>0)
+							<a class="btn btn-default check_out" id="check-out" href="{{route('checkout')}}">Thanh Toán</a>
+							@endif
 					</div>
 				</div>
 			</div>

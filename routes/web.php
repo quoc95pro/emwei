@@ -61,6 +61,11 @@ Route::get('checkout',[
     'uses'=>'PageController@checkout'
 ]);
 
+Route::post('postCheckOut',[
+    'as'=>'postCheckOut',
+    'uses'=>'PageController@postCheckOut'
+]);
+
 Route::get('cart',[
     'as'=>'cart',
     'uses'=>'PageController@cart'
@@ -149,6 +154,10 @@ Route::get('icons',[
 Route::get('login-admin',[
     'as'=>'login-admin',
     'uses'=>'PageController@loginAdmin'
+]);
+Route::get('postLoginAdmin',[
+    'as'=>'postLoginAdmin',
+    'uses'=>'PageController@postLoginAdmin'
 ]);
 
 Route::get('all-product',[

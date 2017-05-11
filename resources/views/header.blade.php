@@ -43,7 +43,7 @@
                             <li><a href="{{route('checkout')}}"><i class="fa fa-crosshairs"></i> Thanh toán</a></li>
                             <li><a href="{{route('cart')}}"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
                             @if(Session::has('userName'))
-                                <li><a href="">Chào bạn {{Session::get('userName')}}</a></li>
+                                <li><a href="">Chào bạn ,{{Session::get('userName')->TenKhachHang}}</a></li>
                                 <li><a href="{{route('logout')}}">Đăng xuất</a></li>
                             @else
                                 <li><a href="{{route('dang-nhap')}}"><i class="fa fa-lock"></i> Đăng nhập</a></li>

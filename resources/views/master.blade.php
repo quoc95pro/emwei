@@ -16,6 +16,7 @@
     <link href="{{ URL::asset('css/responsive.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ URL::asset('css/bootstrap-table.css') }}" rel="stylesheet">
     <script src="{{ URL::asset('js/app.js') }}"></script>
+    <script src="{{ URL::asset('js/accouting.js') }}"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
     <!--[if lt IE 9]>
     <script src="{{ URL::asset('js/bootstrap-table.js')}}"></script>
@@ -30,6 +31,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
     {{--cart--}}
+    <style>
+        .checkout-input{
+            background: #F0F0E9;
+            border: 0 none;
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 100%;
+            font-weight: 300;
+        }
+        }
+    </style>
 </head><!--/head-->
 
 <body>
@@ -71,12 +83,13 @@
     })
 
 
-    function cart_add_ajax(_rowId,_qty,_productPrice){
+    function cart_add_ajax(_rowId,_qty,_productPrice,price){
         var rowId = document.getElementById(_rowId).value;
         var qty = document.getElementById(_qty).value;
+        var price = document.getElementById(price).value;
         qty = parseInt(qty);
         qty++;
-
+        price = parseInt(price);
         $.ajax({
             url : "{{route('cart-update-qty')}}",
             type : "post",
@@ -86,19 +99,23 @@
                 id : rowId
             },
             success : function (result){
-                document.getElementById(_productPrice).innerHTML = result;
+                document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',');
             }
         });
+
         document.getElementById(_qty).value = qty;
+        document.getElementById(_productPrice).innerHTML=accounting.formatMoney(price*qty,'',0,'.',',');
+
     }
 
-    function cart_minus_ajax(_rowId,_qty,_productPrice){
+    function cart_minus_ajax(_rowId,_qty,_productPrice,price){
         var rowId = document.getElementById(_rowId).value;
         var qty = document.getElementById(_qty).value;
+        var price = document.getElementById(price).value;
         qty = parseInt(qty);
         if(qty>1)
         qty--;
-
+        price = parseInt(price);
         $.ajax({
             url : "{{route('cart-update-qty')}}",
             type : "post",
@@ -108,31 +125,38 @@
                 id : rowId
             },
             success : function (result){
-                document.getElementById(_productPrice).innerHTML = result;
+                document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',');
             }
         });
         document.getElementById(_qty).value = qty;
+        document.getElementById(_productPrice).innerHTML=accounting.formatMoney(price*qty,'',0,'.',',');
     }
 
-    function cart_set_qty(_rowId,_qty,_productPrice){
+    function cart_set_qty(_rowId,_qty,_productPrice,price){
         var rowId = document.getElementById(_rowId).value;
         var qty = document.getElementById(_qty).value;
+        var p = document.getElementById(price).value;
         qty = parseInt(qty);
+        if(qty>0) {
 
-
-        $.ajax({
-            url : "{{route('cart-update-qty')}}",
-            type : "post",
-            dateType:"text",
-            data : {
-                number : qty,
-                id : rowId
-            },
-            success : function (result){
-                document.getElementById(_productPrice).innerHTML = result;
-            }
-        });
-        document.getElementById(_qty).value = qty;
+            $.ajax({
+                url: "{{route('cart-update-qty')}}",
+                type: "post",
+                dateType: "text",
+                data: {
+                    number: qty,
+                    id: rowId
+                },
+                success: function (result) {
+                    document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',');
+                }
+            });
+            document.getElementById(_qty).value = qty;
+            document.getElementById(_productPrice).innerHTML = accounting.formatMoney(p*qty,'',0,'.',',');
+        }else {
+            document.getElementById(_qty).value = '1';
+            cart_set_qty(_rowId,_qty,_productPrice,price);
+        }
     }
 
     function cart_delete(_rowId){
@@ -145,8 +169,13 @@
                 id : rowId
             },
             success : function (result){
-                document.getElementsByClassName(_rowId)[0].innerHTML = result;
+                document.getElementsByClassName(_rowId)[0].innerHTML = '';
+                document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',');
+                if(result=='0'){
+                    document.getElementById('check-out').style.display = "none";
+                }
             }
         });
+
     }
 </script>

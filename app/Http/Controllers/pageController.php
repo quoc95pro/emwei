@@ -7,7 +7,9 @@
  */
 
 namespace App\Http\Controllers;
+use App\Admin;
 use App\Customer;
+use App\History;
 use  App\Product;
 use App\Photo;
 use App\Description;
@@ -15,7 +17,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\ProductType;
 use function redirect;
-use function route;
 use function session;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
@@ -37,6 +38,30 @@ class pageController extends Controller
             ->with(['slide' => $slide])
             ->with(['tabContent'=>$tabContent]);
     }
+
+    public function postLoginAdmin(Request $req){
+        $admin = Admin::where([
+            ['IdAdmin','=',$req->idAdmin],
+            ['MatKhau','=',$req->passWord]
+        ])->first();
+
+        if($admin){
+            session(['admin' => $admin]);
+            if($req->remember) {
+                setcookie('adminID', $req->mail, time() + (86400 * 10), "/"); // 86400 = 1 day
+                setcookie('adminPass', $req->pass, time() + (86400 * 10), "/"); // 86400 = 1 day
+            }else{
+                setcookie('adminID', null, -1, '/');
+                setcookie('adminPass', null, -1, '/');
+            }
+        }
+        else{
+            return redirect()->back()->with(['flag'=>'danger','message'=>'Sai Email Hoặc Mật Khẩu']);
+        }
+
+        return redirect()->route('admin-index');
+    }
+
 
     public function login(){
         return \view('page.login');
@@ -62,7 +87,7 @@ class pageController extends Controller
         ])->first();
 
         if($user){
-            session(['userName' => $user->TenKhachHang]);
+            session(['userName' => $user]);
             if($req->save) {
                 setcookie('mail', $req->mail, time() + (86400 * 10), "/"); // 86400 = 1 day
                 setcookie('pass', $req->pass, time() + (86400 * 10), "/"); // 86400 = 1 day
@@ -128,7 +153,47 @@ class pageController extends Controller
     }
 
     public function checkout(){
-        return \view('page.checkout');
+
+        return \view('page.checkout')
+            ->with(['a'=>Cart::count()])
+            ->with(['listProduct'=>Cart::content()]);
+    }
+
+    public function postCheckOut(Request $request){
+        $userName = $request->userName;
+        $userMail = $request->userMail;
+        $userPhone = $request->userPhone;
+        $userAddress = $request->userAddress;
+        $listProduct='';
+        $ghiChu = 'Thanh Toán Trực Tiếp';
+        foreach (Cart::content() as $item){
+            $listProduct=$listProduct.$item->id.':'.$item->qty.';';
+        }
+        $listProduct =rtrim($listProduct,";");
+        $tongGia = 0;
+        foreach (Cart::content() as $item){
+            $tongGia+=($item->price*$item->qty);
+        }
+        if($request->httt=='giaohang'){
+            $nameUser = $request->nameUser;
+            $mailUser = $request->mailUser;
+            $phoneUser = $request->phoneUser;
+            $addressUser = $request->addressUser;
+            $ghiChu = 'Giao Hàng Đến Địa Chỉ :'.$addressUser.' Người Nhận : '.$nameUser.' Email : '.$mailUser.' Số Điện Thoại : '.$phoneUser;
+
+        }
+        $donHang = new History();
+        $donHang->EmailKhachHang=$userMail;
+        $donHang->TenKhachHang=$userName;
+        $donHang->SoDienThoai=$userPhone;
+        $donHang->DiaChi=$userAddress;
+        $donHang->DanhSachSanPham=$listProduct;
+        $donHang->GhiChu=$ghiChu;
+        $donHang->Gia=$tongGia;
+        $donHang->ThoiGianTao=date("Y-m-d-h-i-sa");
+        $donHang->TinhTrang='Mới';
+        $donHang->save();
+        return 'ok';
     }
 
     public function cart(){
@@ -178,8 +243,12 @@ class pageController extends Controller
             $rowId = $req->id;
             $qty = $req->number;
             Cart::update($rowId, ['qty' => $qty]);
-            $price=Cart::get($rowId)->price;
-            echo number_format($price*$qty, 0, ',', '.');
+            $result = 0;
+            foreach (Cart::content() as $item){
+                $result+=($item->price*$item->qty);
+            }
+
+            echo $result;
         }
     }
 
@@ -187,6 +256,12 @@ class pageController extends Controller
         if($req->ajax()){
             $rowId = $req->id;
             Cart::remove($rowId);
+            $result = 0;
+            foreach (Cart::content() as $item){
+                $result+=($item->price*$item->qty);
+            }
+
+            echo $result;
         }
     }
 
