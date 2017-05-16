@@ -85,7 +85,7 @@
                                 }
 							</script>
 						</div>
-					</div>					
+					</div>
 				</div>
 			</div>
 			<div class="review-payment">
@@ -139,7 +139,7 @@
 								<table class="table table-condensed total-result">
 									<tr class="shipping-cost">
 										<td>Phí Vận Chuyển</td>
-										<td>Free</td>										
+										<td>Free</td>
 									</tr>
 									<tr>
 										<td>Tổng Tiền</td>
@@ -153,9 +153,11 @@
 			</div>
 			<div class="col-sm-4"></div>
 			<div class="payment-options col-sm-4">
+				@if($total!=0)
 					<center><span>
 						<input type="submit" class="btn btn-primary" style="width:100%" value="Đặt Hàng"/>
 					</span></center>
+					@endif
 				</div>
 			<div class="col-sm-4"></div>
 			</form>

@@ -189,13 +189,13 @@
 			<div class="col-md-6">
 				<div class="panel panel-default">
 					<div class="panel-body tabs">
-					
+
 						<ul class="nav nav-pills">
 							<li class="active"><a href="#pilltab1" data-toggle="tab">Tab 1</a></li>
 							<li><a href="#pilltab2" data-toggle="tab">Tab 2</a></li>
 							<li><a href="#pilltab3" data-toggle="tab">Tab 3</a></li>
 						</ul>
-		
+
 						<div class="tab-content">
 							<div class="tab-pane fade in active" id="pilltab1">
 								<h4>Tab 1</h4>

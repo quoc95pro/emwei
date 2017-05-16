@@ -30,23 +30,36 @@
             </ul>
         </li>
 
-        <li id="Product" class="parent">
-            <a href="{{route('adminAllProduct')}}">
-                <span data-toggle="collapse" href="#sub-item-2"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span> Giao Dịch
+        <li id="Bills" class="parent">
+            <a href="{{route('bills')}}">
+                <span  href="#sub-item-2"><svg class="glyph stroked bag"><use xlink:href="#stroked-bag"></use></svg></span> Đơn Hàng
+            </a>
+        </li>
+        <li id="Charts" class="parent">
+            <a href="{{route('charts')}}">
+                <span  href="#sub-item-2"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg></span> Thống Kê
+            </a>
+        </li>
+        <li id="Account" class="parent">
+            <a href="{{route('charts')}}">
+                <span data-toggle="collapse" href="#sub-item-2"><svg class="glyph stroked lock"><use xlink:href="#stroked-lock"/></svg></span>Tài Khoản
             </a>
             <ul class="children collapse" id="sub-item-2">
                 <li>
                     <a class="" href="{{route('adminAllProduct')}}">
-                        <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Danh sách giao dịch
+                        <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Admin
 
                     </a>
                 </li>
-
-
+                <li>
+                    <a class="" href="{{route('adminAddProduct')}}">
+                        <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> User
+                    </a>
+                </li>
             </ul>
         </li>
         <li id="Widgets"><a href="{{route('widgets')}}"><svg class="glyph stroked calendar"><use xlink:href="#stroked-calendar"></use></svg> Widgets</a></li>
-        <li><a href="{{route('charts')}}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Charts</a></li>
+        <li><a href="{{route('chart')}}"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Charts</a></li>
         <li><a href="{{route('tables')}}"><svg class="glyph stroked table"><use xlink:href="#stroked-table"></use></svg> Tables</a></li>
         <li><a href="{{route('forms')}}"><svg class="glyph stroked pencil"><use xlink:href="#stroked-pencil"></use></svg> Forms</a></li>
         <li><a href="{{route('panels')}}"><svg class="glyph stroked app-window"><use xlink:href="#stroked-app-window"></use></svg> Alerts &amp; Panels</a></li>

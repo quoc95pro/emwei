@@ -5,9 +5,8 @@ namespace App;
 use const false;
 use Illuminate\Database\Eloquent\Model;
 
-class History extends Model
+class Bill_Product extends Model
 {
     public $timestamps = false;
-    public $primaryKey =  'MaDonHang';
-    protected $table = 'tbl_donhang';
+    protected $table = 'tbl_donhang_sanpham';
 }

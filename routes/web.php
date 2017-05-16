@@ -10,8 +10,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use App\Chart;
+use App\Bill_Product;
 use Illuminate\Http\Request;
 use App\Customer;
+use Illuminate\Support\Arr;
 
 Route::get('/', 'pageController@index' );
 Route::get('readAll',function (){
@@ -21,7 +24,7 @@ Route::get('readAll',function (){
     }
 } );
 
-Route::post('/test',[
+Route::get('/test/{id}/{di}',[
     'as'=>'test',
     'uses'=>'PageController@test'
 ]);
@@ -126,6 +129,11 @@ Route::get('widgets',[
     'uses'=>'PageController@widgets'
 ]);
 
+Route::get('chart',[
+    'as'=>'chart',
+    'uses'=>'PageController@chart'
+]);
+
 Route::get('charts',[
     'as'=>'charts',
     'uses'=>'PageController@charts'
@@ -170,6 +178,30 @@ Route::get('all-product',[
     'uses'=>'PageController@adminAllProduct'
 ]);
 
+Route::get('bills',[
+    'as'=>'bills',
+    'uses'=>'PageController@bills'
+]);
+Route::get('check-bill/{id}',[
+    'as'=>'check-bill',
+    'uses'=>'PageController@checkBill'
+]);
+
+Route::post('edit-bill',[
+    'as'=>'edit-bill',
+    'uses'=>'PageController@postEditBill'
+]);
+
+Route::post('/cart-update-qty-admin',[
+    'as'=>'cart-update-qty-admin',
+    'uses'=>'PageController@cart_update_qty_admin'
+]);
+
+Route::post('/cart-delete-admin',[
+    'as'=>'cart-delete-admin',
+    'uses'=>'PageController@cart_delete_admin'
+]);
+
 Route::get('add-product',[
     'as'=>'adminAddProduct',
     'uses'=>'PageController@adminAddProduct'
@@ -180,9 +212,105 @@ Route::post('add',[
     'uses'=>'PageController@add'
     ]);
 
-Route::get('/json',function (){
-    $product = \App\Product::get(['IDSanPham','TenSanPham','Gia','TinhTrang']);
-    return $product->toJson();
+Route::post('productLineChart',[
+    'as'=>'productLineChart',
+    'uses'=>'PageController@productLineChart'
+]);
+
+Route::get('/all',function (){
+    if(!(Session::has('admin'))){
+        return "";
+    }
+    $listProduct = DB::select('SELECT * FROM `tbl_sanpham` ');
+    $listqty= array();
+
+    foreach ($listProduct as $product){
+        $total=0;
+        $arr = array();
+        $bill = Bill_Product::where('MaMatHang','=',$product->IDSanPham)->get();
+        if(count($bill)>0){
+            foreach ($bill as $b){
+                $total+=$b->SoLuong;
+            }
+        }
+        array_push($listqty,$total);
+    }
+
+    for ($i=0;$i<count($listProduct);$i++){
+        $chart = new Chart();
+        $chart->maSanPham=$listProduct[$i]->IDSanPham;
+        $chart->tenSanPham=$listProduct[$i]->TenSanPham;
+        $chart->soLuongBanDuoc=$listqty[$i];
+        array_push($arr,$chart);
+    }
+
+    $a=json_encode($arr);
+    return $a;
+});
+
+Route::get('/json/{year}',function (Request $request){
+    if(!(Session::has('admin'))){
+        return "";
+    }
+    $listProduct = DB::select('SELECT * FROM `tbl_sanpham` ');
+    $listqty= array();
+
+    foreach ($listProduct as $product){
+        $total=0;
+        $arr = array();
+        $bill = DB::select("SELECT tbl_donhang_sanpham.SoLuong FROM `tbl_donhang_sanpham`,`tbl_donhang` WHERE tbl_donhang.MaDonHang=tbl_donhang_sanpham.MaDonHang AND 
+                            YEAR(tbl_donhang.NgayTao) = '$request->year' AND tbl_donhang_sanpham.MaMatHang='$product->IDSanPham'");
+        if(count($bill)>0){
+            foreach ($bill as $b){
+                $total+=$b->SoLuong;
+            }
+        }
+        array_push($listqty,$total);
+    }
+
+    for ($i=0;$i<count($listProduct);$i++){
+        $chart = new Chart();
+        $chart->maSanPham=$listProduct[$i]->IDSanPham;
+        $chart->tenSanPham=$listProduct[$i]->TenSanPham;
+        $chart->soLuongBanDuoc=$listqty[$i];
+        array_push($arr,$chart);
+    }
+
+    $a=json_encode($arr);
+    return $a;
+});
+
+Route::get('json2/{startDate}/{endDate}',
+function (Request $request){
+    if(!(Session::has('admin'))){
+        return "";
+    }
+    $listProduct = DB::select('SELECT * FROM `tbl_sanpham` ');
+    $listqty= array();
+
+    foreach ($listProduct as $product){
+        $total=0;
+        $arr = array();
+        $bill = DB::select("SELECT tbl_donhang_sanpham.SoLuong FROM `tbl_donhang_sanpham`,`tbl_donhang` WHERE tbl_donhang.MaDonHang=tbl_donhang_sanpham.MaDonHang AND 
+                            tbl_donhang.NgayTao >= '$request->startDate' AND tbl_donhang.NgayTao<='$request->endDate' AND tbl_donhang_sanpham.MaMatHang='$product->IDSanPham'");
+        if(count($bill)>0){
+            foreach ($bill as $b){
+                $total+=$b->SoLuong;
+            }
+        }
+        array_push($listqty,$total);
+    }
+
+    for ($i=0;$i<count($listProduct);$i++){
+        $chart = new Chart();
+        $chart->maSanPham=$listProduct[$i]->IDSanPham;
+        $chart->tenSanPham=$listProduct[$i]->TenSanPham;
+        $chart->soLuongBanDuoc=$listqty[$i];
+        array_push($arr,$chart);
+    }
+
+    $a=json_encode($arr);
+    return $a;
 });
 
 Route::get('edit-product/{id}',[
@@ -194,6 +322,8 @@ Route::post('edit',[
     'as'=>'edit',
     'uses'=>'PageController@postEditProduct'
 ]);
+
+
 
 Route::get('delete-product/{id}',[
     'as'=>'delete-product',

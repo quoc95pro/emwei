@@ -8,11 +8,15 @@
 
 namespace App\Http\Controllers;
 use App\Admin;
+use App\Bill_Product;
 use App\Customer;
 use App\History;
 use  App\Product;
 use App\Photo;
 use App\Description;
+use function array_push;
+use function count;
+use function date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\ProductType;
@@ -163,7 +167,6 @@ class pageController extends Controller
     public function checkout(){
 
         return \view('page.checkout')
-            ->with(['a'=>Cart::count()])
             ->with(['listProduct'=>Cart::content()]);
     }
 
@@ -172,12 +175,7 @@ class pageController extends Controller
         $userMail = $request->userMail;
         $userPhone = $request->userPhone;
         $userAddress = $request->userAddress;
-        $listProduct='';
         $ghiChu = 'Thanh Toán Trực Tiếp';
-        foreach (Cart::content() as $item){
-            $listProduct=$listProduct.$item->id.':'.$item->qty.';';
-        }
-        $listProduct =rtrim($listProduct,";");
         $tongGia = 0;
         foreach (Cart::content() as $item){
             $tongGia+=($item->price*$item->qty);
@@ -190,18 +188,62 @@ class pageController extends Controller
             $ghiChu = 'Giao Hàng Đến Địa Chỉ :'.$addressUser.' Người Nhận : '.$nameUser.' Email : '.$mailUser.' Số Điện Thoại : '.$phoneUser;
 
         }
+        $maDonHang = $this->NextIDDonHang();
         $donHang = new History();
+        $donHang->MaDonHang=$maDonHang;
         $donHang->EmailKhachHang=$userMail;
         $donHang->TenKhachHang=$userName;
         $donHang->SoDienThoai=$userPhone;
         $donHang->DiaChi=$userAddress;
-        $donHang->DanhSachSanPham=$listProduct;
         $donHang->GhiChu=$ghiChu;
         $donHang->Gia=$tongGia;
-        $donHang->ThoiGianTao=date("Y-m-d-h-i-sa");
+        $donHang->NgayTao=date("Y-m-d");
         $donHang->TinhTrang='Mới';
         $donHang->save();
-        return 'ok';
+        foreach (Cart::content() as $item){
+            $bill_product = new Bill_Product();
+            $bill_product->MaDonHang=$maDonHang;
+            $bill_product->MaMatHang=$item->id;
+            $bill_product->SoLuong=$item->qty;
+            $bill_product->save();
+        }
+        return redirect()->route('trang-chu');
+    }
+
+    public function GetLastIdDonHang()
+    {
+        $sql = DB::select('SELECT MaDonHang FROM tbl_donhang ORDER by MaDonHang DESC LIMIT 1');
+        foreach ($sql as $a)
+        {
+            return $a->MaDonHang;
+        }
+
+
+    }
+
+    public function NextIDDonHang()
+    {
+        $prefixID="DH";
+        if($this->GetLastIDDonHang()=="")
+        {
+            return $prefixID+"001";
+        }
+        $nextID = substr($this->GetLastIDDonHang(),2) +1;
+        $lengthNumerID = strlen($this->GetLastIDDonHang())- strlen($prefixID);
+        $zeroNumber = "";
+        for ($i = 1; $i <= $lengthNumerID; $i++)
+        {
+            if ($nextID < pow(10, $i))
+            {
+                for ($j = 1; $j <= $lengthNumerID - $i; $j++)
+                {
+                    $zeroNumber=$zeroNumber."0";
+                }
+                return $prefixID.$zeroNumber.$nextID;
+            }
+        }
+        return $prefixID.$nextID;
+
     }
 
     public function cart(){
@@ -291,12 +333,91 @@ class pageController extends Controller
         return \view('admin.widgets');
 
     }
-    public function test(){
-       return "test";
+    public function test(Request $req){
+       return $req->id.$req->di;
+    }
+
+    public function chart(){
+        return \view('admin.chart');
+
     }
 
     public function charts(){
-        return \view('admin.charts');
+        $listProduct = DB::select('SELECT * FROM `tbl_sanpham` ');
+        $minDate=DB::select('SELECT Min(NgayTao) AS NgayTao FROM tbl_donhang');
+        $maxDate=DB::select('SELECT Max(NgayTao) AS NgayTao FROM tbl_donhang');
+        $year = DB::select('SELECT YEAR(NgayTao) AS Nam FROM tbl_donhang GROUP by YEAR(NgayTao)');
+        $arrTotal = array();
+        for ($i=1;$i<13;$i++){
+            $total = 0;
+            $curYear = date("Y");
+            $monthTotal = DB::select("SELECT tbl_donhang_sanpham.SoLuong FROM `tbl_donhang_sanpham`,`tbl_donhang`
+ WHERE tbl_donhang.MaDonHang=tbl_donhang_sanpham.MaDonHang AND MONTH(tbl_donhang.NgayTao) = '$i' AND YEAR(tbl_donhang.NgayTao) = '$curYear'");
+            if(count($monthTotal)>0){
+                foreach ($monthTotal as $item){
+                    $total+=$item->SoLuong;
+                }
+            }
+            array_push($arrTotal,$total);
+        }
+
+        $listqty= array();
+
+        foreach ($listProduct as $product){
+            $total=0;
+            $bill = Bill_Product::where('MaMatHang','=',$product->IDSanPham)->get();
+            if(count($bill)>0){
+                foreach ($bill as $b){
+                    $total+=$b->SoLuong;
+                }
+            }
+            array_push($listqty,$total);
+
+        }
+        return \view('admin.charts')
+            ->with(['listProduct'=>$listProduct])
+            ->with(['qty'=>$listqty])
+            ->with(['minDate'=>$minDate])
+            ->with(['maxDate'=>$maxDate])
+            ->with(['month'=>$arrTotal])
+            ->with(['year'=>$year]);
+
+
+    }
+
+
+    public function productLineChart(Request $request){
+        $arr= array();
+        for ($i=1;$i<13;$i++){
+            $total = 0;
+            $monthTotal = DB::select("SELECT tbl_donhang_sanpham.SoLuong FROM `tbl_donhang_sanpham`,`tbl_donhang`WHERE tbl_donhang.MaDonHang=tbl_donhang_sanpham.MaDonHang AND
+ MONTH(tbl_donhang.NgayTao) = '$i' AND Year(tbl_donhang.NgayTao)='$request->year' ");
+            if(count($monthTotal)>0){
+                foreach ($monthTotal as $item){
+                    $total+=$item->SoLuong;
+                }
+            }
+            array_push($arr,$total);
+        }
+
+
+
+
+        $arrTotal = array();
+        for ($i=1;$i<13;$i++){
+            $total = 0;
+            $monthTotal = DB::select("SELECT tbl_donhang_sanpham.SoLuong FROM `tbl_donhang_sanpham`,`tbl_donhang`
+ WHERE tbl_donhang.MaDonHang=tbl_donhang_sanpham.MaDonHang AND MONTH(tbl_donhang.NgayTao) = '$i'  AND tbl_donhang_sanpham.MaMatHang='$request->id' AND Year(tbl_donhang.NgayTao)='$request->year' ");
+            if(count($monthTotal)>0){
+                foreach ($monthTotal as $item){
+                    $total+=$item->SoLuong;
+                }
+            }
+            array_push($arrTotal,$total);
+        }
+
+        return [$arrTotal,$arr];
+
 
     }
 
@@ -333,6 +454,82 @@ class pageController extends Controller
         return \view('admin.Product')
             ->with(['listProduct'=>$listProduct]);
 
+    }
+    public function bills(){
+        $listBill = DB::select('SELECT * FROM `tbl_donhang` ORDER by NgayTao DESC');
+        return \view('admin.Bill')
+            ->with(['listBill'=>$listBill]);
+
+    }
+
+    public function checkBill(Request $request){
+        Cart::destroy();
+        $billDetail = DB::select("SELECT * FROM tbl_donhang,tbl_donhang_sanpham WHERE tbl_donhang.MaDonHang=tbl_donhang_sanpham.MaDonHang and tbl_donhang.MaDonHang='$request->id'");
+        foreach ($billDetail as $bill){
+            $product = DB::select("SELECT * FROM tbl_sanpham WHERE IDSanPham='$bill->MaMatHang'");
+            Cart::add($product[0]->IDSanPham, $product[0]->TenSanPham, $bill->SoLuong, $product[0]->Gia, ['img' => $product[0]->AnhDaiDien]);
+        }
+
+
+
+        return \view('admin.BillDetail')
+            ->with(['bill'=>$billDetail])
+            ->with(['cart'=>Cart::content()]);
+
+    }
+
+    public function postEditBill(Request $request){
+        $donHang = History::find($request->maDonHang);
+        if($request->chkChinhSua){
+            $donHang->TenKhachHang=$request->tenKhachHang;
+            $donHang->EmailKhachHang=$request->mailKhachHang;
+            $donHang->SoDienThoai=$request->soDienThoai;
+            $donHang->DiaChi=$request->diaChi;
+
+            foreach (Cart::content() as $item){
+                DB::update('UPDATE tbl_donhang_sanpham SET SoLuong=? WHERE MaDonHang=? AND MaMatHang=?', [$item->qty, $request->maDonHang,$item->id]);
+            }
+            $tongGia = 0;
+            foreach (Cart::content() as $item){
+                $tongGia+=($item->price*$item->qty);
+            }
+            $donHang->GhiChu=$request->ghiChu;
+            $donHang->Gia=$tongGia;
+            $donHang->TinhTrang="Đang Giao Hàng";
+            $donHang->save();
+        }else{
+            $donHang->TinhTrang="Đang Giao Hàng";
+            $donHang->save();
+        }
+
+        return redirect()->route('bills');
+    }
+
+    public function cart_update_qty_admin(Request $req){
+        if($req->ajax()){
+            $rowId = $req->id;
+            $qty = $req->number;
+            Cart::update($rowId, ['qty' => $qty]);
+            $result = 0;
+            foreach (Cart::content() as $item){
+                $result+=($item->price*$item->qty);
+            }
+
+            echo $result;
+        }
+    }
+
+    public function cart_delete_admin(Request $req){
+        if($req->ajax()){
+            $rowId = $req->id;
+            Cart::remove($rowId);
+            $result = 0;
+            foreach (Cart::content() as $item){
+                $result+=($item->price*$item->qty);
+            }
+
+            echo $result;
+        }
     }
 
     public function adminAddProduct(){

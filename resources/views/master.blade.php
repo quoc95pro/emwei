@@ -40,7 +40,7 @@
             width: 100%;
             font-weight: 300;
         }
-        }
+
     </style>
 </head><!--/head-->
 

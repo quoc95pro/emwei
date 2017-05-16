@@ -78,6 +78,67 @@
 						<div class="canvas-wrapper">
 							<canvas class="main-chart" id="line-chart" height="200" width="600"></canvas>
 						</div>
+						<script>
+                            function getRandomColor() {
+                                var letters = '0123456789ABCDEF';
+                                var color = '#';
+                                for (var i = 0; i < 6; i++ ) {
+                                    color += letters[Math.floor(Math.random() * 16)];
+                                }
+                                return color;
+                            }
+//							var i=100;
+//                            var datasetValue = [];
+//                            var count = 3;
+//                            for (var j=0; j<count; j++) {
+//                                datasetValue[j] = {
+//                                    label: "My First dataset",
+//                                        fillColor : getRandomColor(),
+//                                        strokeColor : getRandomColor(),
+//                                        pointColor : getRandomColor(),
+//                                        pointStrokeColor : getRandomColor(),
+//                                        pointHighlightFill : getRandomColor(),
+//                                        pointHighlightStroke : "rgba(220,220,220,1)",
+//                                        data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+//                                }
+//                            }
+                            var lineChartData = {
+                                labels : ["Tháng 1","Tháng 2","Tháng 3","Tháng 4","Tháng 5","Tháng 6","Tháng 7","Tháng 8","Tháng 9","Tháng 10","Tháng 11","Tháng 12"],
+                                datasets : [
+                                    {
+                                        label: "My First dataset",
+                                        fillColor : "#ddd",
+                                        strokeColor : "rgba(220,220,220,1)",
+                                        pointColor : "rgba(220,220,220,1)",
+                                        pointStrokeColor : "#fff",
+                                        pointHighlightFill : "#fff",
+                                        pointHighlightStroke : "rgba(220,220,220,1)",
+                                        data : [500,500,500,500,500,500,500,500,500,500,500,500]
+                                    },
+                                    {
+                                        label: "My Second dataset",
+                                        fillColor : "rgba(48, 164, 255, 0.2)",
+                                        strokeColor : "rgba(48, 164, 255, 1)",
+                                        pointColor : "rgba(48, 164, 255, 1)",
+                                        pointStrokeColor : "#fff",
+                                        pointHighlightFill : "#fff",
+                                        pointHighlightStroke : "rgba(48, 164, 255, 1)",
+                                        data : [600,600,600,600,600,600,600,600,500,500,500,500]
+                                    },
+                                    {
+                                        label: "My Third dataset",
+                                        fillColor : "rgba(48, 164, 255, 0.2)",
+                                        strokeColor : "rgba(48, 164, 255, 1)",
+                                        pointColor : "rgba(48, 164, 255, 1)",
+                                        pointStrokeColor : "#fff",
+                                        pointHighlightFill : "#fff",
+                                        pointHighlightStroke : "rgba(48, 164, 255, 1)",
+                                        data : [700,700,700,700,500,400,300,200,500,500,500,500]
+                                    }
+                                ]
+//								datasets : datasetValue
+                            }
+						</script>
 					</div>
 				</div>
 			</div>
