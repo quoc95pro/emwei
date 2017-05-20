@@ -36,7 +36,8 @@
     <script src="{{ URL::asset('js/easypiechart.js')}}"></script>
     <script src="{{ URL::asset('js/easypiechart-data.js')}}"></script>
     <script src="{{ URL::asset('js/bootstrap-datepicker.js')}}"></script>
-    <script src="{{ URL::asset('js/bootstrap-table.js')}}"></script>
+    @yield('script')
+
     <style>
 
         .width40{
@@ -60,30 +61,13 @@
             width: 100%;
         }
 
+        @yield('css')
 
 
-        .table-hover>tbody>tr>td>a{
-            display: none;
-            text-decoration: none;
-            float: left;
-            margin: 3px;
-            border-right: solid 1px #c1c1c1;
-            padding-right: 4px;
-        }
-        .table-hover>tbody>tr>td>a:hover{
-            color: red;
-        }
-        .table-hover>tbody>tr:hover>td>a{
-            display: block;
-            text-decoration: none;
-        }
         .form-group>label{
             color: #30a5ff;
         }
-        .table-hover>tbody>tr>td>.view-button{
-            border-right: none;
-            padding-right: 4px;
-        }
+
 
         /*cart*/
         #cart_items .cart_info {
@@ -188,110 +172,8 @@
             });
         })
 
-
-        function cart_add_ajax_admin(_rowId,_qty,_productPrice,price){
-            var rowId = document.getElementById(_rowId).value;
-            var qty = document.getElementById(_qty).value;
-            var price = document.getElementById(price).value;
-            qty = parseInt(qty);
-            qty++;
-            price = parseInt(price);
-            $.ajax({
-                url : "{{route('cart-update-qty-admin')}}",
-                type : "post",
-                dateType:"text",
-                data : {
-                    number : qty,
-                    id : rowId
-                },
-                success : function (result){
-                    document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',');
-                }
-            });
-
-            document.getElementById(_qty).value = qty;
-            document.getElementById(_productPrice).innerHTML=accounting.formatMoney(price*qty,'',0,'.',',');
-
-        }
-
-        function cart_minus_ajax_admin(_rowId,_qty,_productPrice,price){
-            var rowId = document.getElementById(_rowId).value;
-            var qty = document.getElementById(_qty).value;
-            var price = document.getElementById(price).value;
-            qty = parseInt(qty);
-            if(qty>1)
-                qty--;
-            price = parseInt(price);
-            $.ajax({
-                url : "{{route('cart-update-qty-admin')}}",
-                type : "post",
-                dateType:"text",
-                data : {
-                    number : qty,
-                    id : rowId
-                },
-                success : function (result){
-                    document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',');
-                }
-            });
-            document.getElementById(_qty).value = qty;
-            document.getElementById(_productPrice).innerHTML=accounting.formatMoney(price*qty,'',0,'.',',');
-        }
-
-        function cart_set_qty_admin(_rowId,_qty,_productPrice,price){
-            var rowId = document.getElementById(_rowId).value;
-            var qty = document.getElementById(_qty).value;
-            var p = document.getElementById(price).value;
-            qty = parseInt(qty);
-            if(qty>0) {
-
-                $.ajax({
-                    url: "{{route('cart-update-qty-admin')}}",
-                    type: "post",
-                    dateType: "text",
-                    data: {
-                        number: qty,
-                        id: rowId
-                    },
-                    success: function (result) {
-                        document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',');
-                    }
-                });
-                document.getElementById(_qty).value = qty;
-                document.getElementById(_productPrice).innerHTML = accounting.formatMoney(p*qty,'',0,'.',',');
-            }else {
-                document.getElementById(_qty).value = '1';
-                cart_set_qty(_rowId,_qty,_productPrice,price);
-            }
-        }
-
-        function cart_delete_admin(_rowId){
-            var rowId = document.getElementById(_rowId).value;
-            $.ajax({
-                url : "{{route('cart-delete-admin')}}",
-                type : "post",
-                dateType:"text",
-                data : {
-                    id : rowId
-                },
-                success : function (result){
-                    document.getElementsByClassName(_rowId)[0].innerHTML = '';
-                    document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',');
-                    if(result=='0'){
-                        document.getElementById('check-out').style.display = "none";
-                    }
-                }
-            });
-
-        }
         //Chart
-        function Chart_By_Day(){
-            var start = document.getElementById("startDate").value;
-            var end = document.getElementById("endDate").value;
-            $('#data').bootstrapTable('refresh',{
-                url: "http://localhost/emwei/public/json2/"+start+"/"+end+""
-            });
-        }
+
     </script>
 </head>
 
@@ -300,7 +182,6 @@
 @include('admin.sidebar')
 @yield('content')
 
-<script src="{{ URL::asset('js/bootstrap.min.js')}}"></script>
 <script>
 //    $('#calendar').datepicker({
 //    });

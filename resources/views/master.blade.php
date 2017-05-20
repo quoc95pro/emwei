@@ -68,8 +68,8 @@
             changeMonth: true,
             changeYear: true,
             yearRange: '1950:2013',
-            dateFormat: 'dd-mm-yy',
-            defaultDate: '01-01-1950'
+            dateFormat: 'yy-mm-dd',
+            defaultDate: '1950-01-01'
 
         });
 

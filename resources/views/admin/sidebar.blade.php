@@ -5,7 +5,7 @@
         </div>
     </form>
     <ul class="nav menu">
-        <li id="Dashboard" class="active"><a href="{{route('admin-index')}}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+        <li id="Dashboard" class="active"><a href="{{route('admin-index')}}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Tổng Quan</a></li>
         <li id="Product" class="parent">
             <a href="{{route('adminAllProduct')}}">
                 <span data-toggle="collapse" href="#sub-item-1"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span> Sản phẩm
@@ -41,18 +41,17 @@
             </a>
         </li>
         <li id="Account" class="parent">
-            <a href="{{route('charts')}}">
-                <span data-toggle="collapse" href="#sub-item-2"><svg class="glyph stroked lock"><use xlink:href="#stroked-lock"/></svg></span>Tài Khoản
+            <a href="#">
+                <span data-toggle="collapse" href="#sub-item-2"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span>Tài Khoản
             </a>
             <ul class="children collapse" id="sub-item-2">
                 <li>
-                    <a class="" href="{{route('adminAllProduct')}}">
+                    <a class="" href="{{route('adminAccount')}}">
                         <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Admin
-
                     </a>
                 </li>
                 <li>
-                    <a class="" href="{{route('adminAddProduct')}}">
+                    <a class="" href="{{route('userAccount')}}">
                         <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> User
                     </a>
                 </li>

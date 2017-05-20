@@ -24,10 +24,10 @@ Route::get('readAll',function (){
     }
 } );
 
-Route::get('/test/{id}/{di}',[
-    'as'=>'test',
-    'uses'=>'PageController@test'
-]);
+Route::get('/test',function (){
+
+    return redirect()-> route('all');
+});
 
 Route::get('/',[
     'as'=>'trang-chu',
@@ -124,6 +124,8 @@ Route::get('admin',[
     'uses'=>'PageController@admin'
 ]);
 
+
+
 Route::get('widgets',[
     'as'=>'widgets',
     'uses'=>'PageController@widgets'
@@ -217,7 +219,34 @@ Route::post('productLineChart',[
     'uses'=>'PageController@productLineChart'
 ]);
 
-Route::get('/all',function (){
+Route::post('editAdminAccount',[
+    'as'=>'editAdminAccount',
+    'uses'=>'PageController@editAdminAccount'
+]);
+
+Route::post('editUserAccount',[
+    'as'=>'editUserAccount',
+    'uses'=>'PageController@editUserAccount'
+]);
+
+Route::get('getNextAdminID',[
+    'as'=>'getNextAdminID',
+    'uses'=>'PageController@NextIDAdmin'
+]);
+
+Route::post('insertAdminAccount',[
+    'as'=>'insertAdminAccount',
+    'uses'=>'PageController@insertAdminAccount'
+]);
+
+Route::post('insertUserAccount',[
+    'as'=>'insertUserAccount',
+    'uses'=>'PageController@insertUserAccount'
+]);
+
+Route::get('/all',[
+    'as'=>'all',
+function (){
     if(!(Session::has('admin'))){
         return "";
     }
@@ -246,9 +275,36 @@ Route::get('/all',function (){
 
     $a=json_encode($arr);
     return $a;
-});
+}]);
+Route::get('/jsonAccountAdmin/',[
+    'as'=>'jsonAccountAdmin'
+,function (){
+    if(!(Session::has('admin'))){
+        return "";
+    }
+    $listAdmin = DB::select('SELECT * FROM `tbl_admin` ');
+    $a=json_encode($listAdmin);
+    return $a;
+}]);
 
-Route::get('/json/{year}',function (Request $request){
+Route::get('/jsonAccountUser/',[
+    'as'=>'jsonAccountUser'
+    ,function (){
+    if(!(Session::has('admin'))){
+        return "";
+    }
+    $listAdmin = DB::select('SELECT * FROM `tbl_khachhang` ');
+
+
+
+
+    $a=json_encode($listAdmin);
+    return $a;
+}]);
+
+Route::get('/json/{year}',[
+    'as'=>'json'
+    ,function (Request $request){
     if(!(Session::has('admin'))){
         return "";
     }
@@ -278,9 +334,10 @@ Route::get('/json/{year}',function (Request $request){
 
     $a=json_encode($arr);
     return $a;
-});
+}]);
 
-Route::get('json2/{startDate}/{endDate}',
+Route::get('json2/{startDate}/{endDate}',[
+    'as'=>'json2',
 function (Request $request){
     if(!(Session::has('admin'))){
         return "";
@@ -311,7 +368,7 @@ function (Request $request){
 
     $a=json_encode($arr);
     return $a;
-});
+}]);
 
 Route::get('edit-product/{id}',[
     'as'=>'edit-product',
@@ -349,4 +406,14 @@ Route::get('logout',[
 Route::get('add-cart/{id}',[
     'as'=>'add-cart',
     'uses'=>'PageController@addCart'
+]);
+
+Route::get('adminAccount',[
+    'as'=>'adminAccount',
+    'uses'=>'PageController@adminAccount'
+]);
+
+Route::get('userAccount',[
+    'as'=>'userAccount',
+    'uses'=>'PageController@userAccount'
 ]);

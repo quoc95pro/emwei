@@ -1,5 +1,43 @@
 @extends('admin.master')
+@section('css')
+    .table-hover>tbody>tr>td>a{
+    display: none;
+    text-decoration: dashed;
+    float: left;
+    margin: 3px;
+    border-right: solid 1px #c1c1c1;
+    padding-right: 4px;
+    }
+
+    .table-hover>tbody>tr>td>a:hover{
+    color: red;
+    }
+
+
+    .table-hover>tbody>tr:hover>td>a{
+    display: block;
+    text-decoration: none;
+    }
+
+    .table-hover>tbody>tr>td>a.view-button{
+    border-right: none;
+    padding-right: 4px;
+    }
+    .table-hover>tbody>tr>td{
+     height:65px;
+    }
+@stop
 @section('content')
+    @if(count($errors)>0)
+        <div class="alert alert-danger">
+            @foreach($errors->all() as $err)
+                {{$err}}
+            @endforeach
+        </div>
+    @endif
+    @if(Session::has('thanhcong'))
+        <div class="alert alert-success">{{Session::get('thanhcong')}}</div>
+    @endif
     <script>
         document.getElementById("Product").className += " active";
         document.getElementById("Dashboard").className -= "active";
@@ -23,7 +61,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Advanced Table</div>
                     <div class="panel-body">
-                        <table data-toggle="table"   data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc" class="table table-hover">
+                        <table data-toggle="table"  data-show-refresh="true" data-page-list="[10, 25, 50, 100, All]"  data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc" class="table table-hover">
                             <thead>
                             <tr>
                                 <th data-field="state" data-checkbox="true" ></th>
@@ -42,7 +80,7 @@
 
                                     </td>
                                     <td>{{$product->IDSanPham}}<br/>
-                                        <a class="edit-button" href="{{route('edit-product',$product->IDSanPham)}}" >Sửa</a>
+                                        <a class="edit-button"  href="{{route('edit-product',$product->IDSanPham)}}" >Sửa</a>
                                         <a class="delete-button" href="{{route('delete-product',$product->IDSanPham)}}" >Xóa</a>
                                         <a class="view-button" href="{{route('edit-product',$product->IDSanPham)}}" >Chi tiết</a>
                                     </td>
@@ -61,6 +99,5 @@
             </div>
         </div><!--/.row-->
     </div>	<!--/.main-->
-    <script src="js/bootstrap.min.js"></script>
     <script src="js/bootstrap-table.js"></script>
 @endsection

@@ -17,12 +17,16 @@ use App\Description;
 use function array_push;
 use function count;
 use function date;
+use function e;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\ProductType;
+use Mockery\Exception;
+use mysqli_sql_exception;
 use function redirect;
 use function session;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use function view;
 
 class pageController extends Controller
 {
@@ -154,6 +158,7 @@ class pageController extends Controller
                 $newUser->GioiTinh=$req->sex;
                 $newUser->SoDienThoai=$req->phone;
                 $newUser->DiaChi=$req->add;
+                $newUser->NgayTao=date('Y-m-d');
                 $newUser->save();
         return $this->index();
     }
@@ -168,6 +173,180 @@ class pageController extends Controller
 
         return \view('page.checkout')
             ->with(['listProduct'=>Cart::content()]);
+    }
+
+    public function editAdminAccount(Request $request){
+        $mess='';
+//        $type=array(['Administrator','Staff']);
+        $this->validate($request,
+            [
+                'name'=>'required',
+                'dob'=>'date_format:"Y-m-d"',
+                'accountType'=>'required',
+                'status'=>'required'
+            ],
+            [
+
+                'name.required'=>'Vui lòng nhập tên',
+                'dob.date_format'=>'Ngày tháng năm không đúng format',
+                'accountType.required'=>'Vui lòng Nhập Loại Tài Khoản',
+                'status.required'=>'Vui lòng Nhập Trạng Thái'
+            ]);
+        try{
+            DB::update('UPDATE tbl_admin SET TenAdmin=?,NamSinh=?,Loai=?,TrangThai=? WHERE IDAdmin=?', [$request->name, $request->dob,$request->accountType,$request->status,$request->id]);
+            $mess = 'Sửa Thành Công';
+        }catch (mysqli_sql_exception $e){
+            $mess = 'Lỗi : '.$e->getMessage();
+        }
+
+        return $mess;
+    }
+
+    public function editUserAccount(Request $request){
+        $mess='Lỗi';
+//        $type=array(['Administrator','Staff']);
+        $this->validate($request,
+            [
+                'name'=>'required',
+                'dob'=>'date_format:"Y-m-d"',
+                'sex'=>'required',
+                'phone'=>'required|numeric|min:9',
+            ],
+            [
+                'name.required'=>'Vui lòng nhập tên',
+                'dob.date_format'=>'Ngày tháng năm không đúng format',
+                'sex.required'=>'Vui lòng nhập giới tính',
+                'phone.required'=>'Vui lòng nhập số điện thoại',
+                'phone.numeric'=>'Số điện thoại không hợp lệ',
+            ]);
+
+            if(DB::update('UPDATE tbl_khachhang SET TenKhachHang=?,NamSinh=?,GioiTinh=?,SoDienThoai=?,DiaChi=?,LoaiTaiKhoan=?,TrangThai=? WHERE Email=?',
+                [$request->name,$request->dob,$request->sex,$request->phone,$request->add,$request->type,$request->status,$request->email]))
+            $mess = 'Sửa Thành Công';
+        return $mess;
+    }
+
+    public function insertUserAccount(Request $request)
+    {
+        $mess = '';
+        $this->validate($request,
+            [
+                'email'=>'required|email|unique:tbl_khachhang,Email',
+                'name'=>'min:2|max:50',
+                'pass'=>'required|min:6|max:50',
+                'repass'=>'same:pass',
+                'dob'=>'date_format:"Y-m-d"',
+                'phone'=>'min:9|max:11'
+            ],
+            [
+                'email.required'=>'Vui lòng nhập email',
+                'email.unique'=>'Email đã tồn tại',
+                'email.email'=>'Không đúng định dạng email',
+                'dob.date_format'=>'Ngày tháng năm không đúng format',
+                'name.min'=>'Tên có độ dài không hợp lệ(quá ngắn)',
+                'name.max'=>'Tên có độ dài không hợp lệ(quá dài)',
+                'pass.min'=>'Mật Khẩu có độ dài không hợp lệ(quá ngắn)',
+                'pass.required'=>'Mật Khẩu không được để trống',
+                'pass.max'=>'Mật Khẩu có độ dài không hợp lệ(quá dài)',
+                'repass.same'=>'Mật Khẩu không trùng khớp',
+                'phone.min'=>'Số điện thoại có độ dài không hợp lệ',
+                'phone.max'=>'Số điện thoại có độ dài không hợp lệ'
+            ]);
+
+        try{
+            $newUser = new Customer();
+            $newUser->TenKhachHang=$request->name;
+            $newUser->Email=$request->email;
+            $newUser->MatKhau=$request->pass;
+            $newUser->NamSinh=$request->dob;
+            $newUser->GioiTinh=$request->sex;
+            $newUser->SoDienThoai=$request->phone;
+            $newUser->DiaChi=$request->add;
+            $newUser->LoaiTaiKhoan=$request->accountType;
+            $newUser->TrangThai=$request->status;
+            $newUser->save();
+            $mess = 'Thêm Thành Công';
+        }catch (mysqli_sql_exception $e){
+            $mess = 'Lỗi : '.$e->getMessage();
+        }
+
+        return $mess;
+
+    }
+
+    public function insertAdminAccount(Request $request)
+    {
+        $mess = '';
+        $this->validate($request,
+            [
+                'name'=>'min:2|max:50',
+                'pass'=>'required|min:6|max:50',
+                'repass'=>'same:pass',
+                'dob'=>'date_format:"Y-m-d"'
+            ],
+            [
+                'dob.date_format'=>'Ngày tháng năm không đúng format',
+                'name.min'=>'Tên có độ dài không hợp lệ(quá ngắn)',
+                'name.max'=>'Tên có độ dài không hợp lệ(quá dài)',
+                'pass.min'=>'Mật Khẩu có độ dài không hợp lệ(quá ngắn)',
+                'pass.required'=>'Mật Khẩu không được để trống',
+                'pass.max'=>'Mật Khẩu có độ dài không hợp lệ(quá dài)',
+                'repass.same'=>'Mật Khẩu không trùng khớp',
+            ]);
+
+        try{
+            $admin = new Admin();
+            $admin->IDAdmin = $request->id;
+            $admin->TenAdmin = $request->name;
+            $admin->MatKhau = $request->pass;
+            $admin->NamSinh = $request->dob;
+            $admin->Loai = $request->accountType;
+            $admin->TrangThai=$request->status;
+            $admin->save();
+            $mess = 'Thêm Thành Công';
+        }catch (mysqli_sql_exception $e){
+            $mess = 'Lỗi : '.$e->getMessage();
+        }
+
+        return $mess;
+
+    }
+
+
+    public function GetLastIDAdmin()
+    {
+        $sql = DB::select('SELECT IDAdmin FROM tbl_admin ORDER by IDAdmin DESC LIMIT 1');
+        foreach ($sql as $a)
+        {
+            return $a->IDAdmin;
+        }
+
+
+    }
+
+    public function NextIDAdmin()
+    {
+        $prefixID="Admin";
+        if($this->GetLastIDAdmin()=="")
+        {
+            return $prefixID+"001";
+        }
+        $nextID = substr($this->GetLastIDAdmin(),5) +1;
+        $lengthNumerID = strlen($this->GetLastIDAdmin())- strlen($prefixID);
+        $zeroNumber = "";
+        for ($i = 1; $i <= $lengthNumerID; $i++)
+        {
+            if ($nextID < pow(10, $i))
+            {
+                for ($j = 1; $j <= $lengthNumerID - $i; $j++)
+                {
+                    $zeroNumber=$zeroNumber."0";
+                }
+                return $prefixID.$zeroNumber.$nextID;
+            }
+        }
+        return $prefixID.$nextID;
+
     }
 
     public function postCheckOut(Request $request){
@@ -266,6 +445,7 @@ class pageController extends Controller
 
     public function getDetail( Request $req){
         $product = DB::select("SELECT * FROM `tbl_sanpham` WHERE  IDSanPham='$req->id'");
+        $image = DB::select("SELECT * FROM `tbl_anh` WHERE link LIKE '%$req->id%'");
         $a = '';
         foreach ($product as $p){
             $a = $p->LoaiSanPham;
@@ -273,7 +453,8 @@ class pageController extends Controller
         $relateProduct = DB::select("SELECT * FROM `tbl_sanpham` WHERE  LoaiSanPham='$a' ORDER BY IDSanPham DESC  limit 6");
         return \view('page.product-details')
             ->with(['product'=>$product])
-            ->with(['relateProduct'=>$relateProduct]);
+            ->with(['relateProduct'=>$relateProduct])
+            ->with(['listImage'=>$image]);
     }
 
     public function shop(){
@@ -325,16 +506,40 @@ class pageController extends Controller
             ;
     }
     public function admin(){
-        return \view('admin.index');
+        $newOrder = DB::select('SELECT * from tbl_donhang WHERE NgayTao=?',[date('Y-m-d')]);
+        $newUser =  DB::select('SELECT * from tbl_khachhang WHERE NgayTao=?',[date('Y-m-d')]);
+        $arrTotal = array();
+        for ($i=1;$i<13;$i++){
+            $total = 0;
+            $curYear = date("Y");
+            $monthTotal = DB::select("SELECT tbl_donhang_sanpham.SoLuong FROM `tbl_donhang_sanpham`,`tbl_donhang`
+ WHERE tbl_donhang.MaDonHang=tbl_donhang_sanpham.MaDonHang AND MONTH(tbl_donhang.NgayTao) = '$i' AND YEAR(tbl_donhang.NgayTao) = '$curYear'");
+            if(count($monthTotal)>0){
+                foreach ($monthTotal as $item){
+                    $total+=$item->SoLuong;
+                }
+            }
+            array_push($arrTotal,$total);
+        }
+
+        $arrBill = array();
+        for ($i=1;$i<13;$i++){
+
+            $curYear = date("Y");
+            $monthTotal = DB::select("SELECT * FROM `tbl_donhang` WHERE  MONTH(NgayTao) = '$i' AND YEAR(NgayTao) = '$curYear'");
+            array_push($arrBill,count($monthTotal));
+        }
+        return \view('admin.index')
+            ->with(['countNewOrder'=>count($newOrder)])
+            ->with(['countNewUser'=>count($newUser)])
+            ->with(['countProduct'=>$arrTotal])
+            ->with(['countBill'=>$arrBill]);
 
     }
 
     public function widgets(){
         return \view('admin.widgets');
 
-    }
-    public function test(Request $req){
-       return $req->id.$req->di;
     }
 
     public function chart(){
@@ -615,29 +820,30 @@ class pageController extends Controller
             $stringMoTa=$stringMoTa.$item->MoTa.':'.$req->$tenMoTa.';';
         }
         $product->MoTa=rtrim($stringMoTa,";");
-        $product->save();
+        if(isset($req->image)) {
+            $product->AnhDaiDien= 'images/product/' . $req->productID.'_0.' . $req->image[0]->getClientOriginalExtension();
+        }else{
+            $product->AnhDaiDien = 'images/product/defaultProduct.png';
 
+        }
+        $product->save();
 
 //         foreach ($req->image as $img)
 //             $filename+= $img->store('photos');
         if(isset($req->image)) {
+            $i=0;
             foreach ($req->image as $file) {
                 $path = public_path() . '/images/product/';
-                $file->move($path, $req->productID . '.' . $file->getClientOriginalExtension());
+                $file->move($path, $req->productID.'_'.$i. '.' . $file->getClientOriginalExtension());
                 $photo = new Photo();
                 $photo->MaSanPham = $req->productID;
-                $photo->link = 'images/product/' . $req->productID . '.' . $file->getClientOriginalExtension();
+                $photo->link = 'images/product/' . $req->productID.'_'.$i . '.' . $file->getClientOriginalExtension();
                 $photo->save();
+                $i++;
             }
-        }else{
-            $photo = new Photo();
-            $photo->MaSanPham = $req->productID;
-            $photo->link = 'images/product/defaultProduct.png';
-            $photo->save();
-            }
+        }
 
-
-        return redirect()->back()->with('thanhcong','Thêm thành công');
+        return redirect()->route('adminAllProduct')->with('thanhcong','Thêm thành công');
     }
 
     public function getEditProduct(Request $req){
@@ -645,13 +851,13 @@ class pageController extends Controller
         $productTypes = DB::select('SELECT LoaiSanPham FROM `tbl_sanpham` GROUP BY LoaiSanPham');
         $companies = DB::select('SELECT HangSanXuat FROM `tbl_sanpham` GROUP BY HangSanXuat');
         $description = DB::select('SELECT * FROM `tbl_motasanpham`');
-
+        $image = DB::select("SELECT * FROM `tbl_anh` WHERE link LIKE '%$req->id%'");
         return \view('admin.edit')
             ->with(['product'=>$product])
             ->with(['productTypes'=>$productTypes])
             ->with(['companies'=>$companies])
             ->with(['description'=>$description])
-            ->with(['nextID'=>$this->NextID()]);
+            ->with(['image'=>$image]);
 
 
 
@@ -756,5 +962,11 @@ class pageController extends Controller
         return $str; // Trả về chuỗi đã chuyển
     }
 
+    function adminAccount(){
+        return view('admin.adminAccount');
+    }
+    function userAccount(){
+        return view('admin.userAccount');
+    }
 
 }

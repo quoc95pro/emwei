@@ -1,5 +1,10 @@
 @extends('master')
 @section('content')
+	@php
+		$contents = Storage::get('countVisitor.log');
+        $contents++;
+        Storage::put('countVisitor.log',$contents);
+	@endphp
 	<section id="slider"><!--slider-->
 		<div class="container">
 			<div class="row">

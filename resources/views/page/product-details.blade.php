@@ -155,9 +155,15 @@
 								  <!-- Wrapper for slides -->
 								    <div class="carousel-inner">
 										<div class="item active">
+											@if(count($listImage)>3)
+												<a><img src="../{{$listImage[0]->link}}" alt="" height="85" width="84"></a>
+												<a><img src="../{{$listImage[1]->link}}" alt="" height="85" width="84"></a>
+												<a><img src="../{{$listImage[2]->link}}" alt="" height="85" width="84"></a>
+												@else
 										  <a href=""><img src="{{ URL::asset('images/product-details/similar1.jpg') }}" alt=""></a>
 										  <a href=""><img src="{{ URL::asset('images/product-details/similar2.jpg') }}" alt=""></a>
 										  <a href=""><img src="{{ URL::asset('images/product-details/similar3.jpg') }}" alt=""></a>
+												@endif
 										</div>
 										<div class="item">
 											<a href=""><img src="{{ URL::asset('images/product-details/similar1.jpg') }}" alt=""></a>
