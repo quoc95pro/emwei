@@ -57,15 +57,15 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Tên Sản Phẩm</label>
-                                    <input class="form-control" value="{{$product[0]->TenSanPham}}" name="productName">
+                                    <input class="form-control" required value="{{$product[0]->TenSanPham}}" name="productName">
                                 </div>
                                 <div class="form-group">
                                     <label>Giá</label>
-                                    <input class="form-control" value="{{$product[0]->Gia}}" name="productPrice">
+                                    <input class="form-control" required value="{{$product[0]->Gia}}" name="productPrice">
                                 </div>
                                 <div class="form-group">
                                     <label>Số Lượng</label>
-                                    <input class="form-control" value="{{$product[0]->SoLuong}}" name="productQTY">
+                                    <input class="form-control" required  value="{{$product[0]->SoLuong}}" name="productQTY">
                                 </div>
                                 <div class="form-group">
                                     <label>Tình Trạng</label>
@@ -84,9 +84,9 @@
                                                 <div style="height:85px;border: 1px solid rgb(221, 221, 221);margin-top: 2px">
                                                     <div style="width: 15%;height:100%;float: left;border-right: 1px solid rgb(221, 221, 221)"><img src="../{{$img->link}}" alt="" style="padding:12px "></div>
                                                     <div style="width: 50%;float: left;border-right: 1px solid rgb(221, 221, 221)"><div style="padding: 30px">{{$img->link}}</div></div>
-                                                    <div style="width: 20%;float: left">
+                                                    <div style="width: 20%;float: left;height: 100%">
                                                         <div style="padding: 30px">
-                                                            <button type="button" class="kv-file-remove btn btn-xs btn-default"><i class="glyphicon glyphicon-trash text-danger"></i></button>
+                                                            <button type="button"  class="kv-file-remove btn btn-xs btn-default"><i class="glyphicon glyphicon-trash text-danger"></i></button>
                                                             <button type="button" class="kv-file-zoom btn btn-xs btn-default"><i class="glyphicon glyphicon-zoom-in"></i></button>
                                                         </div>
                                                     </div>
@@ -181,9 +181,11 @@
                                 if(document.getElementById("companyCheckBox").checked){
                                     document.getElementById("companyInput").disabled = false;
                                     document.getElementById("companySelect").disabled = true;
+                                    document.getElementById("companyInput").setAttribute('required','true');
                                 }else {
                                     document.getElementById("companyInput").disabled = true;
                                     document.getElementById("companySelect").disabled = false;
+                                    document.getElementById("companyInput").setAttribute('required','false');
                                 }
 
                             }
