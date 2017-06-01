@@ -28,7 +28,7 @@
 						@foreach($listProduct as $product)
 							<tr class="rowId{{$i}}">
 								<td class="cart_product">
-									<a href=""><img src="{{$product->options->img}}" alt="" width="50px"></a>
+									<a href="{{route('detail-product',$product->id)}}"><img src="{{$product->options->img}}" alt="" width="50px"></a>
 								</td>
 								<td class="cart_description">
 									<h4><a href="{{route('detail-product',$product->id)}}">{{$product->name}}</a></h4>
@@ -73,7 +73,14 @@
 				<div class="col-sm-9">
 					<div class="total_area">
 						<ul>
-							<li>Tổng Giá : <span id="showTotal">{{number_format($total, 0, ',', '.')}}</span></li>
+							@if(Session::has('userName'))
+								<li>Tổng Giá : <span id="showTotal" style="text-decoration: line-through">{{number_format($total, 0, ',', '.')}} VND</span></li>
+								<li>Chiết Khấu : <span>%</span><span id="ck">{{Session::get('userName')->ChietKhau}}</span></li>
+								<li>Giá Sau Chiết Khấu : <span id="showTotal2">{{number_format($total-round($total/100*Session::get('userName')->ChietKhau/1000)*1000, 0, ',', '.')}} VND</span></li>
+
+							@else
+								<li>Tổng Giá : <span id="showTotal">{{number_format($total, 0, ',', '.')}} VND</span></li>
+							@endif
 						</ul>
 						@if($i>0)
 							<a class="btn btn-default check_out" id="check-out" href="{{route('checkout')}}">Thanh Toán</a>

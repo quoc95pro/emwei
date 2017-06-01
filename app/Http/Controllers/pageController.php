@@ -7,10 +7,12 @@
  */
 
 namespace App\Http\Controllers;
+use App\Accessories;
 use App\Admin;
 use App\Bill_Product;
 use App\Customer;
 use App\History;
+use App\PhotoAccesories;
 use  App\Product;
 use App\Photo;
 use App\Description;
@@ -21,11 +23,17 @@ use function e;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\ProductType;
+use Illuminate\Support\Facades\Session;
 use Mockery\Exception;
 use mysqli_sql_exception;
+use const null;
 use function redirect;
+use function round;
+use function route;
 use function session;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use function substr;
+use function unlink;
 use function view;
 
 class pageController extends Controller
@@ -36,12 +44,16 @@ class pageController extends Controller
 
         $slide = DB::select('SELECT * FROM `tbl_sanpham` ORDER BY IDSanPham DESC LIMIT 3');
         // $slide=Product::take(3) ->get();
-        $left=DB::select('SELECT HangSanXuat,COUNT(*) AS Count FROM `tbl_sanpham` GROUP BY HangSanXuat');
         $tabTitle=DB::select('SELECT LoaiPhuKien from `tbl_phukien` GROUP BY LoaiPhukien');
-        $tabContent=DB::select('SELECT * FROM `tbl_anhphukien`,`tbl_phukien` WHERE tbl_anhphukien.MaSanPham=tbl_phukien.IDPhuKien ORDER BY tbl_phukien.IDPhuKien DESC LIMIT 5');
+        $tabContent= array();
+        foreach ($tabTitle as $title){
+           $content =  DB::select('SELECT * FROM `tbl_phukien` WHERE LoaiPhuKien =? ORDER BY tbl_phukien.IDPhuKien DESC LIMIT 3',[$title->LoaiPhuKien]);
+           foreach ($content as $c){
+               array_push($tabContent,$c);
+           }
+        }
         return view('page.index')
             ->with(['newProducts' => $newProduct])
-            ->with(['left' => $left])
             ->with(['tabTitle'=>$tabTitle])
             ->with(['slide' => $slide])
             ->with(['tabContent'=>$tabContent]);
@@ -158,12 +170,30 @@ class pageController extends Controller
                 $newUser->GioiTinh=$req->sex;
                 $newUser->SoDienThoai=$req->phone;
                 $newUser->DiaChi=$req->add;
+                $newUser->LoaiTaiKhoan='Đồng';
+                $newUser->TrangThai='Active';
                 $newUser->NgayTao=date('Y-m-d');
                 $newUser->save();
-        return $this->index();
+        session(['userName' => $newUser]);
+        return redirect()->route('chietkhau');
     }
 
+    public  function chietkhau(){
+        if(!(Session::has('userName'))){
+            return redirect()->route('trang-chu');
+        }
+        if(Session::get('userName')->ChietKhau!=0){
+            return redirect()->route('trang-chu');
+        }
 
+        return view('page.ChietKhau');
+
+    }
+
+    public  function updateDisCountProduct(Request $request){
+        DB::update('UPDATE tbl_khachhang SET ChietKhau=? WHERE Email=?',[$request->discount,Session::get('userName')->Email]);
+        Session::get('userName')->ChietKhau=$request->discount;
+    }
 
     public function contactUs(){
         return \view('page.contact-us');
@@ -359,6 +389,12 @@ class pageController extends Controller
         foreach (Cart::content() as $item){
             $tongGia+=($item->price*$item->qty);
         }
+        $ck=0;
+        if((Session::has('userName'))){
+            $tongGia=$tongGia-round($tongGia/100*Session::get('userName')->ChietKhau/1000)*1000;
+            $ck=Session::get('userName')->ChietKhau;
+        }
+
         if($request->httt=='giaohang'){
             $nameUser = $request->nameUser;
             $mailUser = $request->mailUser;
@@ -376,6 +412,7 @@ class pageController extends Controller
         $donHang->DiaChi=$userAddress;
         $donHang->GhiChu=$ghiChu;
         $donHang->Gia=$tongGia;
+        $donHang->ChietKhau=$ck;
         $donHang->NgayTao=date("Y-m-d");
         $donHang->TinhTrang='Mới';
         $donHang->save();
@@ -444,6 +481,21 @@ class pageController extends Controller
     }
 
     public function getDetail( Request $req){
+        if(substr($req->id,0,2)=="PK"){
+            $accessory = DB::select("SELECT * FROM `tbl_phukien` WHERE  IDPhuKien='$req->id'");
+            $image = DB::select("SELECT * FROM `tbl_anhphukien` WHERE link LIKE '%$req->id%'");
+            $a = '';
+            foreach ($accessory as $p){
+                $a = $p->MaSanPham;
+            }
+            $product = Product::find($a);
+            $relateProduct = DB::select("SELECT * FROM `tbl_phukien` WHERE  MaSanPham='$a' ORDER BY IDPhuKien DESC  limit 6");
+            return \view('page.product-details')
+                ->with(['product'=>$accessory])
+                ->with(['relateProduct'=>$relateProduct])
+                ->with(['listImage'=>$image])
+                ->with(['mainProduct'=>$product]);
+        }
         $product = DB::select("SELECT * FROM `tbl_sanpham` WHERE  IDSanPham='$req->id'");
         $image = DB::select("SELECT * FROM `tbl_anh` WHERE link LIKE '%$req->id%'");
         $a = '';
@@ -462,8 +514,14 @@ class pageController extends Controller
     }
 
     public function addCart(Request $req){
-        $product = Product::where('IDSanPham','=',$req->id)->first();
-        Cart::add($product->IDSanPham, $product->TenSanPham, 1, $product->Gia, ['img' => $product->AnhDaiDien]);
+        if(substr($req->id,0,2)=="PK"){
+            $accessory = Accessories::find($req->id);
+            Cart::add($req->id, $accessory->TenPhuKien, 1, $accessory->Gia, ['img' => $accessory->AnhDaiDien]);
+        }else{
+            $product = Product::where('IDSanPham','=',$req->id)->first();
+            Cart::add($product->IDSanPham, $product->TenSanPham, 1, $product->Gia, ['img' => $product->AnhDaiDien]);
+        }
+
 
         return redirect()->route('cart');
 
@@ -497,12 +555,37 @@ class pageController extends Controller
     }
 
     public function listProduct(Request $req){
+        if($req->type=='PhuKien') {
+            if($req->manufacturer=='all'){
+                $accessory = Accessories::where('TinhTrang','!=','Đã xóa')
+                    ->paginate(9);
 
+                return \view('page.shop')
+                    ->with(['type'=>'phukien'])
+                    ->with(['listProduct'=>$accessory]);
+            }
+            $accessory = Accessories::where('TinhTrang','!=','Đã xóa')
+                ->where('LoaiPhuKien','=',$req->manufacturer)
+                ->paginate(9);
+
+            return \view('page.shop')
+                ->with(['listProduct'=>$accessory])
+                ->with(['type'=>'phukien']);
+        }
+        if($req->manufacturer!='all'){
+            $listProduct = Product::where('LoaiSanPham','=',$req->type)
+                            ->where('HangSanXuat','=',$req->manufacturer)
+                            ->where('TinhTrang','!=','Đã xóa')
+                            ->paginate(9);
+
+            return \view('page.shop')
+                ->with(['listProduct'=>$listProduct]);
+        }
         $listProduct = Product::where('LoaiSanPham','=',$req->type)
-            ->where('TinhTrang','!=','Đã xóa')->paginate(9);
+                                ->where('TinhTrang','!=','Đã xóa')
+                                ->paginate(9);
         return \view('page.shop')
             ->with(['listProduct'=>$listProduct])
-
             ;
     }
     public function admin(){
@@ -660,14 +743,109 @@ class pageController extends Controller
             ->with(['listProduct'=>$listProduct]);
 
     }
+
+    public function adminAllAccessories(){
+        $listProduct = DB::select('SELECT * FROM tbl_phukien');
+        return \view('admin.Accessories')
+            ->with(['listProduct'=>$listProduct]);
+
+    }
     public function bills(){
-        $listBill = DB::select('SELECT * FROM `tbl_donhang` ORDER by NgayTao DESC');
-        return \view('admin.Bill')
-            ->with(['listBill'=>$listBill]);
+        return \view('admin.Bill');
 
     }
 
     public function checkBill(Request $request){
+        Cart::destroy();
+        $billDetailProduct = DB::select("SELECT * FROM tbl_donhang,tbl_donhang_sanpham WHERE tbl_donhang.MaDonHang=tbl_donhang_sanpham.MaDonHang and tbl_donhang.MaDonHang='$request->id'");
+        foreach ($billDetailProduct as $bill){
+            $product = DB::select("SELECT * FROM tbl_sanpham WHERE IDSanPham='$bill->MaMatHang'");
+            if($product){
+                Cart::add($product[0]->IDSanPham, $product[0]->TenSanPham, $bill->SoLuong, $product[0]->Gia, ['img' => $product[0]->AnhDaiDien]);
+
+            }
+        }
+
+        foreach ($billDetailProduct as $bill){
+            $accessory = DB::select("SELECT * FROM tbl_PhuKien WHERE IDPhuKien='$bill->MaMatHang'");
+            if($accessory){
+                Cart::add($accessory[0]->IDPhuKien, $accessory[0]->TenPhuKien, $bill->SoLuong, $accessory[0]->Gia, ['img' => $accessory[0]->AnhDaiDien]);
+            }
+        }
+
+
+
+        return \view('admin.BillDetail')
+            ->with(['bill'=>$billDetailProduct])
+            ->with(['cart'=>Cart::content()])
+            ->with(['type'=>'check']);
+
+    }
+
+    public function updateStatusBill(Request $request){
+        $donHang = History::find($request->id);
+        if($donHang->TinhTrang!='Đã Giao Hàng') {
+            $donHang->TinhTrang = $request->status;
+            $donHang->save();
+        }
+    }
+
+    public function doneBill(Request $request){
+        $donHang = History::find($request->id);
+        $donHang->TinhTrang = 'Đã Giao Hàng';
+        $donHang->save();
+
+        $billDetail = DB::select("SELECT * FROM tbl_donhang,tbl_donhang_sanpham WHERE tbl_donhang.MaDonHang=tbl_donhang_sanpham.MaDonHang and tbl_donhang.MaDonHang='$request->id'");
+        foreach ($billDetail as $bill){
+            $product =  Product::find($bill->MaMatHang);
+            if ($product){
+                $product->SoLuong-=$bill->SoLuong;
+                if($product->SoLuong==0){
+                    $product->TinhTrang = 'Hết Hàng';
+                }
+                $product->save();
+            }
+
+            $accessory =  Accessories::find($bill->MaMatHang);
+            if ($accessory){
+                $accessory->SoLuong-=$bill->SoLuong;
+                if($accessory->SoLuong==0){
+                    $accessory->TinhTrang = 'Hết Hàng';
+                }
+                $accessory->save();
+            }
+        }
+        if(Customer::find($billDetail[0]->EmailKhachHang)){
+            $mail='';
+            foreach ($billDetail as $b)
+                $mail=$b->EmailKhachHang;
+            $billCustomer = DB::select("SELECT * FROM tbl_donhang WHERE EmailKhachHang='$mail' AND TinhTrang='Đã Giao Hàng'");
+
+            $total = 0;
+            foreach ($billCustomer as $bill){
+                $total+=$bill->Gia;
+            }
+
+            $cus=Customer::find($billDetail[0]->EmailKhachHang);
+            if($total>=10000000&&$cus->LoaiTaiKhoan!='Vàng'&&$cus->LoaiTaiKhoan!='Kim Cương'){
+                $cus->LoaiTaiKhoan='Bạc';
+                $cus->ChietKhau+=1;
+            }
+            if($total>=50000000&&$cus->LoaiTaiKhoan!='Kim Cương'){
+                $cus->LoaiTaiKhoan='Vàng';
+                $cus->ChietKhau+=2;
+            }
+            if($total>=100000000){
+                $cus->LoaiTaiKhoan='Kim Cương';
+                $cus->ChietKhau+=3;
+            }
+            $cus->save();
+        }
+        return redirect()->route('bills');
+
+    }
+
+    public function detailBill(Request $request){
         Cart::destroy();
         $billDetail = DB::select("SELECT * FROM tbl_donhang,tbl_donhang_sanpham WHERE tbl_donhang.MaDonHang=tbl_donhang_sanpham.MaDonHang and tbl_donhang.MaDonHang='$request->id'");
         foreach ($billDetail as $bill){
@@ -679,7 +857,16 @@ class pageController extends Controller
 
         return \view('admin.BillDetail')
             ->with(['bill'=>$billDetail])
-            ->with(['cart'=>Cart::content()]);
+            ->with(['cart'=>Cart::content()])
+            ->with(['type'=>'detail']);
+
+    }
+
+    public function removeBill(Request $request){
+        $donHang = History::find($request->id);
+        $donHang->TinhTrang = 'Đã Hủy';
+        $donHang->save();
+        return redirect()->route('bills');
 
     }
 
@@ -700,6 +887,9 @@ class pageController extends Controller
             }
             $donHang->GhiChu=$request->ghiChu;
             $donHang->Gia=$tongGia;
+            if($request->ck>0){
+                $donHang->Gia=$tongGia-round($tongGia/100*$request->ck/1000)*1000;
+            }
             $donHang->TinhTrang="Đang Giao Hàng";
             $donHang->save();
         }else{
@@ -752,6 +942,15 @@ class pageController extends Controller
 
     }
 
+    public function adminAddAccessory(){
+        $accessoryTypes = DB::select('SELECT LoaiPhuKien FROM `tbl_phukien` GROUP BY LoaiPhuKien');
+        $product = DB::select('SELECT * FROM `tbl_sanpham`');
+        return \view('admin.AddAccessory')
+            ->with(['accessoryTypes'=>$accessoryTypes])
+            ->with(['nextID'=>$this->NextIDAccessory()])
+            ->with(['allProduct'=>$product]);
+    }
+
     public function GetLastID()
     {
         $sql = DB::select('SELECT IDSanPham FROM tbl_sanpham ORDER by IDSanPham DESC LIMIT 1');
@@ -759,8 +958,6 @@ class pageController extends Controller
         {
             return $a->IDSanPham;
         }
-
-
     }
 
     public function NextID()
@@ -787,7 +984,43 @@ class pageController extends Controller
         return $prefixID.$nextID;
 
     }
-    public function add(Request $req)
+
+    public function GetLastIDAccessory()
+    {
+        $sql = DB::select('SELECT IDPhuKien FROM tbl_phukien ORDER by IDPhuKien DESC LIMIT 1');
+        foreach ($sql as $a)
+        {
+            return $a->IDPhuKien;
+        }
+
+
+    }
+
+    public function NextIDAccessory()
+    {
+        $prefixID="PK";
+        if($this->GetLastIDAccessory()=="")
+        {
+            return $prefixID+"001";
+        }
+        $nextID = substr($this->GetLastIDAccessory(),2) +1;
+        $lengthNumerID = strlen($this->GetLastIDAccessory())- strlen($prefixID);
+        $zeroNumber = "";
+        for ($i = 1; $i <= $lengthNumerID; $i++)
+        {
+            if ($nextID < pow(10, $i))
+            {
+                for ($j = 1; $j <= $lengthNumerID - $i; $j++)
+                {
+                    $zeroNumber=$zeroNumber."0";
+                }
+                return $prefixID.$zeroNumber.$nextID;
+            }
+        }
+        return $prefixID.$nextID;
+
+    }
+    public function addNewProduct(Request $req)
     {
         $this->validate($req,
             [
@@ -846,6 +1079,47 @@ class pageController extends Controller
         return redirect()->route('adminAllProduct')->with('thanhcong','Thêm thành công');
     }
 
+    public function addNewAccessory(Request $req)
+    {
+        $accessory = new Accessories();
+        $accessory->IDPhuKien = $req->accessoryID;
+        $accessory->TenPhuKien = $req->accessoryName;
+
+        if($req->typeCheckBox){
+            $accessory->LoaiPhuKien = $req->typeInput;
+        }else{
+            $accessory->LoaiPhuKien = $req->accessoryType;
+        }
+
+
+        $accessory->MaSanPham = $req->productID;
+        $accessory->Gia = $req->accessoryPrice;
+        $accessory->SoLuong = $req->accessoryQTY;
+        $accessory->TinhTrang = $req->accessoryStatus;
+        $accessory->MoTa=$req->accessoryDescription;
+        if(isset($req->image)) {
+            $accessory->AnhDaiDien= 'images/accessory/' . $req->accessoryID.'_0.' . $req->image[0]->getClientOriginalExtension();
+        }else{
+            $accessory->AnhDaiDien = 'images/product/defaultProduct.png';
+
+        }
+        $accessory->save();
+        if(isset($req->image)) {
+            $i=0;
+            foreach ($req->image as $file) {
+                $path = public_path() . '/images/accessory/';
+                $file->move($path, $req->accessoryID.'_'.$i. '.' . $file->getClientOriginalExtension());
+                $photo = new PhotoAccesories();
+                $photo->MaSanPham = $req->accessoryID;
+                $photo->link = 'images/accessory/' . $req->accessoryID.'_'.$i . '.' . $file->getClientOriginalExtension();
+                $photo->save();
+                $i++;
+            }
+        }
+
+        return redirect()->route('adminAllAccessories')->with('thanhcong','Thêm thành công');
+    }
+
     public function getEditProduct(Request $req){
         $product = DB::select("SELECT * FROM `tbl_sanpham` WHERE IDSanPham='$req->id'");
         $productTypes = DB::select('SELECT LoaiSanPham FROM `tbl_sanpham` GROUP BY LoaiSanPham');
@@ -863,6 +1137,84 @@ class pageController extends Controller
 
     }
 
+    public function getEditAccessory(Request $req){
+        $accessoryTypes = DB::select('SELECT LoaiPhuKien FROM `tbl_phukien` GROUP BY LoaiPhuKien');
+        $product = DB::select('SELECT * FROM `tbl_sanpham`');
+        $accessory = DB::select("SELECT * FROM `tbl_phukien` WHERE IDPhuKien='$req->id'");
+        $image = DB::select("SELECT * FROM `tbl_anhphukien` WHERE link LIKE '%$req->id%'");
+        return \view('admin.EditAccessory')
+            ->with(['product'=>$product])
+            ->with(['accessory'=>$accessory])
+            ->with(['accessoryTypes'=>$accessoryTypes])
+            ->with(['image'=>$image]);
+    }
+
+    public function postEditAccessory(Request $req)
+    {
+
+
+        $accessory = Accessories::find($req->accessoryID);
+        $accessory->TenPhuKien = $req->accessoryName;
+        if($req->typeCheckBox){
+            $accessory->LoaiPhuKien = $req->typeInput;
+        }else{
+            $accessory->LoaiPhuKien = $req->accessoryType;
+        }
+        $accessory->Gia = $req->accessoryPrice;
+        $accessory->SoLuong = $req->accessoryQTY;
+        $accessory->TinhTrang = $req->accessoryStatus;
+
+
+        if($req->imgDeleteID!=''){
+            $imgDeleteID=rtrim($req->imgDeleteID,",");
+            $x = preg_split("/,/", $imgDeleteID);
+            $image = DB::select("SELECT * FROM `tbl_anhphukien` WHERE link LIKE '%$req->accessoryID%'");
+            foreach ($x as $delete){
+                DB::delete('DELETE FROM `tbl_anhphukien` WHERE IDAnh=?',[$image[$delete]->IDAnh]);
+                unlink(public_path().'/'.$image[$delete]->link);
+            }
+        }
+
+        $i=0;
+        $newImage = DB::select("SELECT * FROM `tbl_anhphukien` WHERE link LIKE '%$req->accessoryID%'");
+        foreach ($newImage as $img){
+            $newLink = 'images/accessory/' . $req->accessoryID.'_'.$i . '.' .preg_split("/[.]/", $img->link)[1];
+            DB::update('UPDATE `tbl_anh` SET `link`=? WHERE IDAnh=? ',[$newLink,$img->IDAnh]);
+            rename(public_path().'/'.$img->link,$newLink);
+            $i++;
+        }
+
+        if($i>0){
+            $accessory->AnhDaiDien= 'images/accessory/' . $req->accessoryID.'_0.' .preg_split("/[.]/", $newImage[0]->link)[1];
+        }elseif(isset($req->image)) {
+            $accessory->AnhDaiDien= 'images/accessory/' . $req->accessoryID.'_0.' . $req->image[0]->getClientOriginalExtension();
+        }else{
+            $accessory->AnhDaiDien = 'images/product/defaultProduct.png';
+
+        }
+
+
+
+
+
+        $accessory->save();
+
+        if(isset($req->image)) {
+            foreach ($req->image as $file) {
+                $path = public_path() . '/images/accessory/';
+                $file->move($path, $req->accessoryID.'_'.$i. '.' . $file->getClientOriginalExtension());
+                $photo = new PhotoAccesories();
+                $photo->MaSanPham = $req->accessoryID;
+                $photo->link = 'images/accessory/' . $req->accessoryID.'_'.$i . '.' . $file->getClientOriginalExtension();
+                $photo->save();
+                $i++;
+            }
+        }
+
+
+        return redirect()->route('adminAllAccessories')->with('thanhcong','Sửa thành công');
+    }
+
     public function postEditProduct(Request $req)
     {
         $this->validate($req,
@@ -876,7 +1228,11 @@ class pageController extends Controller
 
         $product = Product::find($req->productID);
         $product->TenSanPham = $req->productName;
-        $product->HangSanXuat = $req->productCompany;
+        if($req->companyCheckBox){
+            $product->HangSanXuat = $req->companyInput;
+        }else{
+            $product->HangSanXuat = $req->productCompany;
+        }
         $product->LoaiSanPham = $req->productType;
         $product->Gia = $req->productPrice;
         $product->SoLuong = $req->productQTY;
@@ -889,18 +1245,80 @@ class pageController extends Controller
         }
 
         $product->MoTa=rtrim($stringMoTa,";");
+
+
+        if($req->imgDeleteID!=''){
+            $imgDeleteID=rtrim($req->imgDeleteID,",");
+            $x = preg_split("/,/", $imgDeleteID);
+            $image = DB::select("SELECT * FROM `tbl_anh` WHERE link LIKE '%$req->productID%'");
+            foreach ($x as $delete){
+                DB::delete('DELETE FROM `tbl_anh` WHERE IDAnh=?',[$image[$delete]->IDAnh]);
+                unlink(public_path().'/'.$image[$delete]->link);
+            }
+        }
+
+        $i=0;
+        $newImage = DB::select("SELECT * FROM `tbl_anh` WHERE link LIKE '%$req->productID%'");
+        foreach ($newImage as $img){
+            $newLink = 'images/product/' . $req->productID.'_'.$i . '.' .preg_split("/[.]/", $img->link)[1];
+            DB::update('UPDATE `tbl_anh` SET `link`=? WHERE IDAnh=? ',[$newLink,$img->IDAnh]);
+            rename(public_path().'/'.$img->link,$newLink);
+            $i++;
+        }
+
+        if($i>0){
+            $product->AnhDaiDien= 'images/product/' . $req->productID.'_0.' .preg_split("/[.]/", $newImage[0]->link)[1];
+        }elseif(isset($req->image)) {
+            $product->AnhDaiDien= 'images/product/' . $req->productID.'_0.' . $req->image[0]->getClientOriginalExtension();
+        }else{
+            $product->AnhDaiDien = 'images/product/defaultProduct.png';
+
+        }
+
+
+
+
+
         $product->save();
 
+        if(isset($req->image)) {
+            foreach ($req->image as $file) {
+                $path = public_path() . '/images/product/';
+                $file->move($path, $req->productID.'_'.$i. '.' . $file->getClientOriginalExtension());
+                $photo = new Photo();
+                $photo->MaSanPham = $req->productID;
+                $photo->link = 'images/product/' . $req->productID.'_'.$i . '.' . $file->getClientOriginalExtension();
+                $photo->save();
+                $i++;
+            }
+        }
 
-        return redirect()->back()->with('thanhcong','Sửa thành công');
+
+        return redirect()->route('adminAllProduct')->with('thanhcong','Sửa thành công');
     }
 
     public function getDeleteProduct(Request $req){
         $product = Product::find($req->id);
-        $product->TinhTrang = "Đã xóa";
+        $product->TinhTrang = "Đã Xóa";
         $product->save();
-        return $this->adminAllProduct();
+        return redirect()->route('adminAllProduct');
 
+    }
+
+    public function getDeleteAccessory(Request $req){
+        $accessory = Accessories::find($req->id);
+        $accessory->TinhTrang = "Đã Xóa";
+        $accessory->save();
+        return redirect()->route('adminAllAccessories');
+
+    }
+
+    public function updateStatusProduct(Request $request){
+        DB::update('UPDATE tbl_sanpham SET TinhTrang=? WHERE IDSanPham=?',[$request->status,$request->id]);
+    }
+
+    public function updateStatusAccessory(Request $request){
+        DB::update('UPDATE tbl_phukien SET TinhTrang=? WHERE IDPhuKien=?',[$request->status,$request->id]);
     }
 
     public function getAddProductType(){

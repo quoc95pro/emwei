@@ -23,7 +23,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Thông Tin Sản Phẩm</div>
                     <div class="panel-body">
-                        <form enctype="multipart/form-data"  action="{{route('add')}}" method="post">
+                        <form enctype="multipart/form-data"  action="{{route('addNewProduct')}}" method="post">
                             {{csrf_field()}}
                         <div class="col-md-6">
 

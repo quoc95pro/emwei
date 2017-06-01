@@ -24,6 +24,7 @@
     <script src="{{ URL::asset('js/respond.min.js') }}"></script>
     <![endif]-->
     <link rel="shortcut icon" href="{{ URL::asset('images/ico/favicon.ico') }}">
+
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ URL::asset('images/ico/apple-touch-icon-144-precomposed.png') }}">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ URL::asset('images/ico/apple-touch-icon-114-precomposed.png') }}">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ URL::asset('images/ico/apple-touch-icon-72-precomposed.png') }}">
@@ -41,6 +42,12 @@
             font-weight: 300;
         }
 
+        .compact{
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 </head><!--/head-->
 
@@ -99,7 +106,13 @@
                 id : rowId
             },
             success : function (result){
-                document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',');
+                document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',')+' VND';
+                if(document.getElementById("ck")){
+                    var a  =document.getElementById('ck').innerHTML;
+                    var b =result-Math.floor(result/100*a/1000)*1000;
+                    document.getElementById('showTotal2').innerHTML=accounting.formatMoney(b,'',0,'.',',')+' VND';
+                }
+
             }
         });
 
@@ -125,7 +138,12 @@
                 id : rowId
             },
             success : function (result){
-                document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',');
+                document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',')+' VND';
+                if(document.getElementById("ck")){
+                    var a  =document.getElementById('ck').innerHTML;
+                    var b =result-Math.floor(result/100*a/1000)*1000;
+                    document.getElementById('showTotal2').innerHTML=accounting.formatMoney(b,'',0,'.',',')+' VND';
+                }
             }
         });
         document.getElementById(_qty).value = qty;
@@ -148,7 +166,12 @@
                     id: rowId
                 },
                 success: function (result) {
-                    document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',');
+                    document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',')+' VND';
+                    if(document.getElementById("ck")){
+                        var a  =document.getElementById('ck').innerHTML;
+                        var b =result-Math.floor(result/100*a/1000)*1000;
+                        document.getElementById('showTotal2').innerHTML=accounting.formatMoney(b,'',0,'.',',')+' VND';
+                    }
                 }
             });
             document.getElementById(_qty).value = qty;
@@ -170,7 +193,11 @@
             },
             success : function (result){
                 document.getElementsByClassName(_rowId)[0].innerHTML = '';
-                document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',');
+                document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',')+' VND';
+                if(document.getElementById("ck")){
+                    var a  =document.getElementById('ck').innerHTML;
+                    document.getElementById('showTotal2').innerHTML=accounting.formatMoney(result,'',0,'.',',')+' VND';
+                }
                 if(result=='0'){
                     document.getElementById('check-out').style.display = "none";
                 }

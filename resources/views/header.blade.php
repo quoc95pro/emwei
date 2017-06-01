@@ -72,37 +72,38 @@
                     <div class="mainmenu pull-left">
                         <ul class="nav navbar-nav collapse navbar-collapse">
                             <li><a href="{{route('trang-chu')}}" class="active">Trang Chủ</a></li>
-                            <li class="dropdown"><a href="{{route('list-product/type','Điện thoại')}}">Điện Thoại<i class="fa fa-angle-down"></i></a>
+                            <li class="dropdown"><a href="{{route('listProduct',['Điện thoại','all'])}}">Điện Thoại<i class="fa fa-angle-down"></i></a>
                                 <ul role="menu" class="sub-menu">
-                                    <li><a href="shop.html">Apple</a></li>
-                                    <li><a href="product-details.html">SamSung</a></li>
-                                    <li><a href="checkout.html">ASUS</a></li>
-                                    <li><a href="cart.html">OPPO</a></li>
-                                    <li><a href="login.html">Sony</a></li>
-                                    <li><a href="login.html">Xiao Mi</a></li>
-                                    <li><a href="login.html">Vivo</a></li>
-                                    <li><a href="login.html">HTC</a></li>
-                                    <li><a href="login.html">Huawei</a></li>
-                                    <li><a href="login.html">Lenovo</a></li>
-                                    <li><a href="login.html">Pantech</a></li>
-                                    <li><a href="login.html">Coolpad</a></li>
-                                    <li><a href="login.html">Itel</a></li>
+                                    @php
+                                       use Illuminate\Support\Facades\DB;
+                                       $hangSanXuat = DB::select("SELECT HangSanXuat FROM tbl_sanpham WHERE LoaiSanPham ='Điện thoại' GROUP BY HangSanXuat");
+                                    @endphp
+
+                                    @foreach($hangSanXuat as $hang)
+                                        <li><a href="{{route('listProduct',['Điện thoại',$hang->HangSanXuat])}}">{{$hang->HangSanXuat}}</a></li>
+                                    @endforeach
                                 </ul>
                             </li>
-                            <li class="dropdown"><a href="{{route('list-product/type','Máy tính bảng')}}">Máy Tính Bảng<i class="fa fa-angle-down"></i></a>
+                            <li class="dropdown"><a href="{{route('listProduct',['Máy tính bảng','all'])}}">Máy Tính Bảng<i class="fa fa-angle-down"></i></a>
                                 <ul role="menu" class="sub-menu">
-                                    <li><a href="blog.html">Apple-Ipad</a></li>
-                                    <li><a href="blog-single.html">SamSung</a></li>
-                                    <li><a href="blog-single.html">Sony</a></li>
-                                    <li><a href="blog-single.html">ASUS</a></li>
+                                    @php
+                                        $hangSanXuat = DB::select("SELECT HangSanXuat FROM tbl_sanpham WHERE LoaiSanPham ='Máy tính bảng' GROUP BY HangSanXuat");
+                                    @endphp
+
+                                    @foreach($hangSanXuat as $hang)
+                                        <li><a href="{{route('listProduct',['Máy tính bảng',$hang->HangSanXuat])}}">{{$hang->HangSanXuat}}</a></li>
+                                    @endforeach
                                 </ul>
                             </li>
-                            <li class="dropdown"><a href="#">Phụ Kiện<i class="fa fa-angle-down"></i></a>
+                            <li class="dropdown"><a href="{{route('listProduct',['PhuKien','all'])}}">Phụ Kiện<i class="fa fa-angle-down"></i></a>
                                 <ul role="menu" class="sub-menu">
-                                    <li><a href="blog.html">Apple-Ipad</a></li>
-                                    <li><a href="blog-single.html">SamSung</a></li>
-                                    <li><a href="blog-single.html">Sony</a></li>
-                                    <li><a href="blog-single.html">ASUS</a></li>
+                                    @php
+                                        $loaiPhuKien = DB::select("SELECT LoaiPhuKien FROM tbl_phukien GROUP BY LoaiPhuKien");
+                                    @endphp
+
+                                    @foreach($loaiPhuKien as $loai)
+                                        <li><a href="{{route('listProduct',['PhuKien',$loai->LoaiPhuKien])}}">{{$loai->LoaiPhuKien}}</a></li>
+                                    @endforeach
                                 </ul>
                             </li>
 

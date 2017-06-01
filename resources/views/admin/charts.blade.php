@@ -26,17 +26,10 @@
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-body tabs">
-
-						<ul class="nav nav-pills">
-							<li class="active"><a href="#pilltab1" data-toggle="tab">Sản Phẩm</a></li>
-							<li><a href="#pilltab2" data-toggle="tab">Phụ Kiện</a></li>
-						</ul>
-
 						<div class="tab-content">
-							<div class="tab-pane fade in active" id="pilltab1">
 								<div class="col-lg-6">
 									<div class="panel panel-default">
-										<div class="panel-heading">Bảng So Sánh Số Liệu Từng Năm</div>
+										<div class="panel-heading">Bảng So Sánh Số Liệu Từng Sản Phẩm</div>
 										<div class="panel-body">
 											<div class="canvas-wrapper">
 												<canvas class="main-chart" id="line-chart" height="520" width="600"></canvas>
@@ -61,13 +54,13 @@
 													</select>
 												</div>
 												<table data-toggle="table"  id="tableLineChart" data-toolbar="#toolbar1" data-click-to-select="true"
-													   data-url="http://localhost/emwei/public/json/{{date('Y')}}" data-select-item-name="toolbar1"
-													   data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true"
+													   data-url="http://localhost:8080/emwei/public/json/{{date('Y')}}" data-select-item-name="toolbar1" data-height="580"
+													   data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-filter-control="true"
 													    data-pagination="true" data-sort-name="name" data-sort-order="desc" class="table table-hover">
 													<thead>
 													<tr>
 														<th data-field="state" data-radio="true" ></th>
-														<th data-field="maSanPham" data-sortable="true">Mã Sản Phẩm</th>
+														<th data-field="maSanPham" data-filter-control="select" data-sortable="true">Mã Sản Phẩm</th>
 														<th data-field="tenSanPham"  data-sortable="true">Tên Sản Phẩm</th>
 														<th data-field="soLuongBanDuoc" data-sortable="true">Số Lượng Đã Bán Được (Chiếc)</th>
 
@@ -80,49 +73,6 @@
 										</div>
 
 									</div>
-								</div>
-							</div>
-
-							<div class="tab-pane fade" id="pilltab2">
-								<div class="col-lg-6">
-									<div class="panel panel-default">
-										<div class="panel-heading">Bảng So Sánh Số Liệu Từng Năm</div>
-										<div class="panel-body">
-											<div class="canvas-wrapper">
-												<canvas class="main-chart" id="line-chart" height="520" width="600"></canvas>
-											</div>
-
-										</div>
-
-									</div>
-								</div>
-								<div class="col-lg-6">
-									<div class="panel panel-default">
-										<div class="panel-heading">
-											<select class="form-control" id="selectYear" onchange="changeYear()" style="float: left;width: 30%">
-												@foreach($year as $y)
-													<option value="{{$y->Nam}}" @if($y->Nam==date("Y"))selected="true"@endif>{{$y->Nam}}</option>
-												@endforeach
-											</select>
-										</div>
-										<div class="panel-body">
-											<div class="panel-body" id="table">
-												<table data-toggle="table" id="tableLineChart"  data-url="http://localhost/emwei/public/json/{{date('Y')}}" data-select-item-name="toolbar1"  data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc" class="table table-hover">
-													<thead>
-													<tr>
-														<th data-field="state" data-radio="true" ></th>
-														<th data-field="maSanPham" data-sortable="true">Mã Sản Phẩm</th>
-														<th data-field="tenSanPham"  data-sortable="true">Tên Sản Phẩm</th>
-														<th data-field="soLuongBanDuoc" data-sortable="true">Số Lượng Đã Bán Được (Chiếc)</th>
-
-													</tr>
-													</thead>
-												</table>
-											</div>
-										</div>
-									</div>
-								</div>
-
 							</div>
 						</div>
 					</div>
@@ -162,7 +112,7 @@
                                     var start = document.getElementById("startDate").value;
                                     var end = document.getElementById("endDate").value;
                                     $('#data').bootstrapTable('refresh',{
-                                        url: "http://localhost/emwei/public/json2/"+start+"/"+end+""
+                                        url: "http://localhost:8080/emwei/public/json2/"+start+"/"+end+""
                                     });
                                 }
 							</script>
@@ -176,14 +126,14 @@
 								</select>
 							</div>
 							<table data-toggle="table" id="data" data-show-export="true" data-toolbar="#toolbar" data-page-list="[5, 10, 15, 20, All]" data-height="550"
-								   data-url="http://localhost/emwei/public/all"  data-show-refresh="true" data-show-toggle="true" data-click-to-select="true"
+								   data-url="http://localhost:8080/emwei/public/all"  data-show-refresh="true" data-show-toggle="true" data-click-to-select="true"
 								   data-show-columns="true" data-search="true"  data-pagination="true" data-sort-name="name" data-sort-order="desc"
 								   data-select-item-name="toolbar1" class="table table-hover">
 								<thead>
 								<tr>
 									<th data-field="state" data-checkbox="true" ></th>
 									<th data-field="maSanPham" data-sortable="true">Mã Sản Phẩm</th>
-									<th data-field="tenSanPham"  data-sortable="true">Tên Sản Phẩm</th>
+									<th data-field="tenSanPham"  data-sortable="true" >Tên Sản Phẩm</th>
 									<th data-field="soLuongBanDuoc" data-sortable="true">Số Lượng Bán Được (Chiếc)</th>
 
 								</tr>
@@ -237,10 +187,39 @@
 			</div><!--/.row-->
 			<script>
 
+                var lineChartData = {
+                    labels : ["Tháng 1 ","Tháng 2","Tháng 3","Tháng 4","Tháng 5","Tháng 6","Tháng 7","Tháng 8","Tháng 9","Tháng 10","Tháng 11","Tháng 12"],
+                    datasets : [
+                        {
+                            label: "Tất Cả",
+                            fillColor : "rgba(220,220,220,0.2)",
+                            strokeColor : "rgba(220,220,220,1)",
+                            pointColor : "rgba(220,220,220,1)",
+                            pointStrokeColor : "#fff",
+                            pointHighlightFill : "#fff",
+                            pointHighlightStroke : "rgba(220,220,220,1)",
+                            data : [{{$month[0]}},{{$month[1]}},{{$month[2]}},{{$month[3]}},{{$month[4]}},{{$month[5]}},{{$month[6]}},{{$month[7]}},{{$month[8]}},{{$month[9]}},{{$month[10]}},{{$month[11]}}]
+                        }
+                    ]
+
+                }
+
+                window.onload = function() {
+                    var chart1 = document.getElementById("line-chart").getContext("2d");
+                    window.myLine = new Chart(chart1).Line(lineChartData, {
+                        responsive: true
+                    });
+
+                    var chartx = document.getElementById("line-chart-2").getContext("2d");
+                    window.myLine = new Chart(chartx).Line(lineChartData, {
+                        responsive: true
+                    });
+                }
+
 				function changeYear() {
                     var x = document.getElementById("selectYear").value;
                     $('#tableLineChart').bootstrapTable('refresh',{
-                        url: "http://localhost/emwei/public/json/"+x+""
+                        url: "http://localhost:8080/emwei/public/json/"+x+""
                     });
                 }
 				
@@ -290,22 +269,6 @@
                     });
 
                 });
-                var lineChartData = {
-                    labels : ["Tháng 1 ","Tháng 2","Tháng 3","Tháng 4","Tháng 5","Tháng 6","Tháng 7","Tháng 8","Tháng 9","Tháng 10","Tháng 11","Tháng 12"],
-                    datasets : [
-                        {
-                            label: "Tất Cả",
-                            fillColor : "rgba(220,220,220,0.2)",
-                            strokeColor : "rgba(220,220,220,1)",
-                            pointColor : "rgba(220,220,220,1)",
-                            pointStrokeColor : "#fff",
-                            pointHighlightFill : "#fff",
-                            pointHighlightStroke : "rgba(220,220,220,1)",
-                            data : [{{$month[0]}},{{$month[1]}},{{$month[2]}},{{$month[3]}},{{$month[4]}},{{$month[5]}},{{$month[6]}},{{$month[7]}},{{$month[8]}},{{$month[9]}},{{$month[10]}},{{$month[11]}}]
-                        }
-                    ]
-
-                }
 
 			</script>
 	</div>	<!--/.main-->

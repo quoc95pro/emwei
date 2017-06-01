@@ -24,15 +24,19 @@ Route::get('readAll',function (){
     }
 } );
 
-Route::get('/test',function (){
+Route::get('/test/{id}/{ok}',function (Request $req){
 
-    return redirect()-> route('all');
+    return $req->id.$req->ok;
 });
 
 Route::get('/',[
     'as'=>'trang-chu',
     'uses'=>'PageController@index'
 ]);
+
+//Route::get('/',function (){
+//    return view('welcome');
+//});
 
 Route::get('dang-nhap',[
     'as'=>'dang-nhap',
@@ -47,6 +51,16 @@ Route::post('post-login',[
 Route::get('dang-ky',[
     'as'=>'dang-ky',
     'uses'=>'PageController@signUp'
+]);
+
+Route::get('chietkhau',[
+    'as'=>'chietkhau',
+    'uses'=>'PageController@chietkhau'
+]);
+
+Route::post('updateDisCountProduct',[
+    'as'=>'updateDisCountProduct',
+    'uses'=>'PageController@updateDisCountProduct'
 ]);
 
 Route::post('post-signup',[
@@ -109,8 +123,8 @@ Route::get('shop',[
     'uses'=>'PageController@shop'
 ]);
 
-Route::get('list-product/{type}',[
-    'as'=>'list-product/type',
+Route::get('list-product/{type}/{manufacturer}',[
+    'as'=>'listProduct',
     'uses'=>'PageController@listProduct'
 ]);
 
@@ -180,18 +194,46 @@ Route::get('all-product',[
     'uses'=>'PageController@adminAllProduct'
 ]);
 
+Route::get('all-Accessories',[
+    'as'=>'adminAllAccessories',
+    'uses'=>'PageController@adminAllAccessories'
+]);
+
 Route::get('bills',[
     'as'=>'bills',
     'uses'=>'PageController@bills'
 ]);
+
+
+
 Route::get('check-bill/{id}',[
     'as'=>'check-bill',
     'uses'=>'PageController@checkBill'
 ]);
 
+Route::get('done-bill/{id}',[
+    'as'=>'done-bill',
+    'uses'=>'PageController@doneBill'
+]);
+
+Route::get('detail-bill/{id}',[
+    'as'=>'detail-bill',
+    'uses'=>'PageController@detailBill'
+]);
+
+Route::get('remove-bill/{id}',[
+    'as'=>'remove-bill',
+    'uses'=>'PageController@removeBill'
+]);
+
 Route::post('edit-bill',[
     'as'=>'edit-bill',
     'uses'=>'PageController@postEditBill'
+]);
+
+Route::post('updateStatusBill',[
+    'as'=>'updateStatusBill',
+    'uses'=>'PageController@updateStatusBill'
 ]);
 
 Route::post('/cart-update-qty-admin',[
@@ -209,10 +251,20 @@ Route::get('add-product',[
     'uses'=>'PageController@adminAddProduct'
 ]);
 
-Route::post('add',[
-    'as'=>'add',
-    'uses'=>'PageController@add'
+Route::get('add-accessory',[
+    'as'=>'adminAddAccessory',
+    'uses'=>'PageController@adminAddAccessory'
+]);
+
+Route::post('addNewProduct',[
+    'as'=>'addNewProduct',
+    'uses'=>'PageController@addNewProduct'
     ]);
+
+Route::post('addNewAccessory',[
+    'as'=>'addNewAccessory',
+    'uses'=>'PageController@addNewAccessory'
+]);
 
 Route::post('productLineChart',[
     'as'=>'productLineChart',
@@ -242,6 +294,16 @@ Route::post('insertAdminAccount',[
 Route::post('insertUserAccount',[
     'as'=>'insertUserAccount',
     'uses'=>'PageController@insertUserAccount'
+]);
+
+Route::post('updateStatusProduct',[
+    'as'=>'updateStatusProduct',
+    'uses'=>'PageController@updateStatusProduct'
+]);
+
+Route::post('updateStatusAccessory',[
+    'as'=>'updateStatusAccessory',
+    'uses'=>'PageController@updateStatusAccessory'
 ]);
 
 Route::get('/all',[
@@ -276,6 +338,40 @@ function (){
     $a=json_encode($arr);
     return $a;
 }]);
+
+Route::get('/allProductJson/',[
+    'as'=>'allProductJson'
+    ,function (){
+        if(!(Session::has('admin'))){
+            return "";
+        }
+        $listProduct = DB::select('SELECT * FROM `tbl_sanpham` ');
+        $a=json_encode($listProduct);
+        return $a;
+    }]);
+
+Route::get('/allAccessoriesJson/',[
+    'as'=>'allAccessoriesJson'
+    ,function (){
+        if(!(Session::has('admin'))){
+            return "";
+        }
+        $listProduct = DB::select('SELECT tbl_phukien.IDPhuKien,tbl_phukien.TenPhuKien,tbl_phukien.Gia,tbl_phukien.TinhTrang,tbl_sanpham.TenSanPham FROM `tbl_phukien`,tbl_sanpham WHERE tbl_sanpham.IDSanPham=tbl_phukien.MaSanPham');
+        $a=json_encode($listProduct);
+        return $a;
+    }]);
+
+Route::get('jsonBill',[
+    'as'=>'jsonBill'
+    ,function (){
+        if(!(Session::has('admin'))){
+            return "";
+        }
+        $listBill = DB::select('SELECT * FROM `tbl_donhang` ORDER by NgayTao DESC');
+        $a=json_encode($listBill);
+        return $a;
+    }]);
+
 Route::get('/jsonAccountAdmin/',[
     'as'=>'jsonAccountAdmin'
 ,function (){
@@ -370,6 +466,11 @@ function (Request $request){
     return $a;
 }]);
 
+Route::get('edit-accessory/{id}',[
+    'as'=>'edit-accessory',
+    'uses'=>'PageController@getEditAccessory'
+]);
+
 Route::get('edit-product/{id}',[
     'as'=>'edit-product',
     'uses'=>'PageController@getEditProduct'
@@ -380,11 +481,20 @@ Route::post('edit',[
     'uses'=>'PageController@postEditProduct'
 ]);
 
+Route::post('editAccessory',[
+    'as'=>'editAccessory',
+    'uses'=>'PageController@postEditAccessory'
+]);
 
 
 Route::get('delete-product/{id}',[
     'as'=>'delete-product',
     'uses'=>'PageController@getDeleteProduct'
+]);
+
+Route::get('delete-accessory/{id}',[
+    'as'=>'delete-accessory',
+    'uses'=>'PageController@getDeleteAccessory'
 ]);
 
 Route::get('getAddProductType',[

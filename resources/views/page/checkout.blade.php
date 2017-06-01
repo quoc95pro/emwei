@@ -141,10 +141,26 @@
 										<td>Phí Vận Chuyển</td>
 										<td>Free</td>
 									</tr>
-									<tr>
-										<td>Tổng Tiền</td>
-										<td><span>{{number_format($total, 0, ',', '.')}}</span></td>
-									</tr>
+									@if(Session::has('userName'))
+										<tr>
+											<td>Tổng Tiền</td>
+											<td><span style="color: black;text-decoration: line-through">{{number_format($total, 0, ',', '.')}} VND</span></td>
+										</tr>
+										<tr>
+											<td>Chiết Khấu</td>
+											<td><span style="color: black">{{Session::get('userName')->ChietKhau}} %</span></td>
+										</tr>
+										<tr>
+											<td>Giá Sau Chiết Khấu</td>
+											<td><span>{{number_format($total-round($total/100*Session::get('userName')->ChietKhau/1000)*1000, 0, ',', '.')}} VND</span></td>
+										</tr>
+
+									@else
+										<tr>
+											<td>Tổng Tiền</td>
+											<td><span>{{number_format($total, 0, ',', '.')}}</span></td>
+										</tr>
+									@endif
 								</table>
 							</td>
 						</tr>

@@ -45,15 +45,17 @@
                                data-toolbar="#toolbar"
                                data-sort-name="name"
                                data-height="450"
+                               data-filter-control="true"
+                               data-filter-show-clear="true"
                                data-click-to-select="true"
                                data-sort-order="desc"
                                class="table table-hover"
-                               data-url="http://localhost/emwei/public/jsonAccountUser">
+                               data-url="http://localhost:8080/emwei/public/jsonAccountUser">
                             <thead>
                             <tr>
                                 <th data-field="state" data-checkbox="true" ></th>
                                 <th data-field="Email" data-sortable="true">Email Khách Hàng</th>
-                                <th data-field="TenKhachHang" data-sortable="true" data-editable="true">Tên Khách Hàng</th>
+                                <th data-field="TenKhachHang" data-filter-control="select" data-sortable="true" data-editable="true">Tên Khách Hàng</th>
                                 <th data-field="NamSinh"  data-sortable="true" data-editable="true">Ngày Sinh</th>
                                 <th data-field="GioiTinh" data-sortable="true" data-editable="true">Giới Tính</th>
                                 <th data-field="SoDienThoai" data-sortable="true" data-editable="true">Số Điện Thoại</th>
@@ -171,7 +173,7 @@
                                         $('#resultModal').modal('show')
 
                                         $('#table').bootstrapTable('refresh',{
-                                            url: "http://localhost/emwei/public/jsonAccountUser"
+                                            url: "http://localhost:8080/emwei/public/jsonAccountUser"
                                         });
 
                                     },error:function (data) {

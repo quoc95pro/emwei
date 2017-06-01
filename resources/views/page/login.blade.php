@@ -18,6 +18,7 @@
 							@else
 								<input type="text" placeholder="Email"  name="mail"/>
 								<input type="password" placeholder="Mật Khẩu"  name="pass"/>
+								<div class="g-recaptcha" data-sitekey="6LdmNSMUAAAAAMVpqHFmTjVs4JN1xWSBPWa9IAit"></div>
 								<span>
 								<input type="checkbox" name="save"  class="checkbox">
 								Lưu Mật Khẩu ?
@@ -30,6 +31,7 @@
 							<div class="alert alert-{{Session::get('flag')}}">{{Session::get('message')}}</div>
 						@endif
 					</div><!--/login form-->
+					<script src='https://www.google.com/recaptcha/api.js'></script>
 
 				</div>
 

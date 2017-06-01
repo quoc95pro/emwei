@@ -185,7 +185,7 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Basic Table</div>
 				<div class="panel-body">
-					<table data-toggle="table" data-url="http://localhost/emwei/public/json" >
+					<table data-toggle="table" data-url="http://emwei.tk/allProductJson" >
 						<thead>
 						<tr>
 							<th data-field="id" data-align="right">Item ID</th>
@@ -201,7 +201,7 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Styled Table</div>
 				<div class="panel-body">
-					<table data-toggle="table" id="table-style" data-url="http://localhost/emwei/public/json" data-row-style="rowStyle">
+					<table data-toggle="table" id="table-style" data-url="http://emwei.tk/allProductJson" data-row-style="rowStyle">
 						<thead>
 						<tr>
 							<th data-field="id" data-align="right" >Item ID</th>

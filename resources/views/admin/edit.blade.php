@@ -61,11 +61,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Giá</label>
-                                    <input class="form-control" required value="{{$product[0]->Gia}}" name="productPrice">
+                                    <input class="form-control" required type="number" value="{{$product[0]->Gia}}" name="productPrice">
                                 </div>
                                 <div class="form-group">
                                     <label>Số Lượng</label>
-                                    <input class="form-control" required  value="{{$product[0]->SoLuong}}" name="productQTY">
+                                    <input class="form-control" required type="number" value="{{$product[0]->SoLuong}}" name="productQTY">
                                 </div>
                                 <div class="form-group">
                                     <label>Tình Trạng</label>
@@ -73,30 +73,49 @@
 
                                         <option @if($product[0]->TinhTrang=="Còn Hàng") selected @endif>Còn Hàng</option>
                                         <option @if($product[0]->TinhTrang=="Hết Hàng") selected @endif>Hết Hàng</option>
-                                        <option @if($product[0]->TinhTrang=="Liên Hệ") selected @endif>Liên Hệ</option>
+                                        <option @if($product[0]->TinhTrang=="Đã Xóa") selected @endif>Đã Xóa</option>
                                     </select>
                                 </div>
+                                <input type="text" name="imgDeleteID" style="display: none" id="imgDeleteID">
                                 <div class="form-group">
                                     <label >Ảnh Hiện Có</label>
                                     <div style="overflow: auto ;height: 270px">
                                         @if(count($image)>0)
+                                            @php
+                                                $i=0;
+                                            @endphp
+
+
                                             @foreach($image as $img)
-                                                <div style="height:85px;border: 1px solid rgb(221, 221, 221);margin-top: 2px">
-                                                    <div style="width: 15%;height:100%;float: left;border-right: 1px solid rgb(221, 221, 221)"><img src="../{{$img->link}}" alt="" style="padding:12px "></div>
+                                                <div class="imageDiv" style="height:85px;border: 1px solid rgb(221, 221, 221);margin-top: 2px">
+                                                    <div style="width: 15%;height:100%;float: left;border-right: 1px solid rgb(221, 221, 221)"><img src="../{{$img->link}}" alt="" style="padding:12px;width: 100%;height: 100% "></div>
                                                     <div style="width: 50%;float: left;border-right: 1px solid rgb(221, 221, 221)"><div style="padding: 30px">{{$img->link}}</div></div>
                                                     <div style="width: 20%;float: left;height: 100%">
                                                         <div style="padding: 30px">
-                                                            <button type="button"  class="kv-file-remove btn btn-xs btn-default"><i class="glyphicon glyphicon-trash text-danger"></i></button>
-                                                            <button type="button" class="kv-file-zoom btn btn-xs btn-default"><i class="glyphicon glyphicon-zoom-in"></i></button>
+                                                            <button type="button" onclick="deleteImage({{$i}})"  class="kv-file-remove btn btn-xs btn-default"><i class="glyphicon glyphicon-trash text-danger"></i></button>
+                                                            <button type="button" class="kv-file-zoom btn btn-xs btn-default" onclick="showImage({{$i}})"><i class="glyphicon glyphicon-zoom-in"></i></button>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                @php
+                                                    $i++;
+                                                @endphp
                                             @endforeach
                                         @else
                                             Không Có Ảnh Nào
                                         @endif
                                     </div>
                                 </div>
+                                <script>
+                                    function deleteImage(i) {
+                                         var r = confirm("Bạn có chắc muốn xóa ảnh !");
+                                        if (r == true) {
+                                            document.getElementsByClassName('imageDiv')[i].style.display='none';
+                                            document.getElementById('imgDeleteID').value+=i+',';
+                                        } else {
+                                        }
+                                    }
+                                </script>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -105,7 +124,7 @@
                                 </div>
                                 <div class="form-group" >
                                     <label><input type="checkbox"  onchange="newCompanyFunction()" id="companyCheckBox">  Hãng Sản Xuất Mới</label>
-                                    <input class="form-control"  disabled id="companyInput">
+                                    <input class="form-control" name="companyInput" disabled id="companyInput">
                                 </div>
 
                                 <div class="form-group">
@@ -148,13 +167,11 @@
                                 <div class="form-group">
                                     <label>Thêm Ảnh</label>
                                     <div class="container kv-main">
-
                                         <input id="kv-explorer" type="file" name="image[]" multiple accept="image/*">
                                         <br>
-
                                     </div>
                                 </div>
-                                <button type="submit" name="Submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" name="Submit" class="btn btn-primary">Sửa</button>
                                 <button type="reset" class="btn btn-default">Reset</button>
 
 

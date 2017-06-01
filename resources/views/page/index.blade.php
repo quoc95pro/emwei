@@ -21,11 +21,16 @@
 								<div class="col-sm-6">
 									<h1><span>{{$slide[0]->HangSanXuat}}</span></h1>
 									<h2>{{$slide[0]->TenSanPham}}</h2>
-									<p> {{number_format($slide[0]->Gia, 0, ',', '.')}} VND</p>
+									@if(Session::has('userName'))
+										<h2 style="color: red"> {{number_format($slide[0]->Gia-round($slide[0]->Gia/100*Session::get('userName')->ChietKhau/1000)*1000, 0, ',', '.')}} VND</h2>
+										<p style="text-decoration: line-through"> {{number_format($slide[0]->Gia, 0, ',', '.')}} VND</p>
+									@else
+										<p> {{number_format($slide[0]->Gia, 0, ',', '.')}} VND</p>
+									@endif
 									<button type="button" class="btn btn-default get">Get it now</button>
 								</div>
 								<div class="col-sm-6">
-									<img src="{{$slide[0]->AnhDaiDien}}" class="girl img-responsive" alt="" />
+									<img src="{{$slide[0]->AnhDaiDien}}" class="girl img-responsive" style="height: 490px;width: 490px" alt="" />
 
 								</div>
 							</div>
@@ -33,11 +38,16 @@
 								<div class="col-sm-6">
 									<h1><span>{{$slide[1]->HangSanXuat}}</span></h1>
 									<h2>{{$slide[1]->TenSanPham}}</h2>
-									<p>{{number_format($slide[1]->Gia, 0, ',', '.')}} VND</p>
+									@if(Session::has('userName'))
+										<h2 style="color: red"> {{number_format($slide[1]->Gia-round($slide[1]->Gia/100*Session::get('userName')->ChietKhau/1000)*1000, 0, ',', '.')}} VND</h2>
+										<p style="text-decoration: line-through"> {{number_format($slide[1]->Gia, 0, ',', '.')}} VND</p>
+									@else
+										<p> {{number_format($slide[1]->Gia, 0, ',', '.')}} VND</p>
+									@endif
 									<button type="button" class="btn btn-default get">Get it now</button>
 								</div>
 								<div class="col-sm-6">
-									<img src="{{ $slide[1]->AnhDaiDien }}" class="girl img-responsive" alt="" />
+									<img src="{{ $slide[1]->AnhDaiDien }}" class="girl img-responsive" style="height: 490px;width: 490px" alt="" />
 
 								</div>
 							</div>
@@ -46,11 +56,16 @@
 								<div class="col-sm-6">
 									<h1><span>{{$slide[2]->HangSanXuat}}</span></h1>
 									<h2>{{$slide[2]->TenSanPham}}</h2>
-									<p>{{number_format($slide[2]->Gia, 0, ',', '.')}} VND</p>
+									@if(Session::has('userName'))
+										<h2 style="color: red"> {{number_format($slide[2]->Gia-round($slide[2]->Gia/100*Session::get('userName')->ChietKhau/1000)*1000, 0, ',', '.')}} VND</h2>
+										<p style="text-decoration: line-through"> {{number_format($slide[2]->Gia, 0, ',', '.')}} VND</p>
+									@else
+										<p> {{number_format($slide[2]->Gia, 0, ',', '.')}} VND</p>
+									@endif
 									<button type="button" class="btn btn-default get">Get it now</button>
 								</div>
 								<div class="col-sm-6">
-									<img src="{{ $slide[2]->AnhDaiDien }}" class="girl img-responsive" alt="" />
+									<img src="{{ $slide[2]->AnhDaiDien }}" class="girl img-responsive" style="height: 490px;width: 490px" alt="" />
 
 								</div>
 							</div>
@@ -73,109 +88,7 @@
 	<section>
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-3">
-					<div class="left-sidebar">
-						<h2>Danh Mục</h2>
-						<div class="panel-group category-products" id="accordian"><!--category-productsr-->
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordian" href="#sportswear">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-											Điện Thoại
-										</a>
-									</h4>
-								</div>
-								<div id="sportswear" class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
-											<li><a href="shop.html">Apple</a></li>
-											<li><a href="product-details.html">SamSung</a></li>
-											<li><a href="checkout.html">ASUS</a></li>
-											<li><a href="cart.html">OPPO</a></li>
-											<li><a href="login.html">Sony</a></li>
-											<li><a href="login.html">Xiao Mi</a></li>
-											<li><a href="login.html">Vivo</a></li>
-											<li><a href="login.html">HTC</a></li>
-											<li><a href="login.html">Huawei</a></li>
-											<li><a href="login.html">Lenovo</a></li>
-											<li><a href="login.html">Pantech</a></li>
-											<li><a href="login.html">Coolpad</a></li>
-											<li><a href="login.html">Itel</a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordian" href="#mens">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-											Máy Tính Bảng
-										</a>
-									</h4>
-								</div>
-								<div id="mens" class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
-											<li><a href="blog.html">Apple-Ipad</a></li>
-											<li><a href="blog-single.html">SamSung</a></li>
-											<li><a href="blog-single.html">Sony</a></li>
-											<li><a href="blog-single.html">ASUS</a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordian" href="#womens">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-											Phụ Kiện
-										</a>
-									</h4>
-								</div>
-								<div id="womens" class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
-											<li><a href="blog.html">Apple-Ipad</a></li>
-											<li><a href="blog-single.html">SamSung</a></li>
-											<li><a href="blog-single.html">Sony</a></li>
-											<li><a href="blog-single.html">ASUS</a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-
-						</div><!--/category-products-->
-					
-						<div class="brands_products"><!--brands_products-->
-							<h2>Hãng</h2>
-							<div class="brands-name">
-								<ul class="nav nav-pills nav-stacked">
-									@foreach($left as $l)
-										<li><a href="#"> <span class="pull-right">({{$l -> Count}})</span>{{$l -> HangSanXuat}}</a></li>
-									@endforeach
-
-								</ul>
-							</div>
-						</div><!--/brands_products-->
-						
-						<div class="price-range"><!--price-range-->
-							<h2>Price Range</h2>
-							<div class="well text-center">
-								 <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="600" data-slider-step="5" data-slider-value="[250,450]" id="sl2" ><br />
-								 <b class="pull-left">$ 0</b> <b class="pull-right">$ 600</b>
-							</div>
-						</div><!--/price-range-->
-						
-						<div class="shipping text-center"><!--shipping-->
-							<img src="{{ URL::asset('images/home/shipping.jpg') }}" alt="" />
-						</div><!--/shipping-->
-					
-					</div>
-				</div>
+				@include('left')
 				
 				<div class="col-sm-9 padding-right">
 					<div class="features_items"><!--features_items-->
@@ -187,13 +100,23 @@
 									<div class="single-products">
 										<div class="productinfo text-center">
 											<img src="{{$newProduct->AnhDaiDien}}" alt="" />
-											<h2>{{number_format($newProduct->Gia, 0, ',', '.')}} VND</h2>
+											@if(Session::has('userName'))
+												<h2> {{number_format($newProduct->Gia-round($newProduct->Gia/100*Session::get('userName')->ChietKhau/1000)*1000, 0, ',', '.')}} VND</h2>
+												<h4 style="text-decoration: line-through"> {{number_format($newProduct->Gia, 0, ',', '.')}} VND</h4>
+											@else
+												<h2> {{number_format($newProduct->Gia, 0, ',', '.')}} VND</h2>
+											@endif
 											<p>{{$newProduct->TenSanPham}}</p>
 
 										</div>
 										<div class="product-overlay">
 											<div class="overlay-content">
-												<h2>{{$newProduct->Gia}}</h2>
+												@if(Session::has('userName'))
+													<h2> {{number_format($newProduct->Gia-round($newProduct->Gia/100*Session::get('userName')->ChietKhau/1000)*1000, 0, ',', '.')}} VND</h2>
+													<h4 style="text-decoration: line-through"> {{number_format($newProduct->Gia, 0, ',', '.')}} VND</h4>
+												@else
+													<h2> {{number_format($newProduct->Gia, 0, ',', '.')}} VND</h2>
+												@endif
 												<p>{{$newProduct->TenSanPham}}</p>
 												<a href="{{route('add-cart',$newProduct->IDSanPham)}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
 											</div>
@@ -313,10 +236,30 @@
 					<div class="category-tab"><!--category-tab-->
 						<div class="col-sm-12">
 							<ul class="nav nav-tabs">
-
+								@php
+									function convert_vi_to_en($str) {
+                                        $str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/", 'a', $str);
+                                        $str = preg_replace("/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/", 'e', $str);
+                                        $str = preg_replace("/(ì|í|ị|ỉ|ĩ)/", 'i', $str);
+                                        $str = preg_replace("/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/", 'o', $str);
+                                        $str = preg_replace("/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/", 'u', $str);
+                                        $str = preg_replace("/(ỳ|ý|ỵ|ỷ|ỹ)/", 'y', $str);
+                                        $str = preg_replace("/(đ)/", 'd', $str);
+                                        $str = preg_replace("/(À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ)/", 'A', $str);
+                                        $str = preg_replace("/(È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ)/", 'E', $str);
+                                        $str = preg_replace("/(Ì|Í|Ị|Ỉ|Ĩ)/",'I', $str);
+                                        $str = preg_replace("/(Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ)/", 'O', $str);
+                                        $str = preg_replace("/(Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ)/", 'U', $str);
+                                        $str = preg_replace("/(Ỳ|Ý|Ỵ|Ỷ|Ỹ)/", 'Y', $str);
+                                        $str = preg_replace("/(Đ)/", 'D', $str);
+                                        $str = preg_replace("/( )/", '', $str);
+                                        //$str = str_replace(" ", "-", str_replace("&*#39;","",$str));
+                                        return $str;
+                                        }
+								@endphp
 								<li class="active"><a href="#{{$tabTitle[0]->LoaiPhuKien}}" data-toggle="tab">{{$tabTitle[0]->LoaiPhuKien}}</a></li>
 								@for($i =1;$i< count($tabTitle);$i++)
-									<li><a href="#{{$tabTitle[$i]->LoaiPhuKien}}" data-toggle="tab">{{$tabTitle[$i]->LoaiPhuKien}}</a></li>
+									<li><a href="#{{convert_vi_to_en($tabTitle[$i]->LoaiPhuKien)}}" data-toggle="tab">{{$tabTitle[$i]->LoaiPhuKien}}</a></li>
 								@endfor
 
 							</ul>
@@ -324,44 +267,48 @@
 
 						<div class="tab-content">
 
-							<div class="tab-pane fade active in" id="{{$tabTitle[0]->LoaiPhuKien}}" >
+							<div class="tab-pane fade active in" id="{{convert_vi_to_en($tabTitle[0]->LoaiPhuKien)}}" >
 								@foreach($tabContent as $tc)
 									@if($tc->LoaiPhuKien==$tabTitle[0]->LoaiPhuKien)
-										<div class="col-sm-3">
-											<div class="product-image-wrapper">
-												<div class="single-products">
-													<div class="productinfo text-center">
-														<img src="{{ $tc->link }}" alt="" />
-														<h2>$56</h2>
-														<p>Easy Polo Black Edition</p>
-														<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-													</div>
+										<a href="{{route('detail-product',$tc->IDPhuKien)}}">
+											<div class="col-sm-3">
+												<div class="product-image-wrapper">
+													<div class="single-products">
+														<div class="productinfo text-center">
+															<img src="{{ $tc->AnhDaiDien }}" alt=""  style="height: 183px;width: 183px"/>
+															<h2>$56</h2>
+															<p class="compact">{{ $tc->TenPhuKien }}</p>
+															<a href="{{route('add-cart',$tc->IDPhuKien)}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm Vào Giỏ Hàng</a>
+														</div>
 
+													</div>
 												</div>
 											</div>
-										</div>
+										</a>
 									@endif
 								@endforeach
 							</div>
 
 							@for($i =1;$i< count($tabTitle);$i++)
 
-								<div class="tab-pane fade " id="{{$tabTitle[$i]->LoaiPhuKien}}" >
+								<div class="tab-pane fade " id="{{convert_vi_to_en($tabTitle[$i]->LoaiPhuKien)}}" >
 									@foreach($tabContent as $tc)
 										@if($tc->LoaiPhuKien==$tabTitle[$i]->LoaiPhuKien)
+											<a href="{{route('detail-product',$tc->IDPhuKien)}}">
 											<div class="col-sm-3">
 												<div class="product-image-wrapper">
 													<div class="single-products">
 														<div class="productinfo text-center">
-															<img src="{{ $tc->link }}" alt="" />
+															<img src="{{ $tc->AnhDaiDien }}" alt="" style="height: 183px;width: 183px"/>
 															<h2>$56</h2>
-															<p>Easy Polo Black Edition</p>
-															<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+															<p class="compact">{{ $tc->TenPhuKien }}</p>
+															<a href="{{route('add-cart',$tc->IDPhuKien)}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm Vào Giỏ Hàng</a>
 														</div>
 
 													</div>
 												</div>
 											</div>
+											</a>
 										@endif
 									@endforeach
 								</div>

@@ -57,6 +57,10 @@
                                     <label>Giá</label>
                                     <input class="form-control" value="{{number_format($bill[0]->Gia, 0, ',', '.')}}" name="gia" readonly>
                                 </div>
+                                <div class="form-group">
+                                    <label>Chiết Khấu (%)</label>
+                                    <input class="form-control" id="ck" value="{{$bill[0]->ChietKhau}}" name="ck" readonly>
+                                </div>
                                 <div class="form-group" >
                                     <label>Ngày Tạo</label>
                                     <input class="form-control" value="{{$bill[0]->NgayTao}}" readonly>
@@ -131,10 +135,27 @@
                                                         <td>Phí Vận Chuyển</td>
                                                         <td>Free</td>
                                                     </tr>
-                                                    <tr>
-                                                        <td>Tổng Tiền</td>
-                                                        <td><span style="color: #30a5ff" id="showTotal">{{number_format($total, 0, ',', '.')}}</span></td>
-                                                    </tr>
+
+                                                        @if($bill[0]->ChietKhau>0)
+                                                        <tr>
+                                                            <td>Tổng Tiền</td>
+                                                            <td><span style="color: #30a5ff;text-decoration: line-through" id="showTotal">{{number_format($total, 0, ',', '.')}} VND</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Chiết Khấu</td>
+                                                            <td><span style="color: #30a5ff" id="ck">{{$bill[0]->ChietKhau}}</span><span style="color: #30a5ff"> %</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Giá Sau Chiết Khấu</td>
+                                                            <td><span style="color: #30a5ff" id="showTotal2">{{number_format($bill[0]->Gia-round($bill[0]->Gia/100*$bill[0]->ChietKhau/1000)*1000, 0, ',', '.')}} VND</span></td>
+                                                        </tr>
+                                                        @else
+                                                        <tr>
+                                                            <td>Tổng Tiền</td>
+                                                            <td><span style="color: #30a5ff" id="showTotal">{{number_format($total, 0, ',', '.')}}</span></td>
+                                                        </tr>
+                                                        @endif
+
                                                 </table>
                                             </td>
                                         </tr>
@@ -142,7 +163,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12" @if($type=='detail') style="display: none" @endif>
                                 <div class="checkbox">
                                     <label style="font-size: 20px">
                                         <input type="checkbox" id="chkChinhSua" name="chkChinhSua" onchange="chkChinhSuaChecked()" style="height: 20px">Chỉnh Sửa Thông Tin
@@ -200,6 +221,9 @@
                                     },
                                     success : function (result){
                                         document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',');
+                                        var a  =document.getElementById('ck').value;
+                                        var b =result-Math.floor(result/100*a/1000)*1000;
+                                        document.getElementById('showTotal2').innerHTML=accounting.formatMoney(b,'',0,'.',',')+' VND';
                                     }
                                 });
 
@@ -226,6 +250,9 @@
                                     },
                                     success : function (result){
                                         document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',');
+                                        var a  =document.getElementById('ck').value;
+                                        var b =result-Math.floor(result/100*a/1000)*1000;
+                                        document.getElementById('showTotal2').innerHTML=accounting.formatMoney(b,'',0,'.',',')+' VND';
                                     }
                                 });
                                 document.getElementById(_qty).value = qty;
@@ -249,6 +276,9 @@
                                         },
                                         success: function (result) {
                                             document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',');
+                                            var a  =document.getElementById('ck').value;
+                                            var b =result-Math.floor(result/100*a/1000)*1000;
+                                            document.getElementById('showTotal2').innerHTML=accounting.formatMoney(b,'',0,'.',',')+' VND';
                                         }
                                     });
                                     document.getElementById(_qty).value = qty;
@@ -271,6 +301,9 @@
                                     success : function (result){
                                         document.getElementsByClassName(_rowId)[0].innerHTML = '';
                                         document.getElementById('showTotal').innerHTML=accounting.formatMoney(result,'',0,'.',',');
+                                        var a  =document.getElementById('ck').value;
+                                        var b =result-Math.floor(result/100*a/1000)*1000;
+                                        document.getElementById('showTotal2').innerHTML=accounting.formatMoney(b,'',0,'.',',')+' VND';
                                         if(result=='0'){
                                             document.getElementById('check-out').style.display = "none";
                                         }

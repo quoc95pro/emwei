@@ -16,6 +16,23 @@
 		</div><!--/.row-->
 		
 		<div class="row">
+			@php
+				$visitor = Storage::get('countVisitor.log');
+			@endphp
+			<div class="col-xs-12 col-md-6 col-lg-3">
+				<div class="panel panel-red panel-widget">
+					<div class="row no-padding">
+						<div class="col-sm-3 col-lg-5 widget-left">
+							<svg class="glyph stroked app-window-with-content"><use xlink:href="#stroked-app-window-with-content"></use></svg>
+						</div>
+						<div class="col-sm-9 col-lg-7 widget-right">
+							<div class="large">{{$visitor}}</div>
+							<div class="text-muted">Lượt Truy Cập Trang</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="col-xs-12 col-md-6 col-lg-3">
 				<div class="panel panel-blue panel-widget ">
 					<div class="row no-padding">
@@ -25,22 +42,6 @@
 						<div class="col-sm-9 col-lg-7 widget-right">
 							<div class="large">{{$countNewOrder}}</div>
 							<div class="text-muted">Đơn Hàng Ngày Hôm Nay</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xs-12 col-md-6 col-lg-3">
-				<div class="panel panel-orange panel-widget">
-					<div class="row no-padding">
-						<div class="col-sm-3 col-lg-5 widget-left">
-							<svg class="glyph stroked empty-message"><use xlink:href="#stroked-empty-message"></use></svg>
-						</div>
-						@php
-							$visitor = Storage::get('countVisitor.log');
-						@endphp
-						<div class="col-sm-9 col-lg-7 widget-right">
-							<div class="large">{{$visitor}}</div>
-							<div class="text-muted">Lượt Truy Cập Trang</div>
 						</div>
 					</div>
 				</div>
@@ -59,14 +60,14 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 col-lg-3">
-				<div class="panel panel-red panel-widget">
+				<div class="panel panel-orange panel-widget">
 					<div class="row no-padding">
 						<div class="col-sm-3 col-lg-5 widget-left">
-							<svg class="glyph stroked app-window-with-content"><use xlink:href="#stroked-app-window-with-content"></use></svg>
+							<svg class="glyph stroked empty-message"><use xlink:href="#stroked-empty-message"></use></svg>
 						</div>
 						<div class="col-sm-9 col-lg-7 widget-right">
-							<div class="large">25.2k</div>
-							<div class="text-muted">Page Views</div>
+							<div class="large">10</div>
+							<div class="text-muted">Khách Hàng Đăng Ký</div>
 						</div>
 					</div>
 				</div>

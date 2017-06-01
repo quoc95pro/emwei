@@ -1,4 +1,7 @@
 @extends('admin.master')
+@section('script')
+    <script src="{{ URL::asset('js3/bootstrap-table.js')}}"></script>
+    @stop
 @section('css')
     .table-hover>tbody>tr>td>a{
     display: none;
@@ -24,7 +27,8 @@
     padding-right: 4px;
     }
     .table-hover>tbody>tr>td{
-     height:65px;
+     height:60px;
+     line-height:48px;
     }
 @stop
 @section('content')
@@ -59,41 +63,109 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Advanced Table</div>
+                    <div class="panel-heading">Tất Cả Sản Phẩm</div>
                     <div class="panel-body">
-                        <table data-toggle="table"  data-show-refresh="true" data-page-list="[10, 25, 50, 100, All]"  data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc" class="table table-hover">
+                        <div id="toolbar">
+                            <button type="button" class="btn btn-primary" onclick="addProduct()">Thêm Mới</button>
+                            <button id="button" class="btn btn-default">Sửa Tình Trạng</button>
+                            <select class="form-control" id="optionUpdate" >
+                                <option>Đã Xóa</option>
+                                <option>Còn Hàng</option>
+                                <option>Hết Hàng</option>
+                            </select>
+                        </div>
+                        <table data-toggle="table" id="table" data-url="http://localhost:8080/emwei/public/allProductJson" data-show-refresh="true" data-page-list="[20, 50,60]" data-height="760"
+                               data-show-toggle="true" data-show-columns="true" data-toolbar="#toolbar" data-select-item-name="toolbar1" data-click-to-select="true" data-page-size="20"
+                               data-search="true"  data-pagination="true" data-filter-control="true" data-filter-show-clear="true" data-sort-name="name" data-sort-order="desc"  class="table table-hover">
                             <thead>
                             <tr>
-                                <th data-field="state" data-checkbox="true" ></th>
-                                <th data-field="IDSanPham" data-sortable="true">Mã Sản Phẩm</th>
-                                <th data-field="TenSanPham"  data-sortable="true">Tên Sản Phẩm</th>
-                                <th data-field="Gia" data-sortable="true">Giá</th>
-                                <th data-field="TinhTrang" data-sortable="true">Tình Trạng</th>
+                                <th data-field="state" data-checkbox="true" data-align="center"></th>
+                                <th data-field="IDSanPham" data-sortable="true" data-align="center">Mã Sản Phẩm</th>
+                                <th data-field="TenSanPham"  data-sortable="true" data-align="center">Tên Sản Phẩm</th>
+                                <th data-field="Gia" data-sortable="true" data-align="center">Giá</th>
+                                <th data-field="TinhTrang" data-filter-control="select" data-sortable="true" data-align="center" >Tình Trạng</th>
+                                <th data-formatter="operateFormatter" data-events="operateEvents" data-align="center" >Tùy Chọn</th>
                             </tr>
                             </thead>
-                            <tbody>
-
-                            @foreach($listProduct as $product)
-                                <tr style="height: 70px">
-                                    <td class="bs-checkbox">
-                                        <input name="toolbar1" value="{{$product->IDSanPham}}"  type="checkbox" >
-
-                                    </td>
-                                    <td>{{$product->IDSanPham}}<br/>
-                                        <a class="edit-button"  href="{{route('edit-product',$product->IDSanPham)}}" >Sửa</a>
-                                        <a class="delete-button" href="{{route('delete-product',$product->IDSanPham)}}" >Xóa</a>
-                                        <a class="view-button" href="{{route('edit-product',$product->IDSanPham)}}" >Chi tiết</a>
-                                    </td>
-                                    <td>{{$product->TenSanPham}}</td>
-                                    <td>{{$product->Gia}}</td>
-                                    <td>{{$product->TinhTrang}}</td>
-                                </tr>
-
-                            @endforeach
-
-
-                            </tbody>
                         </table>
+                        <script>
+
+
+                            var $table = $('#table'),
+                                $button = $('#button');
+                            $(function () {
+                                $button.click(function () {
+                                    var a=document.getElementById('optionUpdate').value;
+                                    for(var i=0;i<$table.bootstrapTable('getAllSelections').length;i++){
+//                                        a+=$table.bootstrapTable('getAllSelections')[i].IDSanPham;
+                                        $.ajax({
+                                            url : "{{route('updateStatusProduct')}}",
+                                            type : "post",
+                                            dateType:"text",
+                                            data : {
+                                                id : $table.bootstrapTable('getAllSelections')[i].IDSanPham,
+                                                status : a
+                                            },
+                                            success : function (result){
+                                                $table.bootstrapTable('refresh',{
+                                                    url: "http://localhost:8080/emwei/public/allProductJson"
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            });
+
+                            window.operateEvents = {
+                                'click .chiTiet': function (e, value, row){
+                                window.location.href = "http://localhost:8080/emwei/public/edit-product/"+row.IDSanPham;
+                                },
+                                'click .sua': function (e, value, row) {
+                                    window.location.href = "http://localhost:8080/emwei/public/edit-product/"+row.IDSanPham;
+                                },
+                                'click .xoa': function (e, value, row) {
+                                    var r= confirm('Bạn Có Chắc Muốn Xóa ?');
+                                    if (r == true) {
+                                        window.location.href = "http://localhost:8080/emwei/public/delete-product/"+row.IDSanPham;
+                                    } else {
+                                    }
+
+                                }
+                            };
+
+                            function addProduct() {
+                                window.location.href = "{{route('adminAddProduct')}}";
+                            }
+
+                            function operateFormatter(value, row, index) {
+                                if(row.TinhTrang=='Đã Xóa'){
+                                    return [
+                                        '<div class="center-block">',
+                                        '<a class="chiTiet" href="javascript:void(0)" title="Chi Tiết">',
+                                        '<i class="glyphicon glyphicon-zoom-in"></i>',
+                                        '</a>  ',
+                                        '<a class="sua" href="javascript:void(0)" title="Sửa">',
+                                        '<i class="glyphicon glyphicon-edit"></i>',
+                                        '</a>  ',
+                                        '</div>'
+                                    ].join('')
+                                }
+                                return [
+                                    '<div class="center-block">',
+                                    '<a class="chiTiet" href="javascript:void(0)" title="Chi Tiết">',
+                                    '<i class="glyphicon glyphicon-zoom-in"></i>',
+                                    '</a>  ',
+                                    '<a class="sua" href="javascript:void(0)" title="Sửa">',
+                                    '<i class="glyphicon glyphicon-edit"></i>',
+                                    '</a>  ',
+                                    '<a class="xoa" href="javascript:void(0)" title="Xóa">',
+                                    '<i class="glyphicon glyphicon-remove"></i>',
+                                    '</a>',
+                                    '</div>'
+                                ].join('');
+                            }
+
+                        </script>
                     </div>
                 </div>
             </div>
