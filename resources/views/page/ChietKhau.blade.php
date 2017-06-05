@@ -22,7 +22,7 @@
                                             data : {
                                                 discount : document.getElementById("random-area").innerHTML,
                                             },
-                                            success : function (result){
+                                            success : function (){
                                                 alert('Chúc Mừng Bạn Được Chiết Khấu '+document.getElementById("random-area").innerHTML+' % Trên Mỗi Hóa Đớn Khi Thanh Toán');
                                             }
                                         });

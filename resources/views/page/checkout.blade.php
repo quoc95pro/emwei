@@ -19,8 +19,14 @@
 			@endif
 			<div class="shopper-informations">
 				<div class="row">
+					<div class="col-sm-6">
+						@if(Session::has('flag'))
+							<div class="alert alert-danger">{{Session::get('message')}}</div>
+						@endif
+					</div>
+				</div>
+				<div class="row">
 					<div class="col-sm-3">
-
 						<div class="shopper-info">
 							<p>Thông Tin Khách Hàng</p>
 							<div>
@@ -88,6 +94,7 @@
 					</div>
 				</div>
 			</div>
+
 			<div class="review-payment">
 				<h2>Đơn Hàng</h2>
 			</div>
@@ -137,10 +144,6 @@
 							<td colspan="4">&nbsp;</td>
 							<td colspan="2">
 								<table class="table table-condensed total-result">
-									<tr class="shipping-cost">
-										<td>Phí Vận Chuyển</td>
-										<td>Free</td>
-									</tr>
 									@if(Session::has('userName'))
 										<tr>
 											<td>Tổng Tiền</td>
@@ -170,13 +173,16 @@
 			<div class="col-sm-4"></div>
 			<div class="payment-options col-sm-4">
 				@if($total!=0)
+					<div class="g-recaptcha" data-sitekey="6LdmNSMUAAAAAMVpqHFmTjVs4JN1xWSBPWa9IAit"></div>
 					<center><span>
 						<input type="submit" class="btn btn-primary" style="width:100%" value="Đặt Hàng"/>
 					</span></center>
 					@endif
 				</div>
+				<script src='https://www.google.com/recaptcha/api.js'></script>
 			<div class="col-sm-4"></div>
 			</form>
+
 		</div>
 
 	</section> <!--/#cart_items-->

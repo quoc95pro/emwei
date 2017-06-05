@@ -13,11 +13,11 @@
                 <div class="col-sm-6">
                     <div class="social-icons pull-right">
                         <ul class="nav navbar-nav">
-                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
-                            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                            <li><a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="https://twitter.com/?lang=vi"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="https://www.linkedin.com/"><i class="fa fa-linkedin"></i></a></li>
+                            <li><a href="https://dribbble.com/"><i class="fa fa-dribbble"></i></a></li>
+                            <li><a href="https://www.google.com.vn/"><i class="fa fa-google-plus"></i></a></li>
 
                         </ul>
                     </div>
@@ -29,24 +29,24 @@
     <div class="header-middle"><!--header-middle-->
         <div class="container">
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-2">
                     <div class="logo pull-left">
                         <a href="{{route('trang-chu')}}"><img src="{{ URL::asset('images/home/logo.gif') }}" alt="" /></a>
                     </div>
 
                 </div>
-                <div class="col-sm-8">
+                <div class="col-sm-10">
                     <div class="shop-menu pull-right">
                         <ul class="nav navbar-nav">
-                            <li><a href="#"><i class="fa fa-user"></i> Tài khoản</a></li>
+                            <li><a href="{{route('construction')}}"><i class="fa fa-ambulance"></i> Hướng dẫn mua hàng</a></li>
                             <li><a href="{{route('contact-us')}}"><i class="fa fa-star"></i> Liên hệ</a></li>
-                            <li><a href="{{route('checkout')}}"><i class="fa fa-crosshairs"></i> Thanh toán</a></li>
+                            <li><a href="{{route('checkout')}}"><i class="fa fa-check"></i> Thanh toán</a></li>
                             <li><a href="{{route('cart')}}"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
                             @if(Session::has('userName'))
-                                <li><a href="">Chào bạn ,{{Session::get('userName')->TenKhachHang}}</a></li>
-                                <li><a href="{{route('logout')}}">Đăng xuất</a></li>
+                                <li><a href="{{route('userPage')}}"><i class="fa fa-user"></i>Chào bạn ,{{Session::get('userName')->TenKhachHang}}</a></li>
+                                <li><a href="{{route('logout')}}"><i class="fa fa-sign-out"></i>Đăng xuất</a></li>
                             @else
-                                <li><a href="{{route('dang-nhap')}}"><i class="fa fa-lock"></i> Đăng nhập</a></li>
+                                <li><a href="{{route('dang-nhap')}}"><i class="fa fa-sign-in"></i> Đăng nhập</a></li>
                                 <li><a href="{{route('dang-ky')}}"><i class="fa fa-lock"></i> Đăng Ký</a></li>
                             @endif
 
@@ -112,9 +112,33 @@
                 </div>
                 <div class="col-sm-3">
                     <div class="search_box pull-right">
-                        <input type="text" placeholder="Search"/>
+                        <input type="text" placeholder="Search" onkeyup="showResult(this.value)"/>
+                        <div id="resultsearch" style="background-color:white;z-index: 999;position: absolute;width: 300px">
+
+                        </div>
                     </div>
                 </div>
+                <script>
+                    function showResult(str) {
+                        if (str.length==0) {
+                            document.getElementById("resultsearch").innerHTML="";
+                            document.getElementById("resultsearch").style.border="0px";
+                            return;
+                        }
+                        $.ajax({
+                            url : "{{route('search')}}",
+                            type : "post",
+                            dateType:"text",
+                            data : {
+                                key : str,
+                            },
+                            success : function (result){
+                                document.getElementById("resultsearch").innerHTML=result;
+                            }
+                        });
+
+                    }
+                </script>
             </div>
         </div>
     </div><!--/header-bottom-->

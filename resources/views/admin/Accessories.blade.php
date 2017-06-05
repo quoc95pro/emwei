@@ -74,7 +74,7 @@
                                 <option>Hết Hàng</option>
                             </select>
                         </div>
-                        <table data-toggle="table" id="table" data-url="http://localhost:8080/emwei/public/allAccessoriesJson" data-show-refresh="true" data-page-list="[20, 50,60]" data-height="760"
+                        <table data-toggle="table" id="table" data-url="http://emwei.tk/allAccessoriesJson" data-show-refresh="true" data-page-list="[20, 50,60]" data-height="760"
                                data-show-toggle="true" data-show-columns="true" data-toolbar="#toolbar" data-select-item-name="toolbar1" data-click-to-select="true" data-page-size="20"
                                data-search="true"  data-pagination="true" data-filter-control="true" data-filter-show-clear="true" data-sort-name="name" data-sort-order="desc"  class="table table-hover">
                             <thead>
@@ -109,7 +109,7 @@
                                             },
                                             success : function (result){
                                                 $table.bootstrapTable('refresh',{
-                                                    url: "http://localhost:8080/emwei/public/allAccessoriesJson"
+                                                    url: "http://emwei.tk/allAccessoriesJson"
                                                 });
                                             }
                                         });
@@ -119,15 +119,15 @@
 
                             window.operateEvents = {
                                 'click .chiTiet': function (e, value, row){
-                                window.location.href = "http://localhost:8080/emwei/public/edit-accessory/"+row.IDPhuKien;
+                                window.location.href = "http://emwei.tk/edit-accessory/"+row.IDPhuKien;
                                 },
                                 'click .sua': function (e, value, row) {
-                                    window.location.href = "http://localhost:8080/emwei/public/edit-accessory/"+row.IDPhuKien;
+                                    window.location.href = "http://emwei.tk/edit-accessory/"+row.IDPhuKien;
                                 },
                                 'click .xoa': function (e, value, row) {
                                     var r= confirm('Bạn Có Chắc Muốn Xóa ?');
                                     if (r == true) {
-                                        window.location.href = "http://localhost:8080/emwei/public/delete-accessory/"+row.IDPhuKien;
+                                        window.location.href = "http://emwei.tk/delete-accessory/"+row.IDPhuKien;
                                     } else {
                                     }
 

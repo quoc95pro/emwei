@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Session;
 use Mockery\Exception;
 use mysqli_sql_exception;
 use const null;
+use PhpParser\Node\Stmt\Return_;
 use function redirect;
 use function round;
 use function route;
@@ -92,7 +93,19 @@ class pageController extends Controller
 
 
     public function login(){
+        if((Session::has('userName'))){
+            return redirect()->route('trang-chu');
+        }
         return \view('page.login');
+    }
+
+    public function userPage(){
+        if((Session::has('userName'))){
+            $user = Customer::find(Session::get('userName')->Email);
+            return view('page.userPage')
+                ->with(['user'=>$user]);
+        }
+        return redirect()->route('trang-chu');
     }
 
     public function postLogin(Request $req){
@@ -133,6 +146,9 @@ class pageController extends Controller
 
 
     public function logout(Request $req){
+        if(!(Session::has('userName'))){
+            return redirect()->route('trang-chu');
+        }
              Cart::destroy();
             $req->session()->remove('userName');
 
@@ -142,6 +158,38 @@ class pageController extends Controller
     public function signUp(){
         return \view('page.signup');
     }
+    public function construction(){
+        return \view('page.construction');
+    }
+
+    public function getProductBill(Request $request){
+
+        return $request->id;
+    }
+
+    public function postEdit(Request $request){
+        $this->validate($request,
+            [
+                'pass'=>'required|min:6|max:20',
+                'rePass'=>'required|same:pass',
+                'name'=>'required|min:5|max:100',
+            ],
+            [
+                'pass.required'=>'Vui lòng nhập mật khẩu',
+                'rePass.same'=>'Mật khẩu không giống nhau',
+                'pass.min'=>'Mật khẩu ít nhất 6 kí tự',
+                'name.min'=>'Độ dài tên không hợp lệ',
+            ]);
+        $user = Customer::find(Session::get('userName')->Email);
+        $user->MatKhau = $request->pass;
+        $user->TenKhachHang=$request->name;
+        $user->GioiTinh=$request->sex;
+        $user->NamSinh=$request->dob;
+        $user->DiaChi = $request->add;
+        $user->save();
+        return redirect()->route('userPage');
+    }
+
     public function postSignUp(Request $req){
         $this->validate($req,
             [
@@ -149,7 +197,7 @@ class pageController extends Controller
                 'pass'=>'required|min:6|max:20',
                 'rePass'=>'required|same:pass',
                 'name'=>'required|min:5|max:100',
-                'phone'=>'min:10|max:11'
+                'phone'=>'min:9|max:11|unique:tbl_khachhang,SoDienThoai',
             ],
             [
                 'mail.required'=>'Vui lòng nhập email',
@@ -160,8 +208,40 @@ class pageController extends Controller
                 'pass.min'=>'Mật khẩu ít nhất 6 kí tự',
                 'name.min'=>'Độ dài tên không hợp lệ',
                 'phone.min'=>'Số điện thoại có độ dài không hợp lệ',
-                'phone.max'=>'Số điện thoại có độ dài không hợp lệ'
+                'phone.max'=>'Số điện thoại có độ dài không hợp lệ',
+                'phone.unique'=>'Số điện thoại đã tồn tại',
         ]);
+        if($req->mailgt!=''){
+            $mailgt = Customer::find($req->mailgt);
+            if(!$mailgt){
+                return redirect()->back()->with(['flag'=>'danger','message'=>'Mail giới thiệu không tồn tại']);
+            }
+        }
+
+//cấu hình thông tin do google cung cấp
+$api_url     = 'https://www.google.com/recaptcha/api/siteverify';
+$secret_key  = '6LdmNSMUAAAAABFRIH5RxBlD8riTvxwHiSVBsgSV';
+
+    $site_key_post    = $_POST['g-recaptcha-response'];
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        $remoteip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $remoteip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+        $remoteip = $_SERVER['REMOTE_ADDR'];
+    }
+    $api_url = $api_url.'?secret='.$secret_key.'&response='.$site_key_post.'&remoteip='.$remoteip;
+    $response = file_get_contents($api_url);
+    $response = json_decode($response);
+    if(!isset($response->success))
+    {
+        return redirect()->back()->with(['flag'=>'danger','message'=>'Sai Captcha']);
+    }
+    if(!$response->success == true)
+    {
+        return redirect()->back()->with(['flag'=>'danger','message'=>'Bạn chưa nhập Captcha']);
+    }
+
                 $newUser = new Customer();
                 $newUser->TenKhachHang=$req->name;
                 $newUser->Email=$req->mail;
@@ -171,21 +251,36 @@ class pageController extends Controller
                 $newUser->SoDienThoai=$req->phone;
                 $newUser->DiaChi=$req->add;
                 $newUser->LoaiTaiKhoan='Đồng';
-                $newUser->TrangThai='Active';
+                $newUser->TrangThai='InActive';
+                $newUser->EmailGioiThieu=$req->mailgt;
                 $newUser->NgayTao=date('Y-m-d');
                 $newUser->save();
         session(['userName' => $newUser]);
-        return redirect()->route('chietkhau');
+        return redirect()->route('verify');
     }
 
-    public  function chietkhau(){
+    public  function verify(){
+        if(!(Session::has('userName'))){
+            return redirect()->route('trang-chu');
+        }
+        if(Session::get('userName')->TrangThai!='InActive'){
+            return redirect()->route('discount');
+        }
+        return view('page.verify');
+    }
+
+    public  function discount(){
         if(!(Session::has('userName'))){
             return redirect()->route('trang-chu');
         }
         if(Session::get('userName')->ChietKhau!=0){
             return redirect()->route('trang-chu');
         }
-
+        if(Session::get('userName')->EmailGioiThieu!=''){
+            $mailgt = Customer::find(Session::get('userName')->EmailGioiThieu);
+            $mailgt->ChietKhau+=0.02;
+            $mailgt->save();
+        }
         return view('page.ChietKhau');
 
     }
@@ -193,6 +288,7 @@ class pageController extends Controller
     public  function updateDisCountProduct(Request $request){
         DB::update('UPDATE tbl_khachhang SET ChietKhau=? WHERE Email=?',[$request->discount,Session::get('userName')->Email]);
         Session::get('userName')->ChietKhau=$request->discount;
+
     }
 
     public function contactUs(){
@@ -380,6 +476,30 @@ class pageController extends Controller
     }
 
     public function postCheckOut(Request $request){
+
+        $api_url     = 'https://www.google.com/recaptcha/api/siteverify';
+        $secret_key  = '6LdmNSMUAAAAABFRIH5RxBlD8riTvxwHiSVBsgSV';
+
+        $site_key_post    = $_POST['g-recaptcha-response'];
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $remoteip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $remoteip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $remoteip = $_SERVER['REMOTE_ADDR'];
+        }
+        $api_url = $api_url.'?secret='.$secret_key.'&response='.$site_key_post.'&remoteip='.$remoteip;
+        $response = file_get_contents($api_url);
+        $response = json_decode($response);
+        if(!isset($response->success))
+        {
+            return redirect()->back()->with(['flag'=>'danger','message'=>'Sai Captcha']);
+        }
+        if(!$response->success == true)
+        {
+            return redirect()->back()->with(['flag'=>'danger','message'=>'Bạn chưa nhập Captcha']);
+        }
+
         $userName = $request->userName;
         $userMail = $request->userMail;
         $userPhone = $request->userPhone;
@@ -790,6 +910,43 @@ class pageController extends Controller
         }
     }
 
+    public  function search(Request $request){
+
+        $product = DB::select("SELECT * FROM `tbl_sanpham` WHERE  TenSanPham LIKE '%$request->key%'
+                              OR LoaiSanPham LIKE '%$request->key%' OR HangSanXuat LIKE '%$request->key%' LIMIT 10");
+        $result = '';
+        if(count($product)>0) {
+            for ($i = 0; $i < count($product); $i++) {
+                $result .= "<a href=\"http://emwei.tk/detail-product/{$product[$i]->IDSanPham}\" style='color: red'><div style='height: 50px;margin-top: 5px'>
+                                <div style=\"float: left\">
+                                    <img style=\"width: 50px;height: 50px\" src=\"http://emwei.tk/{$product[$i]->AnhDaiDien}\">
+                                </div>
+                                <div style='margin-left: 60px;border-bottom: 1px solid brown'>
+                                    <div><h6 class='compact2'>{$product[$i]->TenSanPham}</h6></div>
+                                    <div><h6>{$product[$i]->Gia}</h6></div>
+                                </div>
+                            </div></a>";
+            }
+        }else{
+            $accessory = DB::select("SELECT * FROM `tbl_phukien` WHERE  TenPhuKien LIKE '%$request->key%'
+                              OR LoaiPhuKien LIKE '%$request->key%'");
+            for ($i = 0; $i < count($accessory); $i++) {
+                $result .= "<a href=\"http://emwei.tk/detail-product/{$accessory[$i]->IDPhuKien}\" style='color: red'> <div style='height: 50px;margin-top: 5px'>
+                                <div style=\"float: left\">
+                                    <img style=\"width: 50px;height: 50px\" src=\"http://emwei.tk/{$accessory[$i]->AnhDaiDien}\">
+                                </div>
+                                <div style='margin-left: 60px;border-bottom: 1px solid brown'>
+                                    <div><h6 class='compact2'>{$accessory[$i]->TenPhuKien}</h6></div>
+                                    <div><h6>{$accessory[$i]->Gia}</h6></div>
+                                </div>
+                            </div></a>";
+            }
+        }
+
+
+        return $result;
+    }
+
     public function doneBill(Request $request){
         $donHang = History::find($request->id);
         $donHang->TinhTrang = 'Đã Giao Hàng';
@@ -850,7 +1007,13 @@ class pageController extends Controller
         $billDetail = DB::select("SELECT * FROM tbl_donhang,tbl_donhang_sanpham WHERE tbl_donhang.MaDonHang=tbl_donhang_sanpham.MaDonHang and tbl_donhang.MaDonHang='$request->id'");
         foreach ($billDetail as $bill){
             $product = DB::select("SELECT * FROM tbl_sanpham WHERE IDSanPham='$bill->MaMatHang'");
-            Cart::add($product[0]->IDSanPham, $product[0]->TenSanPham, $bill->SoLuong, $product[0]->Gia, ['img' => $product[0]->AnhDaiDien]);
+            if($product){
+                Cart::add($product[0]->IDSanPham, $product[0]->TenSanPham, $bill->SoLuong, $product[0]->Gia, ['img' => $product[0]->AnhDaiDien]);
+            }
+            else{
+                $accessori = Accessories::find($bill->MaMatHang);
+                Cart::add($accessori->IDPhuKien, $accessori->TenPhuKien, $bill->SoLuong, $accessori->Gia, ['img' => $accessori->AnhDaiDien]);
+            }
         }
 
 

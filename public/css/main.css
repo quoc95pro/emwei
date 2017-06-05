@@ -841,6 +841,7 @@ h2.title {
   text-transform: uppercase;
   margin-bottom: 30px;
   position: relative;
+  line-height: 24px;
 }
 
 .product-image-wrapper{

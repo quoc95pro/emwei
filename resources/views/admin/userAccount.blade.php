@@ -50,7 +50,7 @@
                                data-click-to-select="true"
                                data-sort-order="desc"
                                class="table table-hover"
-                               data-url="http://localhost:8080/emwei/public/jsonAccountUser">
+                               data-url="http://emwei.tk/jsonAccountUser">
                             <thead>
                             <tr>
                                 <th data-field="state" data-checkbox="true" ></th>
@@ -173,7 +173,7 @@
                                         $('#resultModal').modal('show')
 
                                         $('#table').bootstrapTable('refresh',{
-                                            url: "http://localhost:8080/emwei/public/jsonAccountUser"
+                                            url: "http://emwei.tk/jsonAccountUser"
                                         });
 
                                     },error:function (data) {

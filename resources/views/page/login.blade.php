@@ -18,7 +18,6 @@
 							@else
 								<input type="text" placeholder="Email"  name="mail"/>
 								<input type="password" placeholder="Mật Khẩu"  name="pass"/>
-								<div class="g-recaptcha" data-sitekey="6LdmNSMUAAAAAMVpqHFmTjVs4JN1xWSBPWa9IAit"></div>
 								<span>
 								<input type="checkbox" name="save"  class="checkbox">
 								Lưu Mật Khẩu ?
@@ -26,13 +25,17 @@
 							@endif
 							<button type="submit" class="btn btn-default">Đăng Nhập</button>
 						</form>
-
+						@if(count($errors)>0)
+							<div class="alert alert-danger">
+								@foreach($errors->all() as $err)
+									{{$err}}<br/>
+								@endforeach
+							</div>
+						@endif
 						@if(Session::has('flag'))
 							<div class="alert alert-{{Session::get('flag')}}">{{Session::get('message')}}</div>
 						@endif
 					</div><!--/login form-->
-					<script src='https://www.google.com/recaptcha/api.js'></script>
-
 				</div>
 
 

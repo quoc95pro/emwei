@@ -54,7 +54,7 @@
 													</select>
 												</div>
 												<table data-toggle="table"  id="tableLineChart" data-toolbar="#toolbar1" data-click-to-select="true"
-													   data-url="http://localhost:8080/emwei/public/json/{{date('Y')}}" data-select-item-name="toolbar1" data-height="580"
+													   data-url="http://emwei.tk/json/{{date('Y')}}" data-select-item-name="toolbar1" data-height="580"
 													   data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-filter-control="true"
 													    data-pagination="true" data-sort-name="name" data-sort-order="desc" class="table table-hover">
 													<thead>
@@ -112,7 +112,7 @@
                                     var start = document.getElementById("startDate").value;
                                     var end = document.getElementById("endDate").value;
                                     $('#data').bootstrapTable('refresh',{
-                                        url: "http://localhost:8080/emwei/public/json2/"+start+"/"+end+""
+                                        url: "http://emwei.tk/json2/"+start+"/"+end+""
                                     });
                                 }
 							</script>
@@ -126,7 +126,7 @@
 								</select>
 							</div>
 							<table data-toggle="table" id="data" data-show-export="true" data-toolbar="#toolbar" data-page-list="[5, 10, 15, 20, All]" data-height="550"
-								   data-url="http://localhost:8080/emwei/public/all"  data-show-refresh="true" data-show-toggle="true" data-click-to-select="true"
+								   data-url="http://emwei.tk/all"  data-show-refresh="true" data-show-toggle="true" data-click-to-select="true"
 								   data-show-columns="true" data-search="true"  data-pagination="true" data-sort-name="name" data-sort-order="desc"
 								   data-select-item-name="toolbar1" class="table table-hover">
 								<thead>
@@ -219,7 +219,7 @@
 				function changeYear() {
                     var x = document.getElementById("selectYear").value;
                     $('#tableLineChart').bootstrapTable('refresh',{
-                        url: "http://localhost:8080/emwei/public/json/"+x+""
+                        url: "http://emwei.tk/json/"+x+""
                     });
                 }
 				

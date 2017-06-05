@@ -1,10 +1,6 @@
 @extends('master')
 @section('content')
-	<section id="advertisement">
-		<div class="container">
-			<img src="{{ URL::asset('images/shop/advertisement.jpg') }}" alt="" />
-		</div>
-	</section>
+
 	
 	<section>
 		<div class="container">
@@ -13,7 +9,7 @@
 				
 				<div class="col-sm-9 padding-right">
 					<div class="features_items"><!--features_items-->
-						<h2 class="title text-center">Features Items</h2>
+						<h2 class="title text-center">Danh Sách Sản Phẩm</h2>
 						<?php
 							$linkRow =0;
 						?>

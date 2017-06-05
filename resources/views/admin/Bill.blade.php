@@ -38,7 +38,7 @@
                                 <option>Đã Hủy</option>
                             </select>
                         </div>
-                        <table data-toggle="table" id="table" data-url="http://localhost:8080/emwei/public/jsonBill" data-show-refresh="true" data-page-list="[10, 20,50]" data-height="760"
+                        <table data-toggle="table" id="table" data-url="http://emwei.tk/jsonBill" data-show-refresh="true" data-page-list="[10, 20,50]" data-height="760"
                                data-show-toggle="true" data-show-columns="true" data-toolbar="#toolbar" data-select-item-name="toolbar1" data-click-to-select="true" data-page-size="10"
                                data-search="true"  data-pagination="true" data-filter-control="true" data-filter-show-clear="true" data-sort-name="name" data-sort-order="desc"  class="table table-hover">
                             <thead>
@@ -73,7 +73,7 @@
                                             },
                                             success : function (result){
                                                 $table.bootstrapTable('refresh',{
-                                                    url: "http://localhost:8080/emwei/public/jsonBill"
+                                                    url: "http://emwei.tk/jsonBill"
                                                 });
                                             }
                                         });
@@ -83,18 +83,18 @@
 
                             window.operateEvents = {
                                 'click .hoanTat': function (e, value, row){
-                                    window.location.href = "http://localhost:8080/emwei/public/done-bill/"+row.MaDonHang;
+                                    window.location.href = "http://emwei.tk/done-bill/"+row.MaDonHang;
                                 },
                                 'click .duyetDonHang': function (e, value, row){
-                                    window.location.href = "http://localhost:8080/emwei/public/detail-bill/"+row.MaDonHang;
+                                    window.location.href = "http://emwei.tk/check-bill/"+row.MaDonHang;
                                 },
                                 'click .chiTiet': function (e, value, row) {
-                                    window.location.href = "http://localhost:8080/emwei/public/detail-bill/"+row.MaDonHang;
+                                    window.location.href = "http://emwei.tk/detail-bill/"+row.MaDonHang;
                                 },
                                 'click .huy': function (e, value, row) {
                                     var r= confirm('Bạn Có Chắc Muốn Xóa ?');
                                     if (r == true) {
-                                        window.location.href = "http://localhost:8080/emwei/public/remove-bill/"+row.MaDonHang;
+                                        window.location.href = "http://emwei.tk/remove-bill/"+row.MaDonHang;
                                     } else {
                                     }
 

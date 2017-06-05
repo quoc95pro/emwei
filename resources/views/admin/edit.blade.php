@@ -61,7 +61,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Giá</label>
-                                    <input class="form-control" required type="number" value="{{$product[0]->Gia}}" name="productPrice">
+                                    <input class="form-control" required readonly type="number" value="{{$product[0]->Gia}}" name="productPrice">
                                 </div>
                                 <div class="form-group">
                                     <label>Số Lượng</label>

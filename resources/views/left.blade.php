@@ -6,7 +6,7 @@
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordian" href="#sportswear">
-                                <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                                <span class="pull-right"><i class="fa fa-plus"></i></span>
                                 Điện Thoại
                             </a>
                         </h4>
@@ -20,7 +20,7 @@
                                 @endphp
 
                                 @foreach($hangSanXuat as $hang)
-                                    <li><a href="shop.html">{{$hang->HangSanXuat}}</a></li>
+                                    <li><a href="{{route('listProduct',['Điện thoại',$hang->HangSanXuat])}}">{{$hang->HangSanXuat}}</a></li>
                                 @endforeach
                             </ul>
                         </div>
@@ -30,7 +30,7 @@
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordian" href="#mens">
-                                <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                                <span class="pull-right"><i class="fa fa-plus"></i></span>
                                 Máy Tính Bảng
                             </a>
                         </h4>
@@ -43,7 +43,7 @@
                                 @endphp
 
                                 @foreach($hangSanXuat as $hang)
-                                    <li><a href="shop.html">{{$hang->HangSanXuat}}</a></li>
+                                    <li><a href="{{route('listProduct',['Máy tính bảng',$hang->HangSanXuat])}}">{{$hang->HangSanXuat}}</a></li>
                                 @endforeach
 
                             </ul>
@@ -55,7 +55,7 @@
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordian" href="#womens">
-                                <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                                <span class="pull-right"><i class="fa fa-plus"></i></span>
                                 Phụ Kiện
                             </a>
                         </h4>
@@ -68,7 +68,7 @@
                                 @endphp
 
                                 @foreach($loaiPhuKien as $loai)
-                                    <li><a href="shop.html">{{$loai->LoaiPhuKien}}</a></li>
+                                    <li><a href="{{route('listProduct',['PhuKien',$loai->LoaiPhuKien])}}">{{$loai->LoaiPhuKien}}</a></li>
                                 @endforeach
                             </ul>
                         </div>
@@ -85,7 +85,7 @@
                             $left = DB::select("SELECT HangSanXuat,COUNT(*) AS Count FROM `tbl_sanpham` GROUP BY HangSanXuat");
                         @endphp
                         @foreach($left as $l)
-                            <li><a href="#"> <span class="pull-right">({{$l -> Count}})</span>{{$l -> HangSanXuat}}</a></li>
+                            <li><a href="{{route('listProduct',['Điện thoại',$l->HangSanXuat])}}"> <span class="pull-right">({{$l -> Count}})</span>{{$l -> HangSanXuat}}</a></li>
                         @endforeach
 
                     </ul>
@@ -94,7 +94,7 @@
 
 
             <div class="shipping text-center"><!--shipping-->
-                <img src="{{ URL::asset('images/home/shipping.jpg') }}" alt="" />
+                <img src="{{ URL::asset('images/home/shipping.png') }}" alt="" />
             </div><!--/shipping-->
 
         </div>

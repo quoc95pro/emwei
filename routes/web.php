@@ -10,11 +10,16 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use App\Accessories;
 use App\Chart;
 use App\Bill_Product;
+use App\History;
+use App\Product;
 use Illuminate\Http\Request;
 use App\Customer;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Session;
+use App\ProductPerBill;
 
 Route::get('/', 'pageController@index' );
 Route::get('readAll',function (){
@@ -24,10 +29,36 @@ Route::get('readAll',function (){
     }
 } );
 
-Route::get('/test/{id}/{ok}',function (Request $req){
+Route::get('/test',function (){
 
-    return $req->id.$req->ok;
+    return '<a href="http://emwei.tk/">ok</a>';
 });
+Route::get('testImg/{id}',[
+    'as'=>'testImg',
+    function(Request $request){
+    $billProduct = Bill_Product::where('MaDonHang','=',$request->id)->get();
+    $arr = array();
+    foreach ($billProduct as $bp){
+        $productPerBill = new ProductPerBill;
+        $productPerBill->MaSanPham = $bp->MaMatHang;
+        $productPerBill->SoLuong = $bp->SoLuong;
+        $product  = Product::find($bp->MaMatHang);
+        if($product){
+            $productPerBill->TenSanPham = $product->TenSanPham;
+            $productPerBill->LoaiSanPham = $product->LoaiSanPham;
+            $productPerBill->AnhDaiDien = $product->AnhDaiDien;
+
+        }else{
+            $accessori = Accessories::find($bp->MaMatHang);
+            $productPerBill->TenSanPham = $accessori->TenPhuKien;
+            $productPerBill->LoaiSanPham = $accessori->LoaiPhuKien;
+            $productPerBill->AnhDaiDien = $accessori->AnhDaiDien;
+        }
+        array_push($arr,$productPerBill);
+    }
+    return json_encode($arr);
+    }
+]);
 
 Route::get('/',[
     'as'=>'trang-chu',
@@ -43,6 +74,11 @@ Route::get('dang-nhap',[
     'uses'=>'PageController@login'
 ]);
 
+Route::get('user-Page',[
+    'as'=>'userPage',
+    'uses'=>'PageController@userPage'
+]);
+
 Route::post('post-login',[
     'as'=>'post-login',
     'uses'=>'PageController@postLogin'
@@ -53,9 +89,24 @@ Route::get('dang-ky',[
     'uses'=>'PageController@signUp'
 ]);
 
-Route::get('chietkhau',[
-    'as'=>'chietkhau',
-    'uses'=>'PageController@chietkhau'
+Route::get('discount',[
+    'as'=>'discount',
+    'uses'=>'PageController@discount'
+]);
+
+Route::post('search',[
+    'as'=>'search',
+    'uses'=>'PageController@search'
+]);
+
+Route::get('construction',[
+    'as'=>'construction',
+    'uses'=>'PageController@construction'
+]);
+
+Route::get('verify',[
+    'as'=>'verify',
+    'uses'=>'PageController@verify'
 ]);
 
 Route::post('updateDisCountProduct',[
@@ -66,6 +117,11 @@ Route::post('updateDisCountProduct',[
 Route::post('post-signup',[
     'as'=>'post-signup',
     'uses'=>'PageController@postSignUp'
+]);
+
+Route::post('post-edit',[
+    'as'=>'post-edit',
+    'uses'=>'PageController@postEdit'
 ]);
 
 Route::get('contact-us',[
@@ -306,6 +362,11 @@ Route::post('updateStatusAccessory',[
     'uses'=>'PageController@updateStatusAccessory'
 ]);
 
+Route::post('getProductBill',[
+    'as'=>'getProductBill',
+    'uses'=>'PageController@getProductBill'
+]);
+
 Route::get('/all',[
     'as'=>'all',
 function (){
@@ -347,6 +408,17 @@ Route::get('/allProductJson/',[
         }
         $listProduct = DB::select('SELECT * FROM `tbl_sanpham` ');
         $a=json_encode($listProduct);
+        return $a;
+    }]);
+
+Route::get('/CustomerBill/',[
+    'as'=>'CustomerBill'
+    ,function (){
+        if(!(Session::has('userName'))){
+            return "";
+        }
+        $bills = History::where('EmailKhachHang','=',Session::get('userName')->Email)->get();
+        $a=json_encode($bills);
         return $a;
     }]);
 

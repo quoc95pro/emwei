@@ -11,11 +11,14 @@
 							<input type="email" placeholder="Địa Chỉ Email (*)" name="mail"  required/>
 							<input type="password" placeholder="Mật Khẩu (*)" name="pass" required/>
 							<input type="password" placeholder="Nhập Lại Mật Khẩu (*)" name="rePass" required/>
+							<input type="number" placeholder="Điện thoại di động (*)" name="phone"/>
 							<input type="text" placeholder="Họ Và Tên (*)" name="name" required/>
+							<input type="email" placeholder="Email Giới Thiệu (*)" name="mailgt"  required/>
 							<p><span style="float: left">Giới tính : &nbsp;&nbsp;&nbsp;&nbsp;</span> <input type="radio" checked name="sex" placeholder="ok" value="Nam" class="radio-inline" style="float: left;width: 22px;margin: 2px;height: 16px"><span style="float: left">Nam</span><input type="radio" class="radio-inline" value="Nữ" style="float: left;width: 22px;margin: 2px;height: 16px" name="sex">Nữ</p>
 							<p><input type="text" id="datepicker" name="dob"  placeholder="Ngày-Tháng-Năm Sinh" size="30"></p>
 							<input type="text" placeholder="Địa Chỉ" name="add" />
-							<input type="number" placeholder="Điện thoại di động" name="phone"/>
+							<div class="g-recaptcha" data-sitekey="6LdmNSMUAAAAAMVpqHFmTjVs4JN1xWSBPWa9IAit"></div>
+
 							<button type="submit" class="btn btn-default">Signup</button>
 						</form>
 
@@ -29,8 +32,13 @@
 						@if(Session::has('thanhcong'))
 							<div class="alert alert-success">{{Session::get('thanhcong')}}</div>
 						@endif
+						@if(Session::has('flag'))
+							<div class="alert alert-danger">{{Session::get('message')}}</div>
+						@endif
 					</div><!--/sign up form-->
 				</div>
+				<script src='https://www.google.com/recaptcha/api.js'></script>
+
 				<div class="col-sm-1">
 					<h2 class="or">OR</h2>
 				</div>
