@@ -1,9 +1,7 @@
 	@extends('admin.master')
 	@section('script')
-		<script src="{{ URL::asset('js/bootstrap-table.js')}}"></script>
-		<script type="text/javascript" src="{{ URL::asset('js/tableExport.js')}}"></script>
-		<script type="text/javascript" src="{{ URL::asset('js/bt.js')}}"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/extensions/export/bootstrap-table-export.js"></script>
+		<script src="{{ URL::asset('js3/bootstrap-table.js')}}"></script>
+		<script src="{{ URL::asset('js3/bootstrap-table-filter-control.js')}}"></script>
 
 	@stop
 	@section('content')
@@ -55,12 +53,12 @@
 												</div>
 												<table data-toggle="table"  id="tableLineChart" data-toolbar="#toolbar1" data-click-to-select="true"
 													   data-url="http://emwei.tk/json/{{date('Y')}}" data-select-item-name="toolbar1" data-height="580"
-													   data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-filter-control="true"
+													   data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true"
 													    data-pagination="true" data-sort-name="name" data-sort-order="desc" class="table table-hover">
 													<thead>
 													<tr>
 														<th data-field="state" data-radio="true" ></th>
-														<th data-field="maSanPham" data-filter-control="select" data-sortable="true">Mã Sản Phẩm</th>
+														<th data-field="maSanPham"  data-sortable="true">Mã Sản Phẩm</th>
 														<th data-field="tenSanPham"  data-sortable="true">Tên Sản Phẩm</th>
 														<th data-field="soLuongBanDuoc" data-sortable="true">Số Lượng Đã Bán Được (Chiếc)</th>
 
@@ -78,109 +76,40 @@
 					</div>
 				</div><!--/.panel-->
 			</div><!-- /.col-->
+			{{--Thong ke theo khach hang--}}
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<div class="col-md-3">
-								<h4>Thống Kế Theo Thời Gian :</h4>
+								<h4>Thống Kế Theo Khách Hàng :</h4>
+							</div>
+
+							<div class="col-md-4">
+
 							</div>
 							<div class="col-md-2">
-								<input class="form-control datepicker" type="text" id="startDate" placeholder="Ngày Bắt Đầu">
+								<button type="submit" style="margin-top: -13px" class="btn btn-primary" onclick="">Lọc</button>
 							</div>
-							<div class="col-md-2">
-								<input class="form-control datepicker" type="text" id="endDate" placeholder="Ngày Kết Thúc">
-							</div>
-							<div class="col-md-2">
-								<button type="submit" style="margin-top: -13px" class="btn btn-primary" onclick="Chart_By_Day()">Lọc</button>
-							</div>
-							<script src="{{ URL::asset('js/bootstrap-datepicker.js')}}"></script>
-							<script>
-
-                                $(function () {
-                                    $( ".datepicker" ).datepicker({
-                                        format:'yyyy-mm-dd',
-                                        startDate:'{{$minDate[0]->NgayTao}}',
-                                        endDate:'{{$maxDate[0]->NgayTao}}'
-
-
-                                    });
-
-                                });
-
-                                function Chart_By_Day(){
-                                    var start = document.getElementById("startDate").value;
-                                    var end = document.getElementById("endDate").value;
-                                    $('#data').bootstrapTable('refresh',{
-                                        url: "http://emwei.tk/json2/"+start+"/"+end+""
-                                    });
-                                }
-							</script>
 						</div>
 						<div class="panel-body" id="table">
-							<div id="toolbar">
-								<select class="form-control">
-									<option value="">Export Basic</option>
-									<option value="all">Export All</option>
-									<option value="selected">Export Selected</option>
-								</select>
-							</div>
-							<table data-toggle="table" id="data" data-show-export="true" data-toolbar="#toolbar" data-page-list="[5, 10, 15, 20, All]" data-height="550"
-								   data-url="http://emwei.tk/all"  data-show-refresh="true" data-show-toggle="true" data-click-to-select="true"
-								   data-show-columns="true" data-search="true"  data-pagination="true" data-sort-name="name" data-sort-order="desc"
+							<table data-toggle="table" id="data2" data-show-export="true"  data-page-list="[5, 10, 15, 20, All]"
+								   data-url="{{route('customerStatistic')}}"  data-show-refresh="true" data-show-toggle="true" data-click-to-select="true"
+								   data-show-columns="true" data-search="true" data-filter-control="true" data-filter-show-clear="true" data-pagination="true"
+								   {{--data-sort-name="name" data-sort-order="desc"--}}
 								   data-select-item-name="toolbar1" class="table table-hover">
 								<thead>
 								<tr>
-									<th data-field="state" data-checkbox="true" ></th>
-									<th data-field="maSanPham" data-sortable="true">Mã Sản Phẩm</th>
-									<th data-field="tenSanPham"  data-sortable="true" >Tên Sản Phẩm</th>
-									<th data-field="soLuongBanDuoc" data-sortable="true">Số Lượng Bán Được (Chiếc)</th>
-
+									<th data-field="MaDH" data-filter-control="select" data-sortable="true">Mã Đơn Hàng</th>
+									<th data-field="Email"  data-sortable="true" data-filter-control="select">Email Khách Hàng</th>
+									<th data-field="Ten" data-filter-control="select" data-sortable="true">Tên Khách Hàng</th>
+									<th data-field="Masp" data-filter-control="select" data-sortable="true">Mã Sản Phẩm</th>
+									<th data-field="Tensp" data-filter-control="select" data-sortable="true">Tên Sản Phẩm</th>
+									<th data-field="SoLuong" data-sortable="true">Số Lượng</th>
+									<th data-field="NgayMua" data-filter-control="select" data-sortable="true">Ngày Đặt Hàng</th>
 								</tr>
 								</thead>
 							</table>
-							<script type="text/javaScript">
-
-                                function detailFormatter(index, row) {
-                                    var html = [];
-                                    $.each(row, function (key, value) {
-                                        html.push('<p><b>' + key + ':</b> ' + value + '</p>');
-                                    });
-                                    return html.join('');
-                                }
-
-                                function DoOnCellHtmlData(cell, row, col, data) {
-                                    var result = "";
-                                    if (typeof data != 'undefined' && data != "") {
-                                        var html = $.parseHTML(data);
-
-                                        $.each( html, function() {
-                                            if ( typeof $(this).html() === 'undefined' )
-                                                result += $(this).text();
-                                            else if ( typeof $(this).attr('class') === 'undefined' || $(this).hasClass('th-inner') === true )
-                                                result += $(this).html();
-                                        });
-                                    }
-                                    return result;
-                                }
-
-                                $(function () {
-                                    $('#toolbar').find('select').change(function () {
-                                        $('#data').bootstrapTable('refreshOptions', {
-                                            exportDataType: $(this).val()
-                                        });
-                                    });
-                                })
-
-                                $(document).ready(function()
-                                {
-                                    $('#data').bootstrapTable('refreshOptions', {
-                                        exportOptions: {ignoreColumn: [0], // or as string array: ['0','checkbox']
-                                            onCellHtmlData: DoOnCellHtmlData}
-                                    });
-                                });
-
-							</script>
 						</div>
 					</div>
 				</div>

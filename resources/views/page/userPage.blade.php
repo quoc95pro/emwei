@@ -37,8 +37,6 @@
 								<input type="number" readonly value="{{$user->SoDienThoai}}"/>
 								<label>Tên Khách Hàng</label>
 								<input type="text"  name="name" required value="{{$user->TenKhachHang}}"/>
-								<label>Email Giới Thiệu</label>
-								<input type="email" value="{{$user->EmailGioiThieu}}" readonly/>
 								<p><span style="float: left">Giới tính : &nbsp;&nbsp;&nbsp;&nbsp;</span> <input type="radio" @if($user->GioiTinh=='Nam') checked @endif name="sex" placeholder="ok" value="Nam" class="radio-inline" style="float: left;width: 22px;margin: 2px;height: 16px"><span style="float: left">Nam</span><input type="radio" @if($user->GioiTinh=='Nữ') checked @endif class="radio-inline" value="Nữ" style="float: left;width: 22px;margin: 2px;height: 16px" name="sex">Nữ</p>
 								<label>Ngày Tháng Năm Sinh</label>
 								<p><input type="text" id="datepicker" name="dob" value="{{$user->NamSinh}}"  size="30"></p>

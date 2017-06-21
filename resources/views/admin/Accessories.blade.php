@@ -82,7 +82,7 @@
                                 <th data-field="state" data-checkbox="true" data-align="center"></th>
                                 <th data-field="IDPhuKien" data-sortable="true" data-align="center">Mã Phụ Kiện</th>
                                 <th data-field="TenPhuKien"  data-sortable="true" data-align="center">Tên Phụ Kiện</th>
-                                <th data-field="TenSanPham"  data-sortable="true" data-align="center">Sản Phẩm Dùng Phụ Kiện</th>
+                                <th data-field="TenSanPham"  data-sortable="true" data-align="center">Phụ Kiện Cho</th>
                                 <th data-field="Gia" data-sortable="true" data-align="center">Giá</th>
                                 <th data-field="TinhTrang" data-filter-control="select" data-sortable="true" data-align="center" >Tình Trạng</th>
                                 <th data-formatter="operateFormatter" data-events="operateEvents" data-align="center" >Tùy Chọn</th>

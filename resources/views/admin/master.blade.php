@@ -25,7 +25,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
     <!--Icons-->
     <script src="{{ URL::asset('js/lumino.glyphs.js')}}"></script>
-    <script src="{{ URL::asset('js3/bootstrap-table-filter-control.js')}}"></script>
 
     <!--[if lt IE 9]>
     <script src="{{ URL::asset('js/html5shiv.js')}}"></script>

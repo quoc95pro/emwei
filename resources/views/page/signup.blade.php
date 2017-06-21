@@ -13,7 +13,6 @@
 							<input type="password" placeholder="Nhập Lại Mật Khẩu (*)" name="rePass" required/>
 							<input type="number" placeholder="Điện thoại di động (*)" name="phone"/>
 							<input type="text" placeholder="Họ Và Tên (*)" name="name" required/>
-							<input type="email" placeholder="Email Giới Thiệu (*)" name="mailgt"  required/>
 							<p><span style="float: left">Giới tính : &nbsp;&nbsp;&nbsp;&nbsp;</span> <input type="radio" checked name="sex" placeholder="ok" value="Nam" class="radio-inline" style="float: left;width: 22px;margin: 2px;height: 16px"><span style="float: left">Nam</span><input type="radio" class="radio-inline" value="Nữ" style="float: left;width: 22px;margin: 2px;height: 16px" name="sex">Nữ</p>
 							<p><input type="text" id="datepicker" name="dob"  placeholder="Ngày-Tháng-Năm Sinh" size="30"></p>
 							<input type="text" placeholder="Địa Chỉ" name="add" />

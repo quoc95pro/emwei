@@ -110,32 +110,48 @@
                         </ul>
                     </div>
                 </div>
+                <script src="{{ URL::asset('js3/bootstrap-table.js')}}"></script>
                 <div class="col-sm-3">
                     <div class="search_box pull-right">
                         <input type="text" placeholder="Search" onkeyup="showResult(this.value)"/>
-                        <div id="resultsearch" style="background-color:white;z-index: 999;position: absolute;width: 300px">
-
+                        <div id="resultsearch" style="background-color:white;z-index: 999;position: absolute;width: 400px;display: none">
+                            <table data-toggle="table"
+                                   id="table"
+                                   data-sort-order="desc"
+                                   class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th data-field="ID" data-sortable="true" data-align="center">Mã Mặt Hàng</th>
+                                    <th data-field="Name"  data-sortable="true" data-align="center">Tên Mặt Hàng</th>
+                                    <th data-field="Price" data-sortable="true" data-align="center">Giá</th>
+                                    <th data-field="Image" data-sortable="true" data-align="center" data-formatter="imageFormatter"></th>
+                                </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
-                <script>
+                <script type="text/javascript">
+                    function imageFormatter(value, row, index) {
+                        return [
+                            '<div class="center-block">',
+                            '<img style="width: 50px;height: 50px" src="'+row.Image+'">',
+                            '</div>'
+                        ].join('');
+                    }
                     function showResult(str) {
                         if (str.length==0) {
-                            document.getElementById("resultsearch").innerHTML="";
+                            document.getElementById("resultsearch").style.display="none";
                             document.getElementById("resultsearch").style.border="0px";
                             return;
+                        }else{
+
+                            $('#table').bootstrapTable('refresh',{
+                                url: "http://emwei.tk/search/"+str+""
+                            });
+                            document.getElementById("resultsearch").style.display="block";
                         }
-                        $.ajax({
-                            url : "{{route('search')}}",
-                            type : "post",
-                            dateType:"text",
-                            data : {
-                                key : str,
-                            },
-                            success : function (result){
-                                document.getElementById("resultsearch").innerHTML=result;
-                            }
-                        });
+
 
                     }
                 </script>

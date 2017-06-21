@@ -69,6 +69,11 @@ Route::get('/',[
 //    return view('welcome');
 //});
 
+Route::get('customerStatistic',[
+    'as'=>'customerStatistic',
+    'uses'=>'PageController@customerStatistic'
+]);
+
 Route::get('dang-nhap',[
     'as'=>'dang-nhap',
     'uses'=>'PageController@login'
@@ -94,7 +99,7 @@ Route::get('discount',[
     'uses'=>'PageController@discount'
 ]);
 
-Route::post('search',[
+Route::get('search/{key}',[
     'as'=>'search',
     'uses'=>'PageController@search'
 ]);

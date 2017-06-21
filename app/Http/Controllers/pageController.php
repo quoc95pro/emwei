@@ -11,11 +11,14 @@ use App\Accessories;
 use App\Admin;
 use App\Bill_Product;
 use App\Customer;
+use App\customerStatistic;
 use App\History;
 use App\PhotoAccesories;
 use  App\Product;
 use App\Photo;
 use App\Description;
+use App\ProductPerBill;
+use App\Search;
 use function array_push;
 use function count;
 use function date;
@@ -24,6 +27,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\ProductType;
 use Illuminate\Support\Facades\Session;
+use function json_encode;
 use Mockery\Exception;
 use mysqli_sql_exception;
 use const null;
@@ -211,12 +215,6 @@ class pageController extends Controller
                 'phone.max'=>'Số điện thoại có độ dài không hợp lệ',
                 'phone.unique'=>'Số điện thoại đã tồn tại',
         ]);
-        if($req->mailgt!=''){
-            $mailgt = Customer::find($req->mailgt);
-            if(!$mailgt){
-                return redirect()->back()->with(['flag'=>'danger','message'=>'Mail giới thiệu không tồn tại']);
-            }
-        }
 
 //cấu hình thông tin do google cung cấp
 $api_url     = 'https://www.google.com/recaptcha/api/siteverify';
@@ -252,7 +250,6 @@ $secret_key  = '6LdmNSMUAAAAABFRIH5RxBlD8riTvxwHiSVBsgSV';
                 $newUser->DiaChi=$req->add;
                 $newUser->LoaiTaiKhoan='Đồng';
                 $newUser->TrangThai='InActive';
-                $newUser->EmailGioiThieu=$req->mailgt;
                 $newUser->NgayTao=date('Y-m-d');
                 $newUser->save();
         session(['userName' => $newUser]);
@@ -275,11 +272,6 @@ $secret_key  = '6LdmNSMUAAAAABFRIH5RxBlD8riTvxwHiSVBsgSV';
         }
         if(Session::get('userName')->ChietKhau!=0){
             return redirect()->route('trang-chu');
-        }
-        if(Session::get('userName')->EmailGioiThieu!=''){
-            $mailgt = Customer::find(Session::get('userName')->EmailGioiThieu);
-            $mailgt->ChietKhau+=0.02;
-            $mailgt->save();
         }
         return view('page.ChietKhau');
 
@@ -746,8 +738,8 @@ $secret_key  = '6LdmNSMUAAAAABFRIH5RxBlD8riTvxwHiSVBsgSV';
     }
 
     public function chart(){
-        return \view('admin.chart');
 
+        return \view('admin.chart');
     }
 
     public function charts(){
@@ -788,9 +780,37 @@ $secret_key  = '6LdmNSMUAAAAABFRIH5RxBlD8riTvxwHiSVBsgSV';
             ->with(['minDate'=>$minDate])
             ->with(['maxDate'=>$maxDate])
             ->with(['month'=>$arrTotal])
-            ->with(['year'=>$year]);
+            ->with(['year'=>$year])
+           ;
 
 
+    }
+
+    public function customerStatistic(){
+        $list = array();
+        $bill = History::all();
+        foreach ($bill as $b){
+            $productBill = Bill_Product::where('MaDonHang','=',$b->MaDonHang)->get();
+            foreach ($productBill as $pb){
+                $statistic = new customerStatistic();
+                $statistic->MaDH = $b->MaDonHang;
+                $statistic->Email = $b->EmailKhachHang;
+                $statistic->Ten = $b->TenKhachHang;
+                $statistic->Masp = $pb->MaMatHang;
+                $statistic->SoLuong = $pb->SoLuong;
+                $statistic->NgayMua = $b->NgayTao;
+                $product = Product::find($pb->MaMatHang);
+                if($product){
+                    $statistic->Tensp=$product->TenSanPham;
+                }else{
+                    $accesories = Accessories::find($pb->MaMatHang);
+                    $statistic->Tensp=$accesories->TenPhuKien;
+                }
+                array_push($list,$statistic);
+            }
+
+        }
+        return json_encode($list);
     }
 
 
@@ -913,37 +933,33 @@ $secret_key  = '6LdmNSMUAAAAABFRIH5RxBlD8riTvxwHiSVBsgSV';
     public  function search(Request $request){
 
         $product = DB::select("SELECT * FROM `tbl_sanpham` WHERE  TenSanPham LIKE '%$request->key%'
-                              OR LoaiSanPham LIKE '%$request->key%' OR HangSanXuat LIKE '%$request->key%' LIMIT 10");
+                              OR LoaiSanPham LIKE '%$request->key%' OR HangSanXuat LIKE '%$request->key%' LIMIT 7");
         $result = '';
         if(count($product)>0) {
-            for ($i = 0; $i < count($product); $i++) {
-                $result .= "<a href=\"http://emwei.tk/detail-product/{$product[$i]->IDSanPham}\" style='color: red'><div style='height: 50px;margin-top: 5px'>
-                                <div style=\"float: left\">
-                                    <img style=\"width: 50px;height: 50px\" src=\"http://emwei.tk/{$product[$i]->AnhDaiDien}\">
-                                </div>
-                                <div style='margin-left: 60px;border-bottom: 1px solid brown'>
-                                    <div><h6 class='compact2'>{$product[$i]->TenSanPham}</h6></div>
-                                    <div><h6>{$product[$i]->Gia}</h6></div>
-                                </div>
-                            </div></a>";
+            $arr = array();
+            foreach ($product as $p){
+                $search = new Search();
+                $search->ID = $p->IDSanPham;
+                $search->Name = $p->TenSanPham;
+                $search->Image = $p->AnhDaiDien;
+                $search->Price = $p->Gia;
+                array_push($arr,$search);
             }
+            $result = json_encode($arr);
         }else{
             $accessory = DB::select("SELECT * FROM `tbl_phukien` WHERE  TenPhuKien LIKE '%$request->key%'
                               OR LoaiPhuKien LIKE '%$request->key%'");
-            for ($i = 0; $i < count($accessory); $i++) {
-                $result .= "<a href=\"http://emwei.tk/detail-product/{$accessory[$i]->IDPhuKien}\" style='color: red'> <div style='height: 50px;margin-top: 5px'>
-                                <div style=\"float: left\">
-                                    <img style=\"width: 50px;height: 50px\" src=\"http://emwei.tk/{$accessory[$i]->AnhDaiDien}\">
-                                </div>
-                                <div style='margin-left: 60px;border-bottom: 1px solid brown'>
-                                    <div><h6 class='compact2'>{$accessory[$i]->TenPhuKien}</h6></div>
-                                    <div><h6>{$accessory[$i]->Gia}</h6></div>
-                                </div>
-                            </div></a>";
+            $arr = array();
+            foreach ($accessory as $p){
+                $search = new Search();
+                $search->ID = $p->IDPhuKien;
+                $search->Name = $p->TenPhuKien;
+                $search->Image = $p->AnhDaiDien;
+                $search->Price = $p->Gia;
+                array_push($arr,$search);
             }
+            $result = json_encode($arr);
         }
-
-
         return $result;
     }
 

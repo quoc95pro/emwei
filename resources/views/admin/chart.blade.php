@@ -1,6 +1,65 @@
 	@extends('admin.master')
+	@section('script')
+		<script src="{{ URL::asset('js3/bootstrap-table.js')}}"></script>
+		<script src="{{ URL::asset('js3/bootstrap-table-filter-control.js')}}"></script>
+
+	@stop
 	@section('content')
-	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="col-md-3">
+							<h4>Thống Kế Theo Khách Hàng :</h4>
+						</div>
+
+						<div class="col-md-4">
+
+						</div>
+						<div class="col-md-2">
+							<button type="submit" style="margin-top: -13px" class="btn btn-primary" onclick="">Lọc</button>
+						</div>
+					</div>
+					<div class="panel-body" id="table">
+						<div id="toolbar">
+							<select class="form-control">
+								<option value="">Export Basic</option>
+								<option value="all">Export All</option>
+								<option value="selected">Export Selected</option>
+							</select>
+						</div>
+						<table data-toggle="table"
+							   id="data2"
+							   data-show-export="true"
+							   data-toolbar="#toolbar"
+							   data-page-list="[5, 10, 15, 20, All]"
+							   data-url="http://emwei.tk/all"
+							   data-show-refresh="true"
+							   data-show-toggle="true"
+							   data-click-to-select="true"
+							   data-show-columns="true"
+							   data-search="true"
+							   data-filter-control="true"
+							   data-filter-show-clear="true"
+							   data-pagination="true"
+							   data-sort-name="name" data-sort-order="desc"
+							   data-select-item-name="toolbar1"
+							   class="table table-hover">
+							<thead>
+							<tr>
+								<th data-field="state" data-checkbox="true" ></th>
+								<th data-field="maSanPham" data-sortable="true">Mã Sản Phẩm</th>
+								<th data-field="tenSanPham"  data-sortable="true" data-filter-control="select">Tên Sản Phẩm</th>
+								<th data-field="soLuongBanDuoc" data-sortable="true">Số Lượng Bán Được (Chiếc)</th>
+
+							</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div><!--/.row-->
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
